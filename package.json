@@ -32,18 +32,19 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
+    "serve": "^14.2.4",
     "stream-http": "^3.2.0",
     "swiper": "^11.1.14",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4",
     "winston": "^3.14.2"
   },
-"scripts": {
-  "start": "serve -s build",   
-  "build": "react-scripts build", 
-  "test": "react-scripts test", 
-  "eject": "react-scripts eject" 
-},
+  "scripts": {
+    "start": "serve -s build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
