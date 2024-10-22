@@ -487,23 +487,24 @@ const handleEdit = (student) => {
           <TableRow key={student._id} sx={{ '&:hover': { backgroundColor: '#f1f8e9' }, transition: 'background-color 0.3s ease' }}>
             {/* Photo Column */}
             <TableCell>
-              {student.photo ? (
-                <img
-                  src={`http://localhost:5000/${student.photo}`}
-                  alt={`${student.firstName} ${student.lastName}`}
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    objectFit: 'cover',
-                    borderRadius: '50%',
-                    border: '2px solid #004d40',
-                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                  }}
-                />
-              ) : (
-                <Typography sx={{ color: '#757575' }}>Pas de photo disponible</Typography>
-              )}
-            </TableCell>
+                {student.photo ? (
+                  <img
+                    src={student.photo} // Utiliser directement l'URL de Cloudinary
+                    alt={`${student.firstName} ${student.lastName}`}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      borderRadius: '50%',
+                      border: '2px solid #004d40',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                    }}
+                  />
+                ) : (
+                  <Typography sx={{ color: '#757575' }}>Pas de photo disponible</Typography>
+                )}
+              </TableCell>
+
 
             {/* Student Info */}
             <TableCell>{student.firstName}</TableCell>

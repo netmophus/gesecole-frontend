@@ -514,10 +514,12 @@ const handleSave = (e) => {
             key={teacher._id}
             sx={{ '&:hover': { backgroundColor: '#f1f8e9' }, transition: 'background-color 0.3s ease' }}
           >
-            <TableCell>
+
+
+           <TableCell>
               {teacher.photo ? (
                 <img
-                  src={`http://localhost:5000/${teacher.photo}`}  // URL de la photo
+                  src={teacher.photo}  // URL complète de Cloudinary
                   alt={teacher.nom}
                   style={{ 
                     width: '50px', 
@@ -532,6 +534,7 @@ const handleSave = (e) => {
                 <Typography sx={{ color: '#757575' }}>Aucune photo</Typography>
               )}
             </TableCell>
+
 
             <TableCell>{teacher.nom || 'N/A'}</TableCell>
             <TableCell>{teacher.telephone || 'N/A'}</TableCell>
@@ -687,7 +690,7 @@ const handleSave = (e) => {
   <Typography variant="body1">Photo de l'enseignant</Typography>
 
   {/* Afficher l'aperçu de l'ancienne photo */}
-  {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
+  {/* {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
     <Box sx={{ mt: 2 }}>
       <Typography variant="body2" sx={{ mb: 1 }}>
         Photo actuelle :
@@ -698,7 +701,22 @@ const handleSave = (e) => {
         style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5%' }}
       />
     </Box>
-  )}
+  )} */}
+
+{currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
+  <Box sx={{ mt: 2 }}>
+    <Typography variant="body2" sx={{ mb: 1 }}>
+      Photo actuelle :
+    </Typography>
+    <img
+      src={currentTeacher.photo}  // Utilise l'URL complète de Cloudinary
+      alt={currentTeacher.nom}
+      style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5%' }}
+    />
+  </Box>
+)}
+
+
 
   {/* Champ pour uploader une nouvelle photo */}
   <input
