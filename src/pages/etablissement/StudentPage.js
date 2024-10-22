@@ -37,7 +37,7 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import jsPDF from 'jspdf'; 
 const StudentPage = () => {
   const navigate = useNavigate();
 
@@ -176,18 +176,95 @@ const StudentPage = () => {
     setCurrentStudent((prevStudent) => ({ ...prevStudent, [key]: value }));
   };
 
-  const downloadTextFile = (matricule, password) => {
-    const element = document.createElement('a');
-    const file = new Blob([`Matricule: ${matricule}\nMot de passe: ${password}`], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'login_info.txt';
-    document.body.appendChild(element);
-    element.click();
-  };
+  // const downloadTextFile = (matricule, password) => {
+  //   const element = document.createElement('a');
+  //   const file = new Blob([`Matricule: ${matricule}\nMot de passe: ${password}`], { type: 'text/plain' });
+  //   element.href = URL.createObjectURL(file);
+  //   element.download = 'login_info.txt';
+  //   document.body.appendChild(element);
+  //   element.click();
+  // };
   
+// Fonction pour générer le PDF
+const generatePDF = (matricule, password) => {
+  const doc = new jsPDF();
+  
+  // Titre
+  doc.setFontSize(20);
+  doc.text('Informations de Connexion', 14, 22);
+
+  // Contenu du PDF
+  const message = `Bonjour ${currentStudent.firstName} ${currentStudent.lastName},\n\nVoici vos informations de connexion :\n\n- Matricule : ${matricule}\n- Mot de Passe : ${password}\n\nNous vous recommandons de changer votre mot de passe lors de votre première connexion pour garantir la sécurité de votre compte.\n\nSi vous avez des questions, n'hésitez pas à nous contacter.`;
+  doc.setFontSize(12);
+  const splitMessage = doc.splitTextToSize(message, 190); // Diviser le message pour s'adapter à la largeur du PDF
+  doc.text(splitMessage, 14, 40); // Ajustez les coordonnées si nécessaire
+
+  // Nom du fichier basé sur le matricule
+  // Nom du fichier basé sur le prénom et le nom
+const fileName = `${currentStudent.firstName}_${currentStudent.lastName}_login_info.pdf`;
+  
+  // Sauvegarder le PDF avec le nom dynamique
+  doc.save(fileName);
+};
+
+
+// const handleCreate = async (e) => {
+//   e.preventDefault();
+
+//   const formData = new FormData();
+//   formData.append('firstName', currentStudent.firstName);
+//   formData.append('lastName', currentStudent.lastName);
+//   formData.append('dateOfBirth', currentStudent.dateOfBirth);
+//   formData.append('gender', currentStudent.gender);
+//   formData.append('classId', currentStudent.classId);
+//   formData.append('motherName', currentStudent.motherName);  // Champ ajouté
+//   formData.append('fatherPhone', currentStudent.fatherPhone);  // Champ ajouté
+//   formData.append('motherPhone', currentStudent.motherPhone);  // Champ ajouté
+//   formData.append('parentsAddress', currentStudent.parentsAddress);  // Champ ajouté
+
+//   if (currentStudent.photo) {
+//     formData.append('photo', currentStudent.photo);  // Ajouter la photo
+//   }
+
+//   try {
+//     const token = user.token;
+//     const res = await axios.post(`${apiBaseUrl}/api/students`, formData, {
+//       headers: {
+//         'Authorization': `Bearer ${token}`,
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
+
+//     // Gérer la réponse et afficher le message de succès
+//     if (res && res.data) {
+//       const { matricule, password } = res.data;
+//       setSnackbarMessage(`Matricule: ${matricule}, Mot de passe: ${password}`);
+//       setSnackbarSeverity('success');
+//       setSnackbarOpen(true);
+//       downloadTextFile(matricule, password);
+//     }
+
+//     fetchStudents();
+//     handleClose();
+//   } catch (err) {
+//     console.error('Erreur lors de la création de l\'élève:', err.response ? err.response.data : err.message);
+//     setSnackbarMessage('Erreur lors de la création de l\'élève.');
+//     setSnackbarSeverity('error');
+//     setSnackbarOpen(true);
+//   }
+// };
 
 
 
+
+
+
+
+// Fonction pour la mise à jour d'un élève
+
+
+
+// Modifiez la fonction handleCreate
 const handleCreate = async (e) => {
   e.preventDefault();
 
@@ -197,13 +274,13 @@ const handleCreate = async (e) => {
   formData.append('dateOfBirth', currentStudent.dateOfBirth);
   formData.append('gender', currentStudent.gender);
   formData.append('classId', currentStudent.classId);
-  formData.append('motherName', currentStudent.motherName);  // Champ ajouté
-  formData.append('fatherPhone', currentStudent.fatherPhone);  // Champ ajouté
-  formData.append('motherPhone', currentStudent.motherPhone);  // Champ ajouté
-  formData.append('parentsAddress', currentStudent.parentsAddress);  // Champ ajouté
+  formData.append('motherName', currentStudent.motherName);
+  formData.append('fatherPhone', currentStudent.fatherPhone);
+  formData.append('motherPhone', currentStudent.motherPhone);
+  formData.append('parentsAddress', currentStudent.parentsAddress);
 
   if (currentStudent.photo) {
-    formData.append('photo', currentStudent.photo);  // Ajouter la photo
+    formData.append('photo', currentStudent.photo);
   }
 
   try {
@@ -217,11 +294,13 @@ const handleCreate = async (e) => {
 
     // Gérer la réponse et afficher le message de succès
     if (res && res.data) {
-      const { matricule, password } = res.data;
+      const { matricule, password } = res.data; // Assurez-vous que ces propriétés existent dans la réponse
       setSnackbarMessage(`Matricule: ${matricule}, Mot de passe: ${password}`);
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      downloadTextFile(matricule, password);
+      
+      // Remplacez l'appel à downloadTextFile par generatePDF
+      generatePDF(matricule, password);
     }
 
     fetchStudents();
@@ -234,7 +313,10 @@ const handleCreate = async (e) => {
   }
 };
 
-// Fonction pour la mise à jour d'un élève
+
+
+
+
 const handleUpdate = async (e) => {
   e.preventDefault();
 
@@ -698,7 +780,7 @@ Annuler
                 sx={{ backgroundColor: '#ffffff' }}
               >
                 <MenuItem value="Masculin">Masculin</MenuItem>
-                <MenuItem value="Féminin">Féminin</MenuItem>
+                <MenuItem value="Feminin">Féminin</MenuItem>
               </TextField>
             </Grid>
 
