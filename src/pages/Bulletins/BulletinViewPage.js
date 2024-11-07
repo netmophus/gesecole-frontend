@@ -72,6 +72,7 @@ const BulletinViewPage = () => {
   }, [id, user.token]);
 
 
+
 const handleDownloadPDF = async () => {
   const input = bulletinRef.current;
 
@@ -80,7 +81,8 @@ const handleDownloadPDF = async () => {
     return;
   }
 
-  const imageUrl = `${apiBaseUrl}/${student.photo.replace(/\\/g, '/')}`;
+  // Utiliser l'URL Cloudinary stockée dans la base de données
+  const imageUrl = student?.photo;
 
   // Fonction pour charger l'image de l'élève
   const loadImage = (url) => {
@@ -110,8 +112,8 @@ const handleDownloadPDF = async () => {
     });
 
     const qrCodeDataURL = await QRCode.toDataURL(qrData, {
-      errorCorrectionLevel: 'H', // Meilleure correction d'erreur pour assurer la lisibilité
-      width: 150, // Taille cohérente du QR Code
+      errorCorrectionLevel: 'H',
+      width: 150,
     });
 
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -120,22 +122,22 @@ const handleDownloadPDF = async () => {
 
     // Positionner le QR code en haut à droite
     const qrCodeSize = 20;
-    const qrCodeX = pdfWidth - qrCodeSize - 5; // Ajusté pour la droite
-    const qrCodeY = 10; // En haut
+    const qrCodeX = pdfWidth - qrCodeSize - 5;
+    const qrCodeY = 10;
     pdf.addImage(qrCodeDataURL, 'PNG', qrCodeX, qrCodeY, qrCodeSize, qrCodeSize);
 
     // Positionner l'image de l'élève à gauche en haut
     const studentImgWidth = 20;
     const studentImgHeight = 20;
-    const imageX = 10; // À gauche
-    const imageY = 10; // En haut
+    const imageX = 10;
+    const imageY = 10;
     pdf.addImage(imgElement, 'PNG', imageX, imageY, studentImgWidth, studentImgHeight);
 
     // Ajouter une ligne de séparation
-    pdf.line(10, 50, pdfWidth - 10, 50); // Ligne horizontale sous le QR code et la photo
+    pdf.line(10, 50, pdfWidth - 10, 50);
 
     // Ajouter le bulletin en dessous des éléments en haut
-    const bulletinY = 40; // Ajusté pour ne pas chevaucher les éléments du haut
+    const bulletinY = 40;
     pdf.addImage(imgDataBulletin, 'PNG', 0, bulletinY, pdfWidth, pdfHeight - bulletinY);
 
     // Enregistrer le PDF avec un nom descriptif
@@ -157,9 +159,9 @@ const handleDownloadPDF = async () => {
 
   return (
     <Container maxWidth="md">
-      {/* <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h4" align="center" gutterBottom>
         Détails du Bulletin {activeAcademicYear} 
-      </Typography> */}
+      </Typography> 
       {bulletin && student && classStatistics ? (
         <>
        

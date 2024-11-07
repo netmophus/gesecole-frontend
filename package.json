@@ -16,6 +16,7 @@
     "axios": "^1.7.4",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.5.4",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
@@ -32,6 +33,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
+    "recharts": "^2.13.0",
     "serve": "^14.2.4",
     "stream-http": "^3.2.0",
     "swiper": "^11.1.14",
@@ -40,7 +42,7 @@
     "winston": "^3.14.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",    
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

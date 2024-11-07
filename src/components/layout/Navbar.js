@@ -1,5 +1,5 @@
 
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItemButton, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'; // Importation de CloseIcon

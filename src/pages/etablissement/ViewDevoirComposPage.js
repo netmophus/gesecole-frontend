@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { TablePagination } from '@mui/material';
 import { Snackbar } from '@mui/material';
+import AverageDisplay from './AverageDisplay'; // Assurez-vous que le chemin est correct
+
 const ViewDevoirComposPage = () => {
   const navigate = useNavigate();
 
@@ -38,39 +40,55 @@ const ViewDevoirComposPage = () => {
     }
 }, [navigate]);
 
+
+
 useEffect(() => {
   const token = localStorage.getItem('token');
   const schoolId = localStorage.getItem('schoolId');
 
-  // Vérifiez si le token et l'identifiant de l'école sont présents
   if (!token || !schoolId) {
     console.error("Token ou identifiant d'établissement manquant. Redirection vers la page de connexion.");
     navigate('/login');
     return;
   }
 
-  const fetchData = async () => {
+  const fetchClasses = async () => {
     try {
-      const devoirRes = await axios.get(`${apiBaseUrl}/api/devoircompo`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log('Devoirs/Compositions récupérés:', devoirRes.data);
-      setDevoirCompos(devoirRes.data);
-      setFilteredDevoirCompos(devoirRes.data);
-
       const classRes = await axios.get(`${apiBaseUrl}/api/classes?establishmentId=${schoolId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('Classes récupérées:', classRes.data);
       setClasses(classRes.data.classes);
     } catch (err) {
-      console.error('Erreur lors de la récupération des données:', err);
+      console.error('Erreur lors de la récupération des classes:', err);
     }
   };
 
-  fetchData();
+  fetchClasses();
 }, [navigate, apiBaseUrl]);
 
+// useEffect pour charger les devoirs/compositions une fois la classe sélectionnée
+useEffect(() => {
+  if (selectedClass) {
+    const token = localStorage.getItem('token');
+
+    const fetchData = async () => {
+      try {
+        const devoirRes = await axios.get(`${apiBaseUrl}/api/devoircompo`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { classId: selectedClass }, // Filtrer par classe
+        });
+        console.log('Devoirs/Compositions récupérés:', devoirRes.data);
+        setDevoirCompos(devoirRes.data);
+        setFilteredDevoirCompos(devoirRes.data);
+      } catch (err) {
+        console.error('Erreur lors de la récupération des devoirs/compositions:', err);
+      }
+    };
+
+    fetchData();
+  }
+}, [selectedClass, apiBaseUrl]);
 
 const handleSaveEdit = async () => {
   const token = localStorage.getItem('token');
@@ -149,32 +167,54 @@ const handleSaveEdit = async () => {
     setPage(0);
   };
 
-  // Gestion de la recherche
+  
+
+  // const handleSearchChange = (event) => {
+  //   const newSearchTerm = event.target.value.toLowerCase();
+  //   setSearchTerm(newSearchTerm);
+  
+  //   // Appel immédiat de filterDevoirCompos pour mettre à jour filteredDevoirCompos
+  //   filterDevoirCompos();
+  // };
+  
+
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-    filterDevoirCompos();
-  };
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
 
-
-  const filterDevoirCompos = () => {
-    const establishmentId = user.schoolId;
-    const selectedClassId = selectedClass;
-  
-    const filtered = devoirCompos.filter(devoir =>
-      devoir.student && // Vérifie si student n'est pas null
-      devoir.establishmentId === establishmentId && // Vérifie si l'ID de l'établissement correspond
-      (!selectedClassId || devoir.classId?._id === selectedClassId) && // Vérifie l'ID de la classe
-      (
-        devoir.student.firstName.toLowerCase().includes(searchTerm) ||
-        devoir.student.lastName.toLowerCase().includes(searchTerm)
-      )
+    const filtered = devoirCompos.filter(devoir => 
+        devoir.student.firstName.toLowerCase().includes(term) ||
+        devoir.student.lastName.toLowerCase().includes(term)
     );
-  
-    console.log('Devoirs filtrés:', filtered); // Ajout d'un log pour vérifier les résultats du filtrage
-    setFilteredDevoirCompos(filtered);
-  };
-  
 
+    console.log("Données après filtrage : ", filtered); // Vérifiez ici
+    setFilteredDevoirCompos(filtered);
+};
+
+ 
+  // const filterDevoirCompos = () => {
+  //   const establishmentId = user.schoolId;
+  //   const selectedClassId = selectedClass;
+  
+  //   // Filtrer les devoirs/compositions
+  //   const filtered = devoirCompos.filter(devoir =>
+  //     devoir.student && // Vérifie si student n'est pas null
+  //     devoir.establishmentId === establishmentId && // Vérifie si l'ID de l'établissement correspond
+  //     (!selectedClassId || devoir.classId?._id === selectedClassId) && // Vérifie l'ID de la classe
+  //     (
+  //       devoir.student.firstName.toLowerCase().includes(searchTerm) ||
+  //       devoir.student.lastName.toLowerCase().includes(searchTerm)
+  //     )
+  //   );
+  
+  //   console.log('Résultats du filtrage avant affectation à filteredDevoirCompos:', filtered);
+  
+  //   // Mettre à jour l'état avec les résultats filtrés
+  //   setFilteredDevoirCompos(filtered);
+  //   console.log('État filteredDevoirCompos après mise à jour :', filtered);
+  // };
+  
+  
   const handleClassChange = (event) => {
     const classId = event.target.value;
     setSelectedClass(classId);
@@ -184,163 +224,198 @@ const handleSaveEdit = async () => {
 
   return (
     <Container maxWidth="lg">
-      <Card sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: 3, mt:4, mb:4, boxShadow: 3 }}>
-
-         {/* Bouton de retour vers le dashboard */}
-         <Button
-            variant="outlined"
+      <Card
+        sx={{
+          backgroundColor: 'rgba(0, 0, 0, 0.03)',
+          padding: 4,
+          mt: 5,
+          mb: 5,
+          boxShadow: 4,
+          borderRadius: '12px',
+        }}
+      >
+        {/* Bouton de retour vers le dashboard */}
+        <Box display="flex" justifyContent="flex-start" mb={3}>
+          <Button
+            variant="contained"
             onClick={() => navigate('/etablissement/dashboardPage')}
             sx={{
-              marginBottom: 2,
               backgroundColor: '#004d40',
               color: '#fff',
-              '&:hover': {
-                backgroundColor: '#00332d',
-                color: '#fff',
-              },
+              '&:hover': { backgroundColor: '#00332d' },
               borderRadius: 2,
               padding: '10px 20px',
+              fontWeight: 'bold',
             }}
           >
             Retour au Dashboard
           </Button>
-
+        </Box>
+  
         <CardContent>
-          <Typography variant="h4" gutterBottom>Visualiser les Notes</Typography>
-
-          {/* Zone de recherche */}
-          <TextField
-            label="Rechercher par élève"
-            variant="outlined"
-            fullWidth
-            value={searchTerm}
-            onChange={handleSearchChange}
-            sx={{ mb: 3 }}
-          />
-
-          {/* Filtre par classe */}
-          <TextField
-            select
-            label="Classe"
-            value={selectedClass}
-            onChange={handleClassChange}
-            fullWidth
-            sx={{ mb: 3 }}
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ color: '#333', fontWeight: 'bold', mb: 4 }}
           >
-            {classes.map((classe) => (
-              <MenuItem key={classe._id} value={classe._id}>
-                {classe.name}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          {/* Tableau des notes */}
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                <TableCell>Année Scolaire</TableCell> {/* Nouvelle colonne */}
-                  <TableCell>Élève</TableCell>
-                  <TableCell>Matière</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Note</TableCell>
-                  <TableCell>Coefficient</TableCell>
-                  <TableCell>Semestre</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-              {filteredDevoirCompos
-  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  .map((devoir) => (
-    <TableRow key={devoir._id}>
-      <TableCell>{devoir.academicYear}</TableCell>
-      <TableCell>{devoir.student.firstName} {devoir.student.lastName}</TableCell>
-      <TableCell>{devoir.subject?.name || 'Non spécifiée'}</TableCell>
-      <TableCell>{devoir.type}</TableCell>
-      <TableCell>{devoir.note}</TableCell>
-      <TableCell>{devoir.coefficient || 'Non défini'}</TableCell>
-      <TableCell>{devoir.semester}</TableCell>
-      <TableCell>
-        <IconButton color="primary" onClick={() => handleEdit(devoir)}>
-          <EditIcon />
-        </IconButton>
-        <IconButton color="secondary" onClick={() => handleDelete(devoir._id)}>
-          <DeleteIcon />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  ))}
-
-              </TableBody>
-            </Table>
-
-            {/* Pagination */}
-            <TablePagination
-              component="div"
-              count={filteredDevoirCompos.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </TableContainer>
-        </CardContent>
-        <Snackbar
-  open={snackbarOpen}
-  autoHideDuration={3000}
-  onClose={handleCloseSnackbar}
-  message={snackbarMessage}
-/>
-
-      </Card>
-
-      {/* Modal d'édition */}
-      <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
-        <DialogTitle>Modifier le Devoir/Composition</DialogTitle>
-        <DialogContent>
-          {selectedDevoir && (
-            <Box component="form" sx={{ mt: 2 }}>
-              <TextField
-                select
-                label="Type"
-                value={selectedDevoir.type}
-                onChange={(e) => setSelectedDevoir({ ...selectedDevoir, type: e.target.value })}
-                fullWidth
-                sx={{ mb: 2 }}
-              >
-                <MenuItem value="Devoir 1">Devoir 1</MenuItem>
-                <MenuItem value="Devoir 2">Devoir 2</MenuItem>
-                <MenuItem value="Composition">Composition</MenuItem>
-              </TextField>
-
-              <TextField
-                label="Note"
-                type="number"
-                value={selectedDevoir.note}
-                onChange={(e) => setSelectedDevoir({ ...selectedDevoir, note: e.target.value })}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-
-              <TextField
-                label="Coefficient"
-                type="number"
-                value={selectedDevoir.coefficient || ''}
-                onChange={(e) => setSelectedDevoir({ ...selectedDevoir, coefficient: e.target.value })}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-            </Box>
+            Visualisation des Notes
+          </Typography>
+  
+          {/* Sélecteur de classe */}
+          <Box mb={3}>
+            <TextField
+              select
+              label="Sélectionner une Classe"
+              value={selectedClass}
+              onChange={handleClassChange}
+              fullWidth
+              sx={{ backgroundColor: '#fff', borderRadius: 1 }}
+            >
+              {classes.map((classe) => (
+                <MenuItem key={classe._id} value={classe._id}>
+                  {classe.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+  
+          {/* Conditionnel pour affichage des données */}
+          {selectedClass ? (
+            <>
+              {/* Zone de recherche */}
+              <Box mb={3}>
+                <TextField
+                  label="Rechercher un élève"
+                  variant="outlined"
+                  fullWidth
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  sx={{ backgroundColor: '#fff', borderRadius: 1 }}
+                />
+              </Box>
+  
+              {/* Tableau des notes */}
+              <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+                <Table>
+                  <TableHead sx={{ backgroundColor: '#004d40' }}>
+                    <TableRow>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Année Scolaire</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Élève</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Matière</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Type</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Note</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Coefficient</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Semestre</TableCell>
+                      <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredDevoirCompos
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((devoir) => (
+                        <TableRow key={devoir._id} hover>
+                          <TableCell>{devoir.academicYear}</TableCell>
+                          <TableCell>
+                            {`${devoir.student.firstName} ${devoir.student.lastName}`}
+                          </TableCell>
+                          <TableCell>{devoir.subject?.name || 'Non spécifiée'}</TableCell>
+                          <TableCell>{devoir.type}</TableCell>
+                          <TableCell>{devoir.note}</TableCell>
+                          <TableCell>{devoir.coefficient || 'Non défini'}</TableCell>
+                          <TableCell>{devoir.semester}</TableCell>
+                          <TableCell>
+                            <IconButton color="primary" onClick={() => handleEdit(devoir)}>
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton color="secondary" onClick={() => handleDelete(devoir._id)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+  
+                {/* Pagination */}
+                <TablePagination
+                  component="div"
+                  count={filteredDevoirCompos.length}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableContainer>
+            </>
+          ) : (
+            <Typography variant="h6" color="textSecondary" sx={{ mt: 4, textAlign: 'center' }}>
+              Veuillez sélectionner une classe pour afficher les devoirs/compositions.
+            </Typography>
           )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenEditModal(false)} color="secondary">Annuler</Button>
-          <Button onClick={handleSaveEdit} color="primary">Sauvegarder</Button>
-        </DialogActions>
-      </Dialog>
+        </CardContent>
+  
+        {/* Snackbar pour affichage des messages */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={snackbarMessage}
+        />
+  
+        {/* Modal d'édition */}
+        <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+          <DialogTitle>Modifier le Devoir/Composition</DialogTitle>
+          <DialogContent>
+            {selectedDevoir && (
+              <Box component="form" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Type"
+                  value={selectedDevoir.type}
+                  onChange={(e) => setSelectedDevoir({ ...selectedDevoir, type: e.target.value })}
+                  fullWidth
+                  sx={{ mb: 2 }}
+                >
+                  <MenuItem value="Devoir 1">Devoir 1</MenuItem>
+                  <MenuItem value="Devoir 2">Devoir 2</MenuItem>
+                  <MenuItem value="Composition">Composition</MenuItem>
+                </TextField>
+  
+                <TextField
+                  label="Note"
+                  type="number"
+                  value={selectedDevoir.note}
+                  onChange={(e) => setSelectedDevoir({ ...selectedDevoir, note: e.target.value })}
+                  fullWidth
+                  sx={{ mb: 2 }}
+                />
+  
+                <TextField
+                  label="Coefficient"
+                  type="number"
+                  value={selectedDevoir.coefficient || ''}
+                  onChange={(e) => setSelectedDevoir({ ...selectedDevoir, coefficient: e.target.value })}
+                  fullWidth
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenEditModal(false)} color="secondary">Annuler</Button>
+            <Button onClick={handleSaveEdit} color="primary">Sauvegarder</Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
     </Container>
   );
+  
+
 };
 
 export default ViewDevoirComposPage;
+
+
+
+

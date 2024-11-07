@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MessageMinistreModal from './MessageMinistreModal'; // Assure-toi que le chemin est correct
-
+import ministerPhoto from '../assets/images/elisa-men.jpg';
 
 
 const HomePage = () => {
@@ -161,7 +161,7 @@ const HomePage = () => {
   }}
 />
 <Typography
-  variant="h6"
+  variant="h7"
   component="h1"
   sx={{
     marginTop: '20px',
@@ -170,11 +170,11 @@ const HomePage = () => {
       xs: '1.5rem', // Taille réduite pour les petits écrans
       sm: '2rem',   // Taille un peu plus grande pour les écrans small
       md: '2.5rem', // Taille ajustée pour les écrans moyens
-      lg: '3rem',   // Taille par défaut pour les grands écrans
+      lg: '2.7rem',   // Taille par défaut pour les grands écrans
     },
   }}
 >
-  Portail des Établissements Scolaires du Niger
+L'éducation universelle et participative pour un Niger inclusif
 </Typography>
 
 
@@ -298,88 +298,180 @@ const HomePage = () => {
       <Grid container spacing={4}>
         {/* Card 1: Inscription Examens */}
         <Grid item xs={12} md={6}>
-          <Card sx={{
-            backgroundColor: '#333',
-            color: '#fff',
-            padding: '20px',
-            borderRadius: '12px',
-            boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, background-color 0.3s ease',
-            '&:hover': {
-              transform: 'scale(1.05)',
-              backgroundColor: '#444',
-            },
-          }}>
-            <CardContent>
-              <AssignmentIcon sx={{ fontSize: 50, color: '#FF8C00' }} />
-              <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
-                Enregistrement aux Examens
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
-                Inscription et Participation aux Examens 
-              </Typography>
-             
+  <Card sx={{
+    backgroundColor: '#004d40', // Vert foncé pour BEPC
+    color: '#fff',
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+    textAlign: 'center',
+    transition: 'transform 0.3s ease, background-color 0.3s ease',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      backgroundColor: '#00695c', // Plus clair au survol
+    },
+  }}>
+    <CardContent>
+      <AssignmentIcon sx={{ fontSize: 50, color: '#FFD700' }} /> {/* Icône dorée pour BEPC */}
+      <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+        Enregistrement aux Examens
+      </Typography>
+      <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
+        Inscription et Participation aux Examens BEPC
+      </Typography>
+      <Button
+        component={Link}
+        to="/bepc-access"
+        variant="contained"
+        sx={{
+          backgroundColor: '#FFD700', // Doré pour le bouton BEPC
+          color: '#333',
+          fontSize: '1.1rem',
+          '&:hover': { backgroundColor: '#ffc107' }, // Doré plus vif au survol
+        }}
+      >
+        Inscription BEPC
+      </Button>
+    </CardContent>
+  </Card>
+</Grid>
 
-              <Button
-                component={Link}
-                to="/bepc-access"
-                variant="contained"
-                sx={{
-                  backgroundColor: '#FF8C00',
-                  color: '#fff',
-                  fontSize: '1.1rem',
-                  '&:hover': { backgroundColor: '#e67e22' },
-               
-                  
-                }}
-              >
-                Inscription BEPC
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
+
+<Grid item xs={12} md={6}>
+  <Card sx={{
+    backgroundColor: '#1A535C', // Bleu vert pour CFEPD
+    color: '#fff',
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+    textAlign: 'center',
+    transition: 'transform 0.3s ease, background-color 0.3s ease',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      backgroundColor: '#2A7E84', // Plus clair au survol
+    },
+  }}>
+    <CardContent>
+      <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange pour CFEPD */}
+      <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+        Enregistrement aux Examens
+      </Typography>
+      <Typography variant="body1" sx={{ color: '#fff8e1', mb: 3 }}>
+        Inscription et Participation aux Examens CFEPD
+      </Typography>
+      <Button
+        component={Link}
+        to="/cfepd-access"
+        variant="contained"
+        sx={{
+          backgroundColor: '#FF8C00', // Orange pour le bouton CFEPD
+          color: '#fff',
+          fontSize: '1.1rem',
+          '&:hover': { backgroundColor: '#ff751a' }, // Orange plus vif
+        }}
+      >
+        Inscription CFEPD
+      </Button>
+    </CardContent>
+  </Card>
+</Grid>
+
+
+
 
         {/* Card 2: Accès au Bulletin Numérique */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{
-            backgroundColor: '#004d40',
+        <Grid container spacing={4}>
+  {/* Carte Accès au Bulletin Numérique */}
+  <Grid item xs={12} md={6}>
+    <Card sx={{
+      backgroundColor: '#2c3e50', // Bleu nuit pour le fond
+      color: '#fff',
+      padding: '20px',
+      mt: 5,
+      ml: 5,
+      borderRadius: '12px',
+      boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+      textAlign: 'center',
+      transition: 'transform 0.3s ease, background-color 0.3s ease',
+      '&:hover': {
+        transform: 'scale(1.05)',
+        backgroundColor: '#34495e', // Plus clair au survol
+      },
+    }}>
+      <CardContent>
+        <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange */}
+        <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+          Accès au Bulletin Numérique
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
+          Consultez les bulletins de vos enfants.
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: '#FF8C00', // Orange pour le bouton
             color: '#fff',
-            padding: '20px',
-            borderRadius: '12px',
-            boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
-            textAlign: 'center',
-            transition: 'transform 0.3s ease, background-color 0.3s ease',
-            '&:hover': {
-              transform: 'scale(1.05)',
-              backgroundColor: '#00695c',
-            },
-          }}>
-            <CardContent>
-              <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} />
-              <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
-                Accès au Bulletin Numérique
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
-                 Consultez les bulletins de vos enfants.
-              </Typography>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: '#FF8C00',
-                  color: '#fff',
-                  fontSize: '1.1rem',
-                  '&:hover': { backgroundColor: '#e67e22' },
-                  mr: 2,
-                }}
-                onClick={() => handleAccess('consult')}
-              >
-                Consulter Bulletin
-              </Button>
-              
-            </CardContent>
-          </Card>
-        </Grid>
+            fontSize: '1.1rem',
+            '&:hover': { backgroundColor: '#e67e22' }, // Orange vif au survol
+            mr: 2,
+          }}
+          onClick={() => handleAccess('consult')}
+        >
+          Consulter Bulletin
+        </Button>
+      </CardContent>
+    </Card>
+  </Grid>
+
+  {/* Carte avec la photo du Ministre */}
+  <Grid item xs={12} md={6}>
+  <Card sx={{
+    backgroundColor: '#fff', // Fond clair et agréable pour la carte
+    color: '#333',
+    mt: 5,
+    ml: 2,
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+    display: 'flex', // Disposition en ligne
+    alignItems: 'center',
+    transition: 'transform 0.3s ease',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      backgroundColor: '#f9f9f9', // Fond légèrement plus clair au survol
+    },
+  }}>
+    <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <img
+        src={ministerPhoto} // Utilisation de l'import de l'image
+        alt="Photo du Ministre"
+        style={{
+          width: '30%',
+          height: 'auto',
+          borderRadius: '8px',
+        }}
+      />
+      <Box sx={{ textAlign: 'left' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
+          Mme Elisabeth Sherif
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#555', fontWeight: 'medium', mt: 1 }}>
+          Ministre de l'Éducation Nationale, de l'Alphabétisation, de l'Enseignement Professionnel
+          et de la Promotion des Langues Nationales
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#FF8C00', mt: 1, fontSize: '1.5rem', textAlign: 'left', fontWeight:'bold'}}>
+          Un engagement fort pour une éducation inclusive et participative.
+        </Typography>
+      </Box>
+    </CardContent>
+  </Card>
+</Grid>
+
+
+
+</Grid>
+
+
       </Grid>
     </Box>
 
@@ -536,24 +628,29 @@ const HomePage = () => {
   </Typography>
 
   <Grid container spacing={4}>
-    <Grid item xs={12} md={4}>
-      <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
-          Ressources Pédagogiques
-        </Typography>
-        <Typography variant="body1" sx={{ color: '#004d40' }}>
-          Explorez des vidéos, des guides PDF et des fiches pour chaque matière et niveau scolaire.
-        </Typography>
-        <Button 
-          variant="contained" 
-          sx={{ backgroundColor: '#FF8C00', marginTop: '10px' }} 
-          onClick={() => alert('Cette fonctionnalité est en cours de développement')}
-        >
-          Accéder
-        </Button>
-      </Paper>
-    </Grid>
+  
+  <Grid item xs={12} md={4}>
+  <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
+    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
+      Ressources Pédagogiques
+    </Typography>
+    <Typography variant="body1" sx={{ color: '#004d40' }}>
+      Explorez des vidéos, des guides PDF et des fiches pour chaque matière et niveau scolaire.
+    </Typography>
+    <Button 
+      component={Link} 
+      to="/login"
+      variant="contained" 
+      sx={{ backgroundColor: '#FF8C00', marginTop: '10px' }} 
+    >
+      Accéder
+    </Button>
+  </Paper>
+</Grid>
 
+
+
+   
     <Grid item xs={12} md={4}>
       <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
         <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
@@ -647,9 +744,8 @@ const HomePage = () => {
         boxShadow: 3,
         borderRadius: '50%',
         transition: 'transform 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.1)',
-        },
+        transform: 'scale(1.1)',
+     
       }}
     >
       <Facebook />
@@ -666,9 +762,8 @@ const HomePage = () => {
         boxShadow: 3,
         borderRadius: '50%',
         transition: 'transform 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.1)',
-        },
+        transform: 'scale(1.1)',
+        
       }}
     >
       <Twitter />
@@ -685,9 +780,8 @@ const HomePage = () => {
         boxShadow: 3,
         borderRadius: '50%',
         transition: 'transform 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.1)',
-        },
+        transform: 'scale(1.1)',
+     
       }}
     >
       <Instagram />
@@ -704,9 +798,7 @@ const HomePage = () => {
         boxShadow: 3,
         borderRadius: '50%',
         transition: 'transform 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.1)',
-        },
+        transform: 'scale(1.1)',
       }}
     >
       <LinkedIn />

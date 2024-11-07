@@ -204,7 +204,7 @@ const CreateBulletinPage = () => {
   <Box mt={2} display="flex" justifyContent="center">
     <img
       src={`${apiBaseUrl}/${formData.studentPhoto.replace(/\\/g, '/')}`} // Remplacement des backslashes
-      alt="Photo de l'élève"
+      alt="Portait de l'élève"
       style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50%' }}
     />
   </Box>

@@ -353,33 +353,11 @@ const handleSave = (e) => {
   };
   
   
-  // const handleDelete = async (id) => {
-  //   if (!user?.permissions?.delete) {
-  //     setSnackbar({ open: true, message: 'Vous n\'avez pas la permission de supprimer cet enseignant.', severity: 'error' });
-  //     return;
-  //   }
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     await axios.delete(`${apiBaseUrl}/api/teachers/${id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  
-  //     fetchTeachers();  // Met à jour la liste des enseignants après suppression
-  //     setSnackbar({ open: true, message: 'Enseignant supprimé avec succès.', severity: 'success' });
-  //   } catch (err) {
-  //     console.error("Erreur lors de la suppression de l'enseignant:", err.response ? err.response.data : err.message);
-  //     setSnackbar({ open: true, message: 'Erreur lors de la suppression de l\'enseignant.', severity: 'error' });
-  //   }
-  // };
-  
   const handleDelete = async (id) => {
     if (!user?.permissions?.delete) {
       setSnackbar({ open: true, message: 'Vous n\'avez pas la permission de supprimer cet enseignant.', severity: 'error' });
       return;
     }
-  
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`${apiBaseUrl}/api/teachers/${id}`, {
@@ -392,19 +370,9 @@ const handleSave = (e) => {
       setSnackbar({ open: true, message: 'Enseignant supprimé avec succès.', severity: 'success' });
     } catch (err) {
       console.error("Erreur lors de la suppression de l'enseignant:", err.response ? err.response.data : err.message);
-  
-      // Vérifier le type d'erreur renvoyé par le backend
-      const errorMessage = err.response?.data?.msg || 'Erreur lors de la suppression de l\'enseignant.';
-  
-      // Si l'erreur est liée à une assignation existante
-      if (errorMessage.includes('assigné')) {
-        setSnackbar({ open: true, message: 'Impossible de supprimer cet enseignant car il a des matières assignées. Veuillez d\'abord retirer les assignations.', severity: 'error' });
-      } else {
-        setSnackbar({ open: true, message: errorMessage, severity: 'error' });
-      }
+      setSnackbar({ open: true, message: 'Erreur lors de la suppression de l\'enseignant.', severity: 'error' });
     }
   };
-
   
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -546,12 +514,10 @@ const handleSave = (e) => {
             key={teacher._id}
             sx={{ '&:hover': { backgroundColor: '#f1f8e9' }, transition: 'background-color 0.3s ease' }}
           >
-
-
-           <TableCell>
+            <TableCell>
               {teacher.photo ? (
                 <img
-                  src={teacher.photo}  // URL complète de Cloudinary
+                  src={`http://localhost:5000/${teacher.photo}`}  // URL de la photo
                   alt={teacher.nom}
                   style={{ 
                     width: '50px', 
@@ -566,7 +532,6 @@ const handleSave = (e) => {
                 <Typography sx={{ color: '#757575' }}>Aucune photo</Typography>
               )}
             </TableCell>
-
 
             <TableCell>{teacher.nom || 'N/A'}</TableCell>
             <TableCell>{teacher.telephone || 'N/A'}</TableCell>
@@ -722,7 +687,7 @@ const handleSave = (e) => {
   <Typography variant="body1">Photo de l'enseignant</Typography>
 
   {/* Afficher l'aperçu de l'ancienne photo */}
-  {/* {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
+  {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
     <Box sx={{ mt: 2 }}>
       <Typography variant="body2" sx={{ mb: 1 }}>
         Photo actuelle :
@@ -733,22 +698,7 @@ const handleSave = (e) => {
         style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5%' }}
       />
     </Box>
-  )} */}
-
-{currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
-  <Box sx={{ mt: 2 }}>
-    <Typography variant="body2" sx={{ mb: 1 }}>
-      Photo actuelle :
-    </Typography>
-    <img
-      src={currentTeacher.photo}  // Utilise l'URL complète de Cloudinary
-      alt={currentTeacher.nom}
-      style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5%' }}
-    />
-  </Box>
-)}
-
-
+  )}
 
   {/* Champ pour uploader une nouvelle photo */}
   <input
@@ -871,25 +821,6 @@ const handleSave = (e) => {
       </Dialog>
 
 
-      {/* <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation de suppression</DialogTitle>
-          <DialogContent>Voulez-vous vraiment supprimer cet enseignant ?</DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button
-              onClick={confirmDelete}
-              sx={{
-                backgroundColor: '#d9534f',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#c9302c',
-                },
-              }}
-            >
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog> */}
 
 
 <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>

@@ -45,6 +45,13 @@ const ClassPage = () => {
   // Ajoute ceci dans ton composant ClassPage.js ou un autre composant pertinent
 const [academicYear, setAcademicYear] = useState('N/A');
 
+// État pour gérer le dialog de confirmation
+const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+const [classToDelete, setClassToDelete] = useState(null);
+
+
+
+
 // Fonction pour récupérer l'année académique active
 const fetchAcademicYear = async () => {
   try {
@@ -137,25 +144,49 @@ useEffect(() => {
     setEditing(false);
   };
 
+
+
   const handleSave = async () => {
     if (!user || !user.token) {
-      alert('Vous devez être connecté pour effectuer cette action');
+      setSnackbar({ open: true, message: 'Vous devez être connecté pour effectuer cette action', severity: 'error' });
       return;
     }
   
     try {
+      // Préparer les données de la classe
       const classData = { ...currentClass, establishment: user.schoolId };
       console.log("Données de la classe avant envoi:", classData);
   
-          // Si le niveau est "Lycée", valider la série
-    if (currentClass.level === 'Lycée' && !classData.series) {
-      alert('Veuillez sélectionner une série pour le lycée.');
-      return;
-    }
-
-
-
-
+      // Si le niveau est "Lycée", valider la série
+      if (classData.level === 'Lycée' && !classData.series) {
+        setSnackbar({ open: true, message: 'Veuillez sélectionner une série pour le lycée.', severity: 'warning' });
+        return;
+      }
+  
+      // S'assurer que maxStudents est un nombre valide
+      classData.maxStudents = parseInt(classData.maxStudents, 10);
+      if (isNaN(classData.maxStudents) || classData.maxStudents <= 0) {
+        setSnackbar({ open: true, message: 'Le nombre maximal d\'étudiants doit être un nombre positif.', severity: 'warning' });
+        return;
+      }
+  
+      // Vérifier si le niveau change de manière interdite avant l'envoi de la requête au backend
+      if (editing) {
+        if ((currentClass.level === 'Collège' && classData.level === 'Lycée') ||
+            (currentClass.level === 'Lycée' && classData.level === 'Collège') ||
+            (currentClass.level === 'Primaire' && (classData.level === 'Collège' || classData.level === 'Lycée')) ||
+            ((currentClass.level === 'Collège' || currentClass.level === 'Lycée') && classData.level === 'Primaire')) {
+          setSnackbar({ open: true, message: "Modification du niveau entre 'Primaire', 'Collège', et 'Lycée' est interdite.", severity: 'error' });
+          return;
+        }
+      }
+  
+      // Supprimer la série si le niveau n'est pas "Lycée"
+      if (classData.level !== 'Lycée') {
+        delete classData.series;
+      }
+  
+      // Envoyer la requête au backend
       if (editing) {
         await axios.put(`${apiBaseUrl}/api/classes/${classData._id}`, classData, {
           headers: {
@@ -174,16 +205,19 @@ useEffect(() => {
   
       fetchClasses();
       handleClose();
+      setSnackbar({ open: true, message: 'Classe sauvegardée avec succès.', severity: 'success' });
     } catch (err) {
       console.error('Erreur lors de la sauvegarde de la classe:', err);
-      if (err.response && err.response.status === 400) {
-        alert(`Erreur: ${err.response.data.msg}`);
+      // Afficher le message d'erreur du backend en dernier recours
+      if (err.response && err.response.data && err.response.data.msg) {
+        setSnackbar({ open: true, message: err.response.data.msg, severity: 'error' });
       } else {
-        alert('Erreur du serveur');
+        setSnackbar({ open: true, message: 'Erreur du serveur lors de la sauvegarde de la classe.', severity: 'error' });
       }
     }
   };
-
+  
+  
   const handleEdit = (classItem) => {
     setCurrentClass(classItem);
     setEditing(true);
@@ -208,7 +242,6 @@ useEffect(() => {
       fetchClasses(); // Recharge la liste des classes après suppression
       setSnackbar({ open: true, message: 'Classe supprimée avec succès', severity: 'success' });
     } catch (err) {
-      // Si la classe est assignée à un élève, renvoie un message
       if (err.response && err.response.status === 400) {
         setSnackbar({ open: true, message: err.response.data.msg, severity: 'warning' });
       } else {
@@ -217,7 +250,30 @@ useEffect(() => {
       }
     }
   };
-  
+
+
+
+   // Fonction pour ouvrir le dialog de confirmation
+   const handleOpenConfirmDialog = (id) => {
+    setClassToDelete(id);
+    setOpenConfirmDialog(true);
+  };
+
+  // Fonction pour fermer le dialog de confirmation
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+    setClassToDelete(null);
+  };
+
+  // Fonction pour confirmer la suppression
+  const handleConfirmDelete = () => {
+    if (classToDelete) {
+      handleDelete(classToDelete);
+    }
+    handleCloseConfirmDialog();
+  };
+
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -231,24 +287,27 @@ useEffect(() => {
 // Fonction pour récupérer les élèves d'une classe spécifique
 const handleViewStudents = async (classId) => {
   try {
-  
-
     const res = await axios.get(`${apiBaseUrl}/api/students/class/${classId}/students`, {
       headers: { Authorization: `Bearer ${user.token}` },
     });
-    
-    
 
-    console.log('Données des étudiants:', res.data.students); // Ajoutez ceci pour voir les données des étudiants récupérées
-    setStudents(res.data.students); // Utilisez `res.data.students` pour accéder à la liste des élèves
-    setOpenStudentModal(true); // Ouvre le modal pour afficher les élèves
+    console.log('Données des étudiants:', res.data.students);
+
+    const fetchedStudents = res.data.students || [];
+
+    if (fetchedStudents.length === 0) {
+      // Afficher un message clair avec Snackbar s'il n'y a aucun élève
+      setSnackbar({ open: true, message: 'Cette classe n\'a actuellement aucun élève. Veuillez en ajouter.', severity: 'info' });
+    } else {
+      setStudents(fetchedStudents);
+      setOpenStudentModal(true); // Ouvre le modal pour afficher les élèves si des données existent
+    }
   } catch (err) {
     console.error('Erreur lors de la récupération des élèves:', err);
-    alert('Erreur lors de la récupération des élèves');
+    const errorMessage = err.response?.data?.msg || 'Une erreur est survenue lors de la récupération des élèves. Veuillez réessayer plus tard.';
+    setSnackbar({ open: true, message: errorMessage, severity: 'error' });
   }
 };
-
-
 
 
 
@@ -268,11 +327,6 @@ const handleViewNotes = async (student) => {
   }
 };
 
-
-
-
-
-
 const handleCloseStudentModal = () => {
   setOpenStudentModal(false);
 };
@@ -283,24 +337,6 @@ const handleCloseStudentDetailModal = () => {
   setOpenStudentDetailModal(false); // Fermer le modal
   setSelectedStudent(null); // Réinitialiser l'élève sélectionné
 };
-
-
-
-
-
-// const handlePrintPDF = () => {
-//   const element = document.getElementById('pdf-content'); // Section à imprimer
-
-//   const options = {
-//     margin: 0.5,
-//     filename: `Situation_${selectedStudent?.firstName}_${selectedStudent?.lastName}.pdf`,
-//     image: { type: 'jpeg', quality: 0.98 },
-//     html2canvas: { scale: 2 },
-//     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-//   };
-
-//   html2pdf().set(options).from(element).save();
-// };
 
 // Fonction pour organiser et calculer les moyennes par matière et semestre
 const organizeNotesBySemester = (notes) => {
@@ -415,9 +451,12 @@ const calculateAverageDevoirs = (devoirs) => {
                           <IconButton color="primary" onClick={() => handleEdit(classItem)}>
                             <EditIcon />
                           </IconButton>
-                          <IconButton color="secondary" onClick={() => handleDelete(classItem._id)}>
+                         
+                          {/* Modifier le bouton de suppression pour ouvrir le dialog de confirmation */}
+                          <IconButton color="secondary" onClick={() => handleOpenConfirmDialog(classItem._id)}>
                             <DeleteIcon />
                           </IconButton>
+
                           <Button
                             variant="contained"
                             color="info"
@@ -625,39 +664,71 @@ const calculateAverageDevoirs = (devoirs) => {
 
 
 {/* Modal pour afficher les details de l'élève */}
-      <Dialog
-  open={openStudentDetailModal}
-  onClose={handleCloseStudentDetailModal}
-  maxWidth="md"
+<Dialog
+  open={openStudentModal}
+  onClose={handleCloseStudentModal}
+  maxWidth="lg"
   fullWidth
 >
-  <DialogTitle>Situation de l'Élève</DialogTitle>
-  <DialogContent>
-    {selectedStudent && (
-      <Box>
-        <Typography variant="h6">
-          {selectedStudent.firstName} {selectedStudent.lastName}
+  <DialogTitle sx={{ backgroundColor: '#1976d2', color: '#fff', textAlign: 'center' }}>
+    Liste des élèves de la classe
+  </DialogTitle>
+  <DialogContent sx={{ padding: 3, backgroundColor: '#f9f9f9' }}>
+    {students.length > 0 ? (
+      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Matricule</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Nom</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Date de Naissance</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Genre</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {students.map((student) => (
+              <TableRow key={student._id} hover sx={{ '&:hover': { backgroundColor: '#e3f2fd' } }}>
+                <TableCell>{student.matricule || 'N/A'}</TableCell>
+                <TableCell>{`${student.firstName} ${student.lastName}`}</TableCell>
+                <TableCell>{new Date(student.dateOfBirth).toLocaleDateString('fr-FR')}</TableCell>
+                <TableCell>{student.gender}</TableCell>
+                <TableCell>
+                  <IconButton color="primary" onClick={() => handleViewNotes(student)}>
+                    <VisibilityIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    ) : (
+      <Box textAlign="center" p={2}>
+        <Typography variant="h6" sx={{ color: '#757575' }}>
+          Aucun élève trouvé dans cette classe. Veuillez ajouter des élèves.
         </Typography>
-        <Typography variant="body1">
-          Matricule : {selectedStudent.matricule || 'N/A'}
-        </Typography>
-        <Typography variant="body1">
-          Date de naissance :{' '}
-          {new Date(selectedStudent.dateOfBirth).toLocaleDateString('fr-FR')}
-        </Typography>
-        <Typography variant="body1">
-          Genre : {selectedStudent.gender || 'N/A'}
-        </Typography>
-        {/* Ajouter d'autres informations sur l'élève si nécessaire */}
       </Box>
     )}
   </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseStudentDetailModal} color="secondary">
+  <DialogActions sx={{ justifyContent: 'center', backgroundColor: '#f5f5f5', padding: 2 }}>
+    <Button
+      onClick={handleCloseStudentModal}
+      variant="contained"
+      sx={{
+        backgroundColor: '#1976d2',
+        color: '#fff',
+        '&:hover': {
+          backgroundColor: '#1565c0',
+        },
+        textTransform: 'none',
+      }}
+    >
       Fermer
     </Button>
   </DialogActions>
 </Dialog>
+
 
 
 
@@ -737,12 +808,33 @@ const calculateAverageDevoirs = (devoirs) => {
 </Dialog>
 
 
+{/* Dialog de confirmation pour supprimer une classe */}
+<Dialog
+        open={openConfirmDialog}
+        onClose={handleCloseConfirmDialog}
+        maxWidth="xs"
+      >
+        <DialogTitle>Confirmer la suppression</DialogTitle>
+        <DialogContent>
+          <Typography>Êtes-vous sûr de vouloir supprimer cette classe ? Cette action est irréversible.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmDialog} color="secondary">
+            Annuler
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary" variant="contained">
+            Confirmer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
 
 <Snackbar
   open={snackbar.open}
   autoHideDuration={6000} // Ferme automatiquement après 6 secondes
   onClose={() => setSnackbar({ ...snackbar, open: false })}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Position en haut et centré
 >
   <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
     {snackbar.message}

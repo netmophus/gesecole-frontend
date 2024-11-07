@@ -52,12 +52,12 @@ const formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
   };
 
   return (
-    <Paper ref={bulletinRef} elevation={3} sx={{ p: 3, mb: 3 }}>
+    <Paper ref={bulletinRef} elevation={3} sx={{ p: 3, mb:4, mt:3 }}>
       {/* En-tête */}
 
  {/* Bouton de retour au dashboard */}
  
-<Box
+{/* <Box
   sx={{
     textAlign: 'center',
     mb: 3,
@@ -90,7 +90,203 @@ const formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
   >
     {bulletin.establishmentId?.address || student.establishmentId?.address || "Adresse indisponible"}
   </Typography>
+</Box> */}
+
+
+<Box
+  sx={{
+    textAlign: 'center',
+    mb: 3,
+    p: 2,
+    backgroundColor: '#f5f5f5',
+    borderRadius: '12px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  }}
+>
+  {/* Nom de l'établissement avec une taille de police élevée */}
+  <Typography
+    variant="h4"
+    component="div"
+    sx={{
+      color: '#2c3e50',
+      fontWeight: 'bold',
+      fontSize: '1.8rem',
+      mb: 2,
+      letterSpacing: '0.05rem',
+    }}
+  >
+    {bulletin.establishmentId?.name || student.establishmentId?.name || "Nom de l'établissement indisponible"}
+  </Typography>
+
+  
+
+  {/* Organisation des informations supplémentaires */}
+  <Box
+    sx={{
+      textAlign: 'left',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 1,
+    }}
+  >
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '600px',
+        paddingBottom: '8px',
+        borderBottom: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+          fontWeight: 'bold',
+        }}
+      >
+        Adresse :
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+        }}
+      >
+        {bulletin.establishmentId?.address || student.establishmentId?.address || "Adresse indisponible"}
+      </Typography>
+    </Box>
+
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '600px',
+        paddingBottom: '8px',
+        borderBottom: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+          fontWeight: 'bold',
+        }}
+      >
+        Téléphone :
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+        }}
+      >
+        {bulletin.establishmentId?.phoneNumber || student.establishmentId?.phoneNumber || "Téléphone indisponible"}
+      </Typography>
+    </Box>
+
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '600px',
+        paddingBottom: '8px',
+        borderBottom: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+          fontWeight: 'bold',
+        }}
+      >
+        Email :
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+        }}
+      >
+        {bulletin.establishmentId?.contactEmail || student.establishmentId?.contactEmail || "Email indisponible"}
+      </Typography>
+    </Box>
+
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '600px',
+        paddingBottom: '8px',
+        borderBottom: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+          fontWeight: 'bold',
+        }}
+      >
+        Année de création :
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+        }}
+      >
+        {bulletin.establishmentId?.yearOfCreation || student.establishmentId?.yearOfCreation || "Année de création indisponible"}
+      </Typography>
+    </Box>
+
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        maxWidth: '600px',
+        paddingBottom: '8px',
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+          fontWeight: 'bold',
+        }}
+      >
+        Type :
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#7f8c8d',
+          fontSize: '0.95rem',
+        }}
+      >
+        {bulletin.establishmentId?.type || student.establishmentId?.type || "Type d'établissement indisponible"}
+      </Typography>
+    </Box>
+  </Box>
 </Box>
+
+
 
 
 
@@ -168,45 +364,47 @@ const formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
 </Grid>
 
 
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ bgcolor: '#f5f5f5', p: 1 }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-              {/* Image de l'élève */}
-              {student.photo && (
-                <img
-                  src={`http://localhost:5000/${student.photo.replace(/\\/g, '/')}`}
-                  alt="Photo de l'élève"
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    marginRight: '15px',
-                    objectFit: 'cover',
-                  }}
-                />
-              )}
-              <Box>
-                <Typography variant="h6" sx={sectionTitleStyle}>
-                  Informations sur l'Élève
-                </Typography>
-                <Typography variant="body2">
-                   {student.firstName} {student.lastName}
-                </Typography>
-                <Typography variant="body2">
-                  Matricule: {student.matricule || 'N/A'}
-                </Typography>
-                {/* <Typography variant="body2">
-                  Date de Naissance: {formattedDateOfBirth || 'N/A'}
-                </Typography> */}
+<Grid item xs={12} md={6}>
+  <Card variant="outlined" sx={{ bgcolor: '#f5f5f5', p: 1 }}>
+    <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* Image de l'élève */}
+      {student.photo && (
+        <img
+          src={student.photo} // Utilisation directe de l'URL Cloudinary
+          alt="Portrait de l'élève"
+          style={{
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            marginRight: '15px',
+            objectFit: 'cover',
+          }}
+        />
+      )}
+      <Box>
+        <Typography variant="h6" sx={sectionTitleStyle}>
+          Informations sur l'Élève
+        </Typography>
+        <Typography variant="body2">
+          {student.firstName} {student.lastName}
+        </Typography>
+        <Typography variant="body2">
+          Matricule: {student.matricule || 'N/A'}
+        </Typography>
+        <Typography variant="body2">
+          Date de Naissance: {formattedDateOfBirth}
+        </Typography>
+      </Box>
+    </CardContent>
+  </Card>
+</Grid>
 
-<Typography variant="body2">
-  Date de Naissance: {formattedDateOfBirth}
-</Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+
+
+
+
+
+</Grid>
 
 
 
@@ -253,91 +451,55 @@ const formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
 
       {/* Résumé des Notes et Statistiques de la Classe */}
      
-      <Grid container spacing={3} sx={{ mb: 2 }}>
-  {/* Résumé des Notes + Conduite & Discipline */}
-  <Grid item xs={12} md={6}>
-    <Card
-      sx={{
-        p: 2,
-        bgcolor: '#fafafa',
-        borderRadius: '13px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        height: '65%',
-        display: 'flex',
-        flexDirection: 'row',
-      }}
-    >
-      {/* Première moitié - Résumé des Notes */}
-      <CardContent
+          <Grid container spacing={3} sx={{ mb: 2 }}>
+    {/* Résumé des Notes */}
+    <Grid item xs={12} md={6}>
+      <Card
         sx={{
-          flex: 1,
-          borderRight: '2px solid #b2ebf2',
-          paddingRight: 2,
+          p: 2,
+          bgcolor: '#e3f2fd',
+          borderRadius: '10px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: '600',
-            color: '#00796b',
-            fontSize: '1rem',
-            textTransform: 'uppercase',
-            mb: 2,
-            textAlign: 'center',
-          }}
-        >
-          Résumé des Notes
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: '600',
+          color: '#0d47a1',
+          mb: 2,
+          textAlign: 'center',
+        }}
+      >
+        Résumé des Notes
+      </Typography>
+      <Box sx={{ textAlign: 'center', color: '#0d47a1', mb: 2 }}>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+          <strong>Total Notes :</strong> {totalNotes}
         </Typography>
-
-        <Box sx={{ textAlign: 'center', color: '#004d40', mb: 2 }}>
-          <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
-            <strong>Total Notes :</strong> {totalNotes}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
-            <strong>Total Coefficients :</strong> {totalCoefficients}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
-            <strong>Total Définitif :</strong> {totalDefinitive}
-          </Typography>
-        </Box>
-      </CardContent>
-
-      {/* Deuxième moitié - Moyenne + Conduite & Discipline */}
-      <CardContent
-        sx={{
-          flex: 1,
-          paddingLeft: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <Box sx={{ textAlign: 'center', color: '#004d40', mb: 2 }}>
-          <Typography variant="body2" sx={{ fontWeight: '800' }}>
-            <strong>Moyenne :</strong> {moyenneSemestrielle}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-            <strong>Classement :</strong> {periodRank}<sup>ème</sup>
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            mt: 2,
-            bgcolor: '#fafafa',
-            padding: 1,
-            borderRadius: '8px',
-            textAlign: 'center',
-          }}
-        >
-          <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#00695c' }}>
-            <strong>Conduite :</strong> {conductGrade} | <strong>Discipline :</strong> {disciplineGrade}
-          </Typography>
-        </Box>
-      </CardContent>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+          <strong>Total Coefficients :</strong> {totalCoefficients}
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+          <strong>Total Définitif :</strong> {totalDefinitive}
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: '1rem', mt: 2 }}>
+          <strong>Moyenne Semestrielle :</strong> {moyenneSemestrielle}
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+          <strong>Classement :</strong> {periodRank}<sup>ème</sup>
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: '1rem', mt: 2 }}>
+          <strong>Note de Conduite :</strong> {conductGrade}
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+          <strong>Note de Discipline :</strong> {disciplineGrade}
+        </Typography>
+      </Box>
     </Card>
   </Grid>
 
@@ -346,64 +508,41 @@ const formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
     <Card
       sx={{
         p: 2,
-        bgcolor: '#fafafa',
+        bgcolor: '#f1f8e9',
         borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        height: '65%',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      {/* Première moitié - Moyennes */}
-      <CardContent
+      <Typography
+        variant="h6"
         sx={{
-          flex: 1,
-          borderRight: '1px solid #bbdefb',
-          paddingRight: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+          fontWeight: '600',
+          color: '#33691e',
+          mb: 2,
+          textAlign: 'center',
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: '600',
-            color: '#1e88e5',
-            fontSize: '1rem',
-            textTransform: 'uppercase',
-            mb: 2,
-            textAlign: 'center',
-          }}
-        >
-          Statistiques de Classe
-        </Typography>
-
-        <Typography variant="body2" sx={{ fontSize: '1rem', color: '#1565c0', mb: 1 }}>
+        Statistiques de Classe
+      </Typography>
+      <Box sx={{ textAlign: 'center', color: '#33691e' }}>
+        <Typography variant="body2" sx={{ fontSize: '1rem' }}>
           <strong>Moyenne de la Classe :</strong> {classStatistics.classAverage}
         </Typography>
-      </CardContent>
-
-      {/* Deuxième moitié - Plus Forte et Plus Faible Moyenne */}
-      <CardContent
-        sx={{
-          flex: 1,
-          paddingLeft: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography variant="body2" sx={{ fontSize: '1rem', color: '#1565c0', mb: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '1rem', mt: 1 }}>
           <strong>Plus Forte Moyenne :</strong> {classStatistics.highestAverage}
         </Typography>
-        <Typography variant="body2" sx={{ fontSize: '1rem', color: '#1565c0' }}>
+        <Typography variant="body2" sx={{ fontSize: '1rem', mt: 1 }}>
           <strong>Plus Faible Moyenne :</strong> {classStatistics.lowestAverage}
         </Typography>
-      </CardContent>
+      </Box>
     </Card>
   </Grid>
 </Grid>
+
 
 
 

@@ -277,42 +277,96 @@ const ParentDashboard = () => {
       <Tab
   label="Bulletin"
   sx={{
-    background: 'linear-gradient(135deg, #f0f4c3, #dce775)',
+    background: '#004d40',
+    color: '#fff', // Initial color set to white
     borderRadius: '12px',
     mx: 1,
     px: 15,
     py: 1.5,
     mb: 2,
-    fontSize:'20px',
-    color: '#33691e',
+    fontSize: '20px',
     fontWeight: 'bold',
     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease, background-color 0.3s ease',
+    fontFamily: 'Montserrat, sans-serif', 
     '&:hover': {
       transform: 'scale(1.05)',
-      backgroundColor: '#d4e157',
+      backgroundColor: '#333',
+      color: '#fff', // Keep white on hover
     },
-    fontFamily: 'Montserrat, sans-serif', // Font changed to Montserrat
+    '&:focus': {
+      color: '#fff', // Ensure text stays white on focus
+    },
+    '&:active': {
+      color: '#fff', // Ensure text stays white on active state
+      backgroundColor: '#004d40',
+    },
+    '&:visited': {
+      color: '#fff', // Ensure text stays white if visited (for links)
+    },
   }}
+  
 />
-        <Tab label="Note"  sx={{ 
-        bgcolor: '#bbdefb', 
-        borderRadius: '10px', 
-        mx: 1, 
-        px: 3, 
-        mb:2,
-        transition: 'background-color 0.3s', 
-        '&:hover': { bgcolor: '#90caf9' } 
-      }}  />
-        <Tab label="Message au Parent" sx={{ 
-        bgcolor: '#ffcdd2', 
-        borderRadius: '10px', 
-        mx: 1, 
-        px: 3, 
-        mb:2,
-        transition: 'background-color 0.3s', 
-        '&:hover': { bgcolor: '#ef9a9a' } 
-      }}  />
+        <Tab label="Notes"  sx={{
+  background: '#004d40',
+  color: '#fff', // Initial color set to white
+  borderRadius: '12px',
+  mx: 1,
+  px: 15,
+  py: 1.5,
+  mb: 2,
+  fontSize: '20px',
+  fontWeight: 'bold',
+  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+  transition: 'transform 0.3s ease, background-color 0.3s ease',
+  fontFamily: 'Montserrat, sans-serif', 
+  '&:hover': {
+    transform: 'scale(1.05)',
+    backgroundColor: '#333',
+    color: '#fff', // Keep white on hover
+  },
+  '&:focus': {
+    color: '#fff', // Ensure text stays white on focus
+  },
+  '&:active': {
+    color: '#fff', // Ensure text stays white on active state
+    backgroundColor: '#004d40',
+  },
+  '&:visited': {
+    color: '#fff', // Ensure text stays white if visited (for links)
+  },
+}}
+  />
+        <Tab label="Conduite" sx={{
+  background: '#004d40',
+  color: '#fff', // Initial color set to white
+  borderRadius: '12px',
+  mx: 1,
+  px: 15,
+  py: 1.5,
+  mb: 2,
+  fontSize: '20px',
+  fontWeight: 'bold',
+  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+  transition: 'transform 0.3s ease, background-color 0.3s ease',
+  fontFamily: 'Montserrat, sans-serif', 
+  '&:hover': {
+    transform: 'scale(1.05)',
+    backgroundColor: '#333',
+    color: '#fff', // Keep white on hover
+  },
+  '&:focus': {
+    color: '#fff', // Ensure text stays white on focus
+  },
+  '&:active': {
+    color: '#fff', // Ensure text stays white on active state
+    backgroundColor: '#004d40',
+  },
+  '&:visited': {
+    color: '#fff', // Ensure text stays white if visited (for links)
+  },
+}}
+ />
 
 
 
@@ -321,7 +375,7 @@ const ParentDashboard = () => {
       
       </Tabs>
 
-      <TabPanel value={activeTab} index={0} bgcolor="#f9fbe7">
+      <TabPanel value={activeTab} index={0} bgcolor="#333333">
         <Paper elevation={3} sx={{ p: 3, mb: 2 }}>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -355,7 +409,7 @@ const ParentDashboard = () => {
                 <MenuItem value="Semestre 2">Semestre 2</MenuItem>
               </Select>
             </FormControl>
-            <Button type="submit" variant="contained" fullWidth>
+            <Button type="submit" variant="contained" fullWidth sx={{ backgroundColor: '#004d40', color: '#ffffff', '&:hover': { backgroundColor: '#00332d' } }}>
               Rechercher le Bulletin
             </Button>
           </form>
@@ -370,7 +424,7 @@ const ParentDashboard = () => {
       </TabPanel>
 
 
-      <TabPanel value={activeTab} index={1} bgcolor="#e3f2fd">
+      <TabPanel value={activeTab} index={1} bgcolor="#333333">
   <Paper elevation={3} sx={{ p: 3, mb: 2 }}>
     <form onSubmit={(e) => e.preventDefault()}>
       <TextField
@@ -408,13 +462,13 @@ const ParentDashboard = () => {
           <MenuItem value="Composition">Composition</MenuItem>
         </Select>
       </FormControl>
-      <Button type="submit" variant="contained" fullWidth>
+      <Button type="submit" variant="contained" fullWidth sx={{ backgroundColor: '#004d40', color: '#ffffff', '&:hover': { backgroundColor: '#00332d' } }}>
         Rechercher les Notes
       </Button>
     </form>
   </Paper>
 
-  <Box sx={{ mt: 2 }}>
+  <Box sx={{ mt: 2 , color: '#ffffff' }}>
     <Typography variant="h6" gutterBottom>
       Statistiques de la Classe (Données Simulées)
     </Typography>

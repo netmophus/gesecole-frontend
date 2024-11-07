@@ -115,9 +115,7 @@ const LoginPage = () => {
           <Card sx={{ boxShadow: 3, borderRadius: 2, backgroundColor: '#004d40', padding: 2 }}>
             <CardContent>
               {/* Texte en haut du formulaire */}
-              <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#fff', marginBottom: '20px' }}>
-                Bienvenue sur le Portail de Connexion
-              </Typography>
+            
               <Typography variant="h4" align="center" gutterBottom sx={{ color: '#fff' }}>
                 Connexion
               </Typography>

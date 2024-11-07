@@ -40,7 +40,7 @@ const BulletinPage = () => {
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const apiBaseUrl = process.env.REACT_APP_API_URL;
-  
+  //const defaultPhotoUrl = 'https://example.com/default-photo.png'; // URL de l'image par défaut
   const fetchBulletins = useCallback(async () => {
     // Récupérer le token et l'identifiant de l'établissement depuis le localStorage
     const token = localStorage.getItem('token');
@@ -218,33 +218,28 @@ const BulletinPage = () => {
                   bulletins.map((bulletin) => (
                     <TableRow key={bulletin._id}>
 
+
 <TableCell>
   <Box display="flex" alignItems="center">
-    {bulletin.student?.photo && 
-      console.log('URL de la photo:', `http://localhost:5000/${bulletin.student.photo.replace(/\\/g, '/')}`)
-    }
     {bulletin.student?.photo ? (
-    
-
-
-
       <img
-  src={`${apiBaseUrl}/${bulletin.student.photo.replace(/\\/g, '/')}`}
-  alt={`${bulletin.student.firstName}`}
-  style={{
-    width: '40px',
-    height: '40px',
-    objectFit: 'cover',
-    borderRadius: '50%',
-    marginRight: '10px',
-  }}
-/>
+        src={bulletin.student.photo}
+        alt={`${bulletin.student.firstName}`}
+        style={{
+          width: '40px',
+          height: '40px',
+          objectFit: 'cover',
+          borderRadius: '50%',
+          marginRight: '10px',
+        }}
+      />
     ) : (
       <Typography>Aucune photo disponible</Typography>
     )}
     {bulletin.student?.firstName} {bulletin.student?.lastName}
   </Box>
 </TableCell>
+
 
 
 

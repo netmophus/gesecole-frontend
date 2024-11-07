@@ -4,7 +4,6 @@ import React from 'react';
 import { Box, Typography, Button, Paper, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import InfoIcon from '@mui/icons-material/Info';
 
 const BepcAccessPage = () => {
 
@@ -29,18 +28,20 @@ const BepcAccessPage = () => {
         fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } 
       }}
     >
-      Bienvenue au processus d’inscription BEPC
+      Bienvenue au processus d’inscription CFEPD/BEPC
     </Typography>
+
     <Typography 
-      variant="h6" 
+      variant="h5" 
+      gutterBottom 
       sx={{ 
-        color: '#004d40', 
-        mb: { xs: 2, md: 4 },
-        fontSize: { xs: '0.9rem', sm: '1rem', md: '1.2rem' }
+        color: '#333', 
+        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }
       }}
     >
-      Veuillez choisir une option pour continuer.
+      Processus d’inscription simplifié
     </Typography>
+
 
     <Box 
       sx={{ 
@@ -52,6 +53,9 @@ const BepcAccessPage = () => {
         mb: { xs: 3, md: 5 } 
       }}
     >
+
+
+
       <Button 
         component={Link} 
         to="/register-bepc" 
@@ -66,6 +70,8 @@ const BepcAccessPage = () => {
       >
         S'inscrire
       </Button>
+
+    
       <Button 
         component={Link} 
         to="/login-bepc" 
@@ -82,41 +88,7 @@ const BepcAccessPage = () => {
       </Button>
     </Box>
 
-    <Typography 
-      variant="h5" 
-      gutterBottom 
-      sx={{ 
-        color: '#333', 
-        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }
-      }}
-    >
-      Processus d’inscription simplifié
-    </Typography>
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        flexDirection: { xs: 'column', sm: 'row' }, 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        gap: { xs: 1, md: 2 }, 
-        mt: { xs: 2, md: 4 }
-      }}
-    >
-      <InfoIcon sx={{ fontSize: { xs: 30, md: 50 }, color: '#004d40' }} />
-      <Typography 
-        variant="body1" 
-        sx={{ 
-          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }, 
-          textAlign: { xs: 'center', sm: 'left' }
-        }}
-      >
-        1. Inscrivez-vous en fournissant les informations nécessaires.
-        <br />
-        2. Effectuez le paiement dans un guichet agréé avec votre bordereau.
-        <br />
-        3. Suivez l’état de votre inscription et les résultats sur votre tableau de bord.
-      </Typography>
-    </Box>
+ 
 
     <Box sx={{ mt: { xs: 3, md: 4 }, textAlign: 'center' }}>
       <CalendarTodayIcon sx={{ fontSize: { xs: 30, md: 50 }, color: '#004d40' }} />
@@ -128,7 +100,7 @@ const BepcAccessPage = () => {
           fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' } 
         }}
       >
-        Les inscriptions sont ouvertes du 1er au 30 novembre.
+        Les inscriptions sont ouvertes du 1er au 30 novembre pour le CFEPD et du 1er novembre au 2 Fevrier pour le BEPC.
       </Typography>
     </Box>
   </Paper>

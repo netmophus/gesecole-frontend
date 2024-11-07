@@ -3,23 +3,15 @@ import React, { useEffect } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
 const SelectStudent = ({ formData, setFormData, students }) => {
-  // const handleStudentChange = (e) => {
-  //   setFormData(prevData => ({ ...prevData, studentId: e.target.value }));
-  // };
-
+  
   const handleStudentChange = (e) => {
     const selectedStudent = students.find(student => student._id === e.target.value);
-    
-    console.log('Élève sélectionné:', selectedStudent); // Log de l'élève sélectionné
-    
     setFormData(prevData => ({
       ...prevData,
-      studentId: selectedStudent?._id || '',  // Vérification que l'élève existe
-      studentPhoto: selectedStudent?.photo || '',  // Ajout de la photo
+      studentId: selectedStudent?._id || '',
+      studentPhoto: selectedStudent?.photo || '',
     }));
   };
-  
-  
 
   // Log pour vérifier le formData et les élèves
   useEffect(() => {
@@ -41,8 +33,9 @@ const SelectStudent = ({ formData, setFormData, students }) => {
   
 
   // Filtrer les élèves par classe
+  //const filteredStudents = students.filter(student => student.classId?._id === formData.classId);
   const filteredStudents = students.filter(student => student.classId?._id === formData.classId);
-
+  
   return (
     <TextField
       select

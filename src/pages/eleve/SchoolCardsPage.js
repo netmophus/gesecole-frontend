@@ -15,14 +15,50 @@ const SchoolCardsPage = () => {
   const { user } = useContext(AuthContext);
   const apiBaseUrl = process.env.REACT_APP_API_URL;
   
+  // useEffect(() => {
+  //   const fetchSchoolCards = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiBaseUrl}/api/students/school-cards`, {
+  //         headers: {
+  //           'Authorization': `Bearer ${user.token}`,
+  //         },
+
+  //         params: {
+  //           establishmentId: user.establishmentId, // Vérifiez que l'ID de l'établissement est bien défini ici
+  //         }
+  //       });
+  //       console.log('Establishment ID envoyé:', user.establishmentId);
+
+  //       setSchoolCards(response.data.cards);
+  //     } catch (err) {
+  //       console.error('Erreur lors de la récupération des cartes scolaires:', err);
+  //     }
+  //   };
+
+  //   fetchSchoolCards();
+  // }, [user, apiBaseUrl]);
+
+
   useEffect(() => {
     const fetchSchoolCards = async () => {
       try {
+        // Vérifiez si user et schoolId sont bien définis
+        if (!user || !user.schoolId) {
+          console.error("L'utilisateur ou le schoolId est manquant.");
+          return;
+        }
+
+        console.log("School ID récupéré :", user.schoolId);
+
         const response = await axios.get(`${apiBaseUrl}/api/students/school-cards`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
+          },
+          params: {
+            establishmentId: user.schoolId, // Utilisez schoolId pour l'établissement
           }
         });
+
         setSchoolCards(response.data.cards);
       } catch (err) {
         console.error('Erreur lors de la récupération des cartes scolaires:', err);
@@ -32,6 +68,8 @@ const SchoolCardsPage = () => {
     fetchSchoolCards();
   }, [user, apiBaseUrl]);
 
+
+  
   const handleDeleteAllCards = async () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer toutes les cartes scolaires ?')) {
       try {
@@ -109,26 +147,33 @@ const SchoolCardsPage = () => {
               <Grid item xs={12} sm={6} md={4} key={card._id}>
                 <Card>
                   <CardContent>
-                    <Box display="flex" alignItems="center" mb={2}>
-                      <Box flex={1}>
-                        <img
-                          src={student?.photo ? `${apiBaseUrl}/${student.photo}` : 'https://via.placeholder.com/150'}
-                          alt={`${student?.firstName || 'N/A'} ${student?.lastName || 'N/A'}`}
-                          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                        />
-                      </Box>
-                      <Box flex={2} textAlign="center">
-                        <Typography variant="subtitle1">République du Niger</Typography>
-                        <Typography variant="body2">Ministère de l'Éducation Nationale</Typography>
-                        <Typography variant="body2" gutterBottom>Carte d'Identité Scolaire</Typography>
-                        <Typography variant="body2" style={{ fontSize: '0.7rem' }}>
-                          <strong>Année Académique :</strong>
-                          {establishment?.academicYears && establishment.academicYears.length > 0
-                            ? `${establishment.academicYears[0].yearId?.startYear} - ${establishment.academicYears[0].yearId?.endYear}`
-                            : 'N/A'}
-                        </Typography>
-                      </Box>
-                    </Box>
+                  
+                  <Box display="flex" alignItems="center" mb={2}>
+  <Box flex={1}>
+    <img
+      src={student?.photo ? student.photo : 'https://via.placeholder.com/150'}
+      alt={`${student?.firstName || 'N/A'} ${student?.lastName || 'N/A'}`}
+      style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50%' }}
+    />
+  </Box>
+  <Box flex={2} textAlign="center">
+    <Typography variant="subtitle1">République du Niger</Typography>
+    <Typography variant="body2">Ministère de l'Éducation Nationale</Typography>
+    <Typography variant="body2" gutterBottom>Carte d'Identité Scolaire</Typography>
+    <Typography variant="body2" style={{ fontSize: '0.7rem' }}>
+      <strong>Année Académique :</strong>
+      {establishment?.academicYears && establishment.academicYears.length > 0
+        ? `${establishment.academicYears[0].yearId?.startYear} - ${establishment.academicYears[0].yearId?.endYear}`
+        : 'N/A'}
+    </Typography>
+  </Box>
+</Box>
+
+
+
+
+
+
                     <Box display="flex" justifyContent="space-between" mb={2}>
                       <Card sx={{ flex: 1, marginRight: '2px' }}>
                         <CardContent>

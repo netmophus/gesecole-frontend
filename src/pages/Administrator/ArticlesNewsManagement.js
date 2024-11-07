@@ -329,7 +329,7 @@ const ArticlesNewsManagement = () => {
                   {article.imgArticle && (
                     <>
                       <Typography variant="body2">Image : {article.imgDescription}</Typography>
-                      <img src={`/${article.imgArticle}`} alt="Image de l'article" style={{ width: '100%', maxHeight: '200px', marginBottom: '10px' }} />
+                      <img src={`/${article.imgArticle}`} alt="Portrait de l'article" style={{ width: '100%', maxHeight: '200px', marginBottom: '10px' }} />
                     </>
                   )}
 

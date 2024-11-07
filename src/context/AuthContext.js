@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
 export const AuthContext = createContext();
@@ -15,42 +15,6 @@ export const AuthProvider = ({ children }) => {
   const handleSnackbarClose = () => setSnackbarOpen(false);
   const apiBaseUrl = process.env.REACT_APP_API_URL;
 
-
-
-  useEffect(() => {    
-    const loadUser = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const res = await fetch(`${apiBaseUrl}/api/auth/profile`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-    
-          const data = await res.json();
-    
-          if (res.ok) {
-            setUser({
-              ...data,
-              token,
-            });
-            console.log('Utilisateur restauré avec le token:', { ...data, token });
-          } else {
-            localStorage.removeItem('token');
-          }
-        } catch (err) {
-          console.error('Erreur serveur lors de la récupération du profil utilisateur', err);
-          localStorage.removeItem('token');
-        }
-      }
-    }; 
-    
-    
-    loadUser();
-  }, [navigate, apiBaseUrl]);
 
 
 

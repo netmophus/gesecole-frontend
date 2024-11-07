@@ -78,7 +78,15 @@ import BepcAccessPage from './components/BEPC/BepcAccessPage'
 import InscriptionPage from './components/BEPC/InscriptionPageBEPC'; // Assuming you have an InscriptionPage component
 import AdminDashboardPageBEPC from './components/BEPC/AdminDashboardPageBEPC';
 import AdminCentralDashboardBEPC from './components/BEPC/AdminCentralDashboardBEPC';
+import ReportAnalysisPage from './pages/etablissement/ReportAnalysisPage';
 
+import AverageReportPage from './pages/etablissement/AverageReportPage';
+
+import CfepdAccessPage from './components/CFEPD/CfepdAccessPage'
+import RegisterPageCFEPD from './components/CFEPD/RegisterPageCFEPD'; // Importez le composant d'inscription CFEPD
+import LoginPageCFEPD from './components/CFEPD/LoginPageCFEPD'; // Importez le composant de connexion CFEPD
+import DashboardPageCFEPD from './components/CFEPD/DashboardPageCFEPD';
+import InscriptionPageCFEPD from './components/CFEPD/InscriptionPageCFEPD'; // Assuming you have an InscriptionPage component
 const App = () => {
 
  
@@ -116,6 +124,15 @@ const App = () => {
           <Route path="/bulletin/:id" element={<BulletinViewPage />} />
           <Route path="/devoircompos/create" element={<CreateDevoirCompoPage />} /> {/* Ajout de la route pour Devoir/Composition */}
           <Route path="/view-devoircompos" element={<ViewDevoirComposPage />} />
+{/* Route pour la page d'analyse des rapports */}
+<Route path="/report-analysis" element={<ReportAnalysisPage />} />
+
+
+<Route path="/average-report" element={<AverageReportPage />} />
+
+
+
+
 
           <Route path="/news" element={<NewsPage />} />
         {/* <Route path="/resources" element={<ResourcesPage />} />
@@ -139,6 +156,17 @@ const App = () => {
         <Route path="/register-bepc" element={<RegisterPageBEPC />} />
         <Route path="/login-bepc" element={<LoginPageBEPC />} />
 
+
+        {/*Encapsuler les routes CFEPD avec AuthProviderCFEPD*/}
+
+  <Route path="/register-cfepd" element={<RegisterPageCFEPD />} />
+  <Route path="/login-cfepd" element={<LoginPageCFEPD />} />
+
+  <Route path="dashboard-cfepd" element={<DashboardPageCFEPD />} />
+  <Route path="/inscription-cfepd" element={<InscriptionPageCFEPD />} /> {/* This route points to the inscription page */}
+
+
+
         {/* <Route path="register" element={<RegisterPageBEPC />} />
         <Route path="login" element={<LoginPageBEPC />} /> */}
         <Route path="dashboard-bepc" element={<DashboardPageBEPC />} />
@@ -153,7 +181,10 @@ const App = () => {
         
         <Route
           path="/admincentralbepc-dashboard" element={<AdminCentralDashboardBEPC />} />
-        
+
+
+
+       <Route path="/cfepd-access" element={<CfepdAccessPage />} /> 
 
  {/* Autres routes SUITE */}
 
