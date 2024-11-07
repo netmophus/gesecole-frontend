@@ -46,7 +46,10 @@ const login = async (formData) => {
         schoolName: data.schoolName,
         isConfigured: data.isConfigured,
         academicYear: data.academicYear,
+        permissions: data.permissions, // Inclure les permissions ici
       });
+
+      console.log('Permissions reçues et stockées dans le contexte utilisateur:', data.permissions);
   
       console.log('Connexion réussie, token reçu:', data.token);
   

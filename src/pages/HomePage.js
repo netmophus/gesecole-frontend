@@ -295,9 +295,9 @@ L'éducation universelle et participative pour un Niger inclusif
 
 <Box sx={{ padding: '40px', backgroundColor: '#B2DFDB' }}>
     
-      <Grid container spacing={4}>
-        {/* Card 1: Inscription Examens */}
-        <Grid item xs={12} md={6}>
+<Grid container spacing={4}>
+{/* Card 1: Inscription Examens */}
+<Grid item xs={12} md={6}>
   <Card sx={{
     backgroundColor: '#004d40', // Vert foncé pour BEPC
     color: '#fff',
@@ -305,6 +305,7 @@ L'éducation universelle et participative pour un Niger inclusif
     borderRadius: '12px',
     boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
     textAlign: 'center',
+    maxHeight: '300px',
     transition: 'transform 0.3s ease, background-color 0.3s ease',
     '&:hover': {
       transform: 'scale(1.05)',
@@ -345,6 +346,7 @@ L'éducation universelle et participative pour un Niger inclusif
     borderRadius: '12px',
     boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
     textAlign: 'center',
+    maxHeight: '300px',
     transition: 'transform 0.3s ease, background-color 0.3s ease',
     '&:hover': {
       transform: 'scale(1.05)',
@@ -379,8 +381,8 @@ L'éducation universelle et participative pour un Niger inclusif
 
 
 
-        {/* Card 2: Accès au Bulletin Numérique */}
-        <Grid container spacing={4}>
+  {/* Card 2: Accès au Bulletin Numérique */}
+  <Grid container spacing={4}>
   {/* Carte Accès au Bulletin Numérique */}
   <Grid item xs={12} md={6}>
     <Card sx={{
@@ -392,6 +394,7 @@ L'éducation universelle et participative pour un Niger inclusif
       borderRadius: '12px',
       boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
       textAlign: 'center',
+      maxHeight: '300px',
       transition: 'transform 0.3s ease, background-color 0.3s ease',
       '&:hover': {
         transform: 'scale(1.05)',
@@ -411,7 +414,7 @@ L'éducation universelle et participative pour un Niger inclusif
           sx={{
             backgroundColor: '#FF8C00', // Orange pour le bouton
             color: '#fff',
-            fontSize: '1.1rem',
+            fontSize: '1.2rem',
             '&:hover': { backgroundColor: '#e67e22' }, // Orange vif au survol
             mr: 2,
           }}
@@ -436,6 +439,7 @@ L'éducation universelle et participative pour un Niger inclusif
     display: 'flex', // Disposition en ligne
     alignItems: 'center',
     transition: 'transform 0.3s ease',
+    maxHeight: '300px',
     '&:hover': {
       transform: 'scale(1.05)',
       backgroundColor: '#f9f9f9', // Fond légèrement plus clair au survol
@@ -444,9 +448,9 @@ L'éducation universelle et participative pour un Niger inclusif
     <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       <img
         src={ministerPhoto} // Utilisation de l'import de l'image
-        alt="Photo du Ministre"
+        alt="Portrait du Ministre"
         style={{
-          width: '30%',
+          width: '40%',
           height: 'auto',
           borderRadius: '8px',
         }}
@@ -456,10 +460,9 @@ L'éducation universelle et participative pour un Niger inclusif
           Mme Elisabeth Sherif
         </Typography>
         <Typography variant="body2" sx={{ color: '#555', fontWeight: 'medium', mt: 1 }}>
-          Ministre de l'Éducation Nationale, de l'Alphabétisation, de l'Enseignement Professionnel
-          et de la Promotion des Langues Nationales
+          MEN/A/EP/PLN
         </Typography>
-        <Typography variant="body2" sx={{ color: '#FF8C00', mt: 1, fontSize: '1.5rem', textAlign: 'left', fontWeight:'bold'}}>
+        <Typography variant="body2" sx={{ color: '#FF8C00', mt: 1, fontSize: '1.1rem', textAlign: 'left', fontWeight:'bold'}}>
           Un engagement fort pour une éducation inclusive et participative.
         </Typography>
       </Box>
@@ -472,7 +475,7 @@ L'éducation universelle et participative pour un Niger inclusif
 </Grid>
 
 
-      </Grid>
+</Grid>
     </Box>
 
 <Dialog 

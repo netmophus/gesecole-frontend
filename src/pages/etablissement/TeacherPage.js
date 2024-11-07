@@ -56,6 +56,13 @@ const TeacherPage = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState(null);
 
+  useEffect(() => {
+    console.log("Permissions de l'utilisateur :", user?.permissions);
+    if (!user?.permissions) {
+      console.warn("Aucune permission trouvée. Vérifiez le contexte AuthContext ou la structure des données.");
+    }
+  }, [user]);
+  
   // Fonction pour récupérer les enseignants avec les matières assignées peuplées
   const fetchTeachers = useCallback(async () => {
     try {
@@ -66,6 +73,16 @@ const TeacherPage = () => {
         console.error("Aucun identifiant d'établissement trouvé");
         return;
       }
+
+
+       // Ajoutez ce console.log pour vérifier les paramètres envoyés
+    console.log("Paramètres pour fetchTeachers:", {
+      search: searchTerm,
+      page: page + 1,
+      limit: rowsPerPage,
+      establishmentId,
+      educationLevel: currentTeacher.educationLevel || '',
+    });
   
       // Assurez-vous que `educationLevel` est bien défini ici avant de l'envoyer
       const res = await axios.get(`${apiBaseUrl}/api/teachers`, {
@@ -77,7 +94,8 @@ const TeacherPage = () => {
           page: page + 1,
           limit: rowsPerPage,
           establishmentId,
-          educationLevel: currentTeacher.educationLevel || '', // Assurez-vous que cette variable est bien définie
+          educationLevel: currentTeacher.educationLevel || '',
+
         },
       });
   
@@ -166,6 +184,13 @@ const handleChange = (key, value) => {
 
 
 const handleCreateTeacher = async () => {
+  if (!user?.permissions?.create) {
+    setSnackbar({ open: true, message: "Vous n'avez pas la permission de créer des enseignants.", severity: 'warning' });
+    return;
+  }
+  
+  
+  
   const formData = new FormData();
 
   // Ajouter les données du formulaire
@@ -352,28 +377,7 @@ const handleSave = (e) => {
     setOpen(true);
   };
   
-  
-  // const handleDelete = async (id) => {
-  //   if (!user?.permissions?.delete) {
-  //     setSnackbar({ open: true, message: 'Vous n\'avez pas la permission de supprimer cet enseignant.', severity: 'error' });
-  //     return;
-  //   }
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     await axios.delete(`${apiBaseUrl}/api/teachers/${id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  
-  //     fetchTeachers();  // Met à jour la liste des enseignants après suppression
-  //     setSnackbar({ open: true, message: 'Enseignant supprimé avec succès.', severity: 'success' });
-  //   } catch (err) {
-  //     console.error("Erreur lors de la suppression de l'enseignant:", err.response ? err.response.data : err.message);
-  //     setSnackbar({ open: true, message: 'Erreur lors de la suppression de l\'enseignant.', severity: 'error' });
-  //   }
-  // };
-  
+
   const handleDelete = async (id) => {
     if (!user?.permissions?.delete) {
       setSnackbar({ open: true, message: 'Vous n\'avez pas la permission de supprimer cet enseignant.', severity: 'error' });
@@ -501,22 +505,27 @@ const handleSave = (e) => {
               }}
             />         
 
-            <Button
-              variant="contained"
-              color="inherit"
-              startIcon={<AddIcon />}
-              onClick={handleOpen}
-              disabled={!user?.permissions?.create}
-              sx={{
-                backgroundColor: user?.permissions?.create ? '#004d40' : '#ccc',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: user?.permissions?.create ? '#00332d' : '#ccc',
-                },
-              }}
-            >
-              Ajouter
-            </Button>
+         
+
+
+
+<Button
+  variant="contained"
+  color="inherit"
+  startIcon={<AddIcon />}
+  onClick={handleOpen}
+  disabled={!user?.permissions?.create} // Désactivé si l'utilisateur n'a pas la permission de créer
+  sx={{
+    backgroundColor: user?.permissions?.create ? '#004d40' : '#ccc',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: user?.permissions?.create ? '#00332d' : '#ccc',
+    },
+  }}
+>
+  Ajouter
+</Button>
+
 
           
 
@@ -722,18 +731,7 @@ const handleSave = (e) => {
   <Typography variant="body1">Photo de l'enseignant</Typography>
 
   {/* Afficher l'aperçu de l'ancienne photo */}
-  {/* {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
-    <Box sx={{ mt: 2 }}>
-      <Typography variant="body2" sx={{ mb: 1 }}>
-        Photo actuelle :
-      </Typography>
-      <img
-        src={`http://localhost:5000/${currentTeacher.photo}`}
-        alt={currentTeacher.nom}
-        style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5%' }}
-      />
-    </Box>
-  )} */}
+ 
 
 {currentTeacher.photo && typeof currentTeacher.photo === 'string' && (
   <Box sx={{ mt: 2 }}>
@@ -871,25 +869,6 @@ const handleSave = (e) => {
       </Dialog>
 
 
-      {/* <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation de suppression</DialogTitle>
-          <DialogContent>Voulez-vous vraiment supprimer cet enseignant ?</DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button
-              onClick={confirmDelete}
-              sx={{
-                backgroundColor: '#d9534f',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#c9302c',
-                },
-              }}
-            >
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog> */}
 
 
 <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
