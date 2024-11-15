@@ -1757,7 +1757,7 @@ const handleEdit = (student) => {
   onClick={handleGenerateReport}
   disabled={loading || !selectedClassId}  // Désactiver si aucune classe sélectionnée
 >
-  {loading ? 'Génération en cours...' : 'Générer le Rapport'}
+  {loading ? 'Génération en cours...' : 'Générer le Rapport de paiement'}
 </Button>
 
 

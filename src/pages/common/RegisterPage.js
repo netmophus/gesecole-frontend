@@ -202,18 +202,7 @@ const RegisterPage = () => {
             </CardContent>
           </Card>
         </Container>
-      </Box>
-
-      {/* Section droite pour l'image de placeholder */}
-      {/* <Box
-        sx={{
-          flex: 1, // L'image prend 1/3 de la largeur
-          backgroundImage: 'url(https://via.placeholder.com/800x600)', // Utilisation d'une image de placeholder
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '100vh', // S'assurer que l'image couvre toute la hauteur
-        }}
-      /> */}
+      </Box> 
       
     </Box>
   );

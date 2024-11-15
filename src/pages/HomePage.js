@@ -298,26 +298,79 @@ L'éducation universelle et participative pour un Niger inclusif
 <Grid container spacing={4}>
 {/* Card 1: Inscription Examens */}
 <Grid item xs={12} md={6}>
-  <Card sx={{
-    backgroundColor: '#004d40', // Vert foncé pour BEPC
-    color: '#fff',
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-    textAlign: 'center',
-    maxHeight: '300px',
-    transition: 'transform 0.3s ease, background-color 0.3s ease',
-    '&:hover': {
-      transform: 'scale(1.05)',
-      backgroundColor: '#00695c', // Plus clair au survol
-    },
-  }}>
+  <Card
+    sx={{
+      backgroundColor: '#004d40', // Vert foncé pour BEPC
+      color: '#fff',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+      textAlign: 'center',
+      maxHeight: '300px',
+      transition: 'transform 0.3s ease, background-color 0.3s ease',
+      '&:hover': {
+        transform: 'scale(1.05)',
+        backgroundColor: '#00695c', // Plus clair au survol
+      },
+      '@media (max-width:450px)': {
+        padding: '15px',
+        maxHeight: '250px',
+      },
+      '@media (max-width:320px)': {
+        padding: '10px',
+        maxHeight: '200px',
+      },
+    }}
+  >
     <CardContent>
-      <AssignmentIcon sx={{ fontSize: 50, color: '#FFD700' }} /> {/* Icône dorée pour BEPC */}
-      <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+      <AssignmentIcon
+        sx={{
+          fontSize: {
+            xs: '40px', // Réduction de la taille de l'icône pour les petits écrans
+            sm: '50px',
+          },
+          color: '#FFD700',
+        }}
+      /> {/* Icône dorée pour BEPC */}
+      <Typography
+        variant="h5"
+        sx={{
+          mt: 2,
+          mb: 2,
+          fontWeight: 'bold',
+          fontSize: {
+            xs: '1rem', // Taille pour les petits écrans
+            sm: '1.2rem', // Taille par défaut pour les écrans moyens
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.9rem', // Plus petit pour les écrans ≤ 450px
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.8rem', // Encore plus petit pour les écrans ≤ 320px
+           
+          },
+        }}
+      >
         Enregistrement aux Examens
       </Typography>
-      <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
+      <Typography
+        variant="body1"
+        sx={{
+          color: '#e0f7fa',
+          mb: 3,
+          fontSize: {
+            xs: '0.9rem', // Taille pour les petits écrans
+            sm: '1rem',   // Taille par défaut
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.8rem',
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.7rem',
+            display: 'none',
+          },
+        }}
+      >
         Inscription et Participation aux Examens BEPC
       </Typography>
       <Button
@@ -327,7 +380,16 @@ L'éducation universelle et participative pour un Niger inclusif
         sx={{
           backgroundColor: '#FFD700', // Doré pour le bouton BEPC
           color: '#333',
-          fontSize: '1.1rem',
+          fontSize: {
+            xs: '0.9rem', // Taille pour les petits écrans
+            sm: '1.1rem', // Taille par défaut pour les écrans moyens
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.8rem', // Plus petit pour les écrans ≤ 450px
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.7rem', // Encore plus petit pour les écrans ≤ 320px
+          },
           '&:hover': { backgroundColor: '#ffc107' }, // Doré plus vif au survol
         }}
       >
@@ -338,27 +400,80 @@ L'éducation universelle et participative pour un Niger inclusif
 </Grid>
 
 
+
 <Grid item xs={12} md={6}>
-  <Card sx={{
-    backgroundColor: '#1A535C', // Bleu vert pour CFEPD
-    color: '#fff',
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-    textAlign: 'center',
-    maxHeight: '300px',
-    transition: 'transform 0.3s ease, background-color 0.3s ease',
-    '&:hover': {
-      transform: 'scale(1.05)',
-      backgroundColor: '#2A7E84', // Plus clair au survol
-    },
-  }}>
+  <Card
+    sx={{
+      backgroundColor: '#1A535C', // Bleu vert pour CFEPD
+      color: '#fff',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+      textAlign: 'center',
+      maxHeight: '300px',
+      transition: 'transform 0.3s ease, background-color 0.3s ease',
+      '&:hover': {
+        transform: 'scale(1.05)',
+        backgroundColor: '#2A7E84', // Plus clair au survol
+      },
+      '@media (max-width:450px)': {
+        padding: '15px', // Réduction des marges
+        maxHeight: '250px',
+      },
+      '@media (max-width:320px)': {
+        padding: '10px', // Moins d'espace pour les très petits écrans
+        maxHeight: '200px',
+      },
+    }}
+  >
     <CardContent>
-      <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange pour CFEPD */}
-      <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+      <FileCopyIcon
+        sx={{
+          fontSize: {
+            xs: '40px', // Réduction de l'icône pour les petits écrans
+            sm: '50px', // Taille par défaut pour les écrans moyens et plus
+          },
+          color: '#FF8C00',
+        }}
+      />
+      <Typography
+        variant="h5"
+        sx={{
+          mt: 2,
+          mb: 2,
+          fontWeight: 'bold',
+          fontSize: {
+            xs: '1rem', // Taille pour les petits écrans
+            sm: '1.2rem', // Taille par défaut pour les écrans moyens
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.9rem', // Plus petit pour les écrans <= 450px
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.8rem', // Encore plus petit pour les écrans <= 320px
+          },
+        }}
+      >
         Enregistrement aux Examens
       </Typography>
-      <Typography variant="body1" sx={{ color: '#fff8e1', mb: 3 }}>
+      <Typography
+        variant="body1"
+        sx={{
+          color: '#fff8e1',
+          mb: 3,
+          fontSize: {
+            xs: '0.9rem', // Taille pour les petits écrans
+            sm: '1rem', // Taille par défaut pour les écrans moyens
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.8rem', // Plus petit pour 450px
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.7rem', // Encore plus petit pour 320px
+            display: 'none',
+          },
+        }}
+      >
         Inscription et Participation aux Examens CFEPD
       </Typography>
       <Button
@@ -368,8 +483,17 @@ L'éducation universelle et participative pour un Niger inclusif
         sx={{
           backgroundColor: '#FF8C00', // Orange pour le bouton CFEPD
           color: '#fff',
-          fontSize: '1.1rem',
-          '&:hover': { backgroundColor: '#ff751a' }, // Orange plus vif
+          fontSize: {
+            xs: '0.9rem', // Taille pour les petits écrans
+            sm: '1.1rem', // Taille par défaut pour les écrans moyens
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.8rem', // Plus petit pour les écrans <= 450px
+          },
+          '@media (max-width:320px)': {
+            fontSize: '0.7rem', // Encore plus petit pour les écrans <= 320px
+          },
+          '&:hover': { backgroundColor: '#ff751a' }, // Orange plus vif au survol
         }}
       >
         Inscription CFEPD
@@ -381,11 +505,13 @@ L'éducation universelle et participative pour un Niger inclusif
 
 
 
+
   {/* Card 2: Accès au Bulletin Numérique */}
   <Grid container spacing={4}>
   {/* Carte Accès au Bulletin Numérique */}
   <Grid item xs={12} md={6}>
-    <Card sx={{
+  <Card
+    sx={{
       backgroundColor: '#2c3e50', // Bleu nuit pour le fond
       color: '#fff',
       padding: '20px',
@@ -400,57 +526,125 @@ L'éducation universelle et participative pour un Niger inclusif
         transform: 'scale(1.05)',
         backgroundColor: '#34495e', // Plus clair au survol
       },
-    }}>
-      <CardContent>
-        <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange */}
-        <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
-          Accès au Bulletin Numérique
-        </Typography>
-        <Typography variant="body1" sx={{ color: '#e0f7fa', mb: 3 }}>
-          Consultez les bulletins de vos enfants.
-        </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: '#FF8C00', // Orange pour le bouton
-            color: '#fff',
-            fontSize: '1.2rem',
-            '&:hover': { backgroundColor: '#e67e22' }, // Orange vif au survol
-            mr: 2,
-          }}
-          onClick={() => handleAccess('consult')}
-        >
-          Consulter Bulletin
-        </Button>
-      </CardContent>
-    </Card>
-  </Grid>
+      '@media (max-width:450px)': {
+        padding: '15px', // Réduction de l'espace
+        maxHeight: '250px',
+      },
+      '@media (max-width:150px)': {
+        padding: '10px', // Encore moins d'espace pour les écrans ultra-petits
+        maxHeight: '200px',
+      },
+    }}
+  >
+    <CardContent>
+      <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange */}
+      <Typography
+        variant="h5"
+        sx={{
+          mt: 2,
+          mb: 2,
+          fontWeight: 'bold',
+          fontSize: {
+            xs: '1rem', // Réduction pour les petits écrans
+            sm: '1.2rem',
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.9rem', // Plus petit pour 450px
+          },
+          '@media (max-width:150px)': {
+            fontSize: '0.7rem', // Encore plus petit pour 150px
+          },
+        }}
+      >
+        Accès au Bulletin Numérique
+      </Typography>
+      <Typography
+        variant="body1"
+        sx={{
+          color: '#e0f7fa',
+          mb: 3,
+          fontSize: {
+            xs: '0.8rem', // Par défaut pour les petits écrans
+            sm: '1rem', // Taille moyenne pour les écrans small
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.7rem', // Plus petit pour 450px
+          },
+          '@media (max-width:350px)': {            
+            display: 'none',
+          },
+        }}
+      >
+        Consultez les bulletins de vos enfants.
+      </Typography>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#FF8C00', // Orange pour le bouton
+          color: '#fff',
+          fontSize: {
+            xs: '0.9rem', // Taille pour les petits écrans
+            sm: '1.1rem', // Taille moyenne pour les écrans small
+          },
+          '@media (max-width:450px)': {
+            fontSize: '0.8rem', // Plus petit pour 450px
+          },
+          '@media (max-width:150px)': {
+            fontSize: '0.6rem', // Encore plus petit pour 150px
+          },
+          '&:hover': { backgroundColor: '#e67e22' }, // Orange vif au survol
+          mr: 2,
+        }}
+        onClick={() => handleAccess('consult')}
+      >
+        Consulter Bulletin
+      </Button>
+    </CardContent>
+  </Card>
+</Grid>
+
+
 
   {/* Carte avec la photo du Ministre */}
-  <Grid item xs={12} md={6}>
-  <Card sx={{
-    backgroundColor: '#fff', // Fond clair et agréable pour la carte
-    color: '#333',
-    mt: 5,
-    ml: 2,
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-    display: 'flex', // Disposition en ligne
-    alignItems: 'center',
-    transition: 'transform 0.3s ease',
-    maxHeight: '300px',
-    '&:hover': {
-      transform: 'scale(1.05)',
-      backgroundColor: '#f9f9f9', // Fond légèrement plus clair au survol
+  <Grid
+  item
+  xs={12}
+  md={6}
+  sx={{
+    display: {
+      xs: 'none', // Masquer par défaut pour les petits écrans
+      md: 'block', // Visible pour les écrans moyens et au-dessus
     },
-  }}>
+    '@media (max-width:450px)': {
+      display: 'none', // Spécifiquement masqué pour les écrans <= 450px
+    },
+  }}
+>
+  <Card
+    sx={{
+      backgroundColor: '#fff', // Fond clair et agréable pour la carte
+      color: '#333',
+      mt: 5,
+      ml: 2,
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
+      display: 'flex', // Disposition en ligne
+      alignItems: 'center',
+      transition: 'transform 0.3s ease',
+      maxHeight: '300px',
+      '&:hover': {
+        transform: 'scale(1.05)',
+        backgroundColor: '#f9f9f9', // Fond légèrement plus clair au survol
+      },
+    }}
+  >
     <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       <img
         src={ministerPhoto} // Utilisation de l'import de l'image
         alt="Portrait du Ministre"
         style={{
-          width: '40%',
+          width: '32%',
           height: 'auto',
           borderRadius: '8px',
         }}
@@ -462,13 +656,17 @@ L'éducation universelle et participative pour un Niger inclusif
         <Typography variant="body2" sx={{ color: '#555', fontWeight: 'medium', mt: 1 }}>
           MEN/A/EP/PLN
         </Typography>
-        <Typography variant="body2" sx={{ color: '#FF8C00', mt: 1, fontSize: '1.1rem', textAlign: 'left', fontWeight:'bold'}}>
+        <Typography
+          variant="body2"
+          sx={{ color: '#FF8C00', mt: 1, fontSize: '1.1rem', textAlign: 'left', fontWeight: 'bold' }}
+        >
           Un engagement fort pour une éducation inclusive et participative.
         </Typography>
       </Box>
     </CardContent>
   </Card>
 </Grid>
+
 
 
 
