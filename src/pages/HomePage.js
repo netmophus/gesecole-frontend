@@ -1195,7 +1195,7 @@ const HomePage = () => {
     <Player
       autoplay
       loop
-      src={educations1} // Remplace par l'animation de ton choix
+      src={LottieLego} // Remplace par l'animation de ton choix
       style={{
         height: '150px', // Taille de l'animation
         width: '150px',
