@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, Typography, Button, Paper, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import InfoIcon from '@mui/icons-material/Info';
 
 const CfepdAccessPage = () => {
   return (
@@ -49,7 +49,7 @@ const CfepdAccessPage = () => {
             mb: { xs: 3, md: 5 } 
           }}
         >
-          <Button 
+          {/* <Button 
             component={Link} 
             to="/register-cfepd" // Lien vers la page d'inscription CFEPD
             variant="contained" 
@@ -62,7 +62,7 @@ const CfepdAccessPage = () => {
             }}
           >
             S'inscrire
-          </Button>
+          </Button> */}
 
           <Button 
             component={Link} 
@@ -81,17 +81,36 @@ const CfepdAccessPage = () => {
         </Box>
 
         <Box sx={{ mt: { xs: 3, md: 4 }, textAlign: 'center' }}>
-          <CalendarTodayIcon sx={{ fontSize: { xs: 30, md: 50 }, color: '#004d40' }} />
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: '#757575', 
-              mt: 1, 
-              fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' } 
-            }}
-          >
-            Les inscriptions sont ouvertes du 1er au 30 novembre pour le CFEPD.
-          </Typography>
+         
+          <Box
+  sx={{
+    backgroundColor: '#fff8e1', // Couleur de fond douce pour attirer l'attention
+    padding: '15px',
+    borderRadius: '8px',
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // Ombre pour mettre en relief
+    display: 'flex',
+    alignItems: 'center',
+    gap: 2,
+  }}
+>
+  <InfoIcon
+    sx={{
+      fontSize: '2rem',
+      color: '#FF8C00', // Couleur vive pour l'icône
+    }}
+  />
+  <Typography
+    variant="body1"
+    sx={{
+      color: '#333', // Texte sombre pour contraste
+      fontWeight: 'bold', // Mettre en valeur
+      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.2rem' }, // Ajustement pour différents écrans
+    }}
+  >
+    Les inscriptions sont ouvertes du <strong>1er novembre 2024</strong> au <strong>30 mars 2025</strong> pour le <strong>CFEPD</strong>.
+  </Typography>
+</Box>
+
         </Box>
       </Paper>
     </Container>

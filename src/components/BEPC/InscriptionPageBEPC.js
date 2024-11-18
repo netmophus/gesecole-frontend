@@ -113,7 +113,7 @@ const InscriptionPageBEPC = () => {
   
   const handleDownloadReport = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/bepc/inscription/report/inscriptions`, {
+      const response = await axios.get(`${apiBaseUrl}/api/bepc/inscription/report/inscriptions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -212,11 +212,79 @@ const InscriptionPageBEPC = () => {
     }
   };
   
-  const handleDownloadPDF = async (data) => {
+ 
+
+  // const handleDownloadPDF = () => {
+  //   if (!recuData) {
+  //     alert("Aucune donnée disponible pour générer le PDF.");
+  //     return;
+  //   }
+  
+  //   const pdf = new jsPDF('portrait', 'mm', 'a4');
+  //   const img = new Image();
+  //   img.src = logoMinistere;
+  
+  //   img.onload = async () => {
+  //     pdf.addImage(img, 'PNG', 20, 10, 30, 30);
+  //     pdf.setFontSize(10);
+  //     pdf.setFont('helvetica', 'bold');
+  //     const titleText = pdf.splitTextToSize(
+  //       "Ministère de l'Éducation Nationale, de l'Alphabétisation, de l'Enseignement Professionnel et de la Promotion des Langues Nationales",
+  //       130
+  //     );
+  //     pdf.text(titleText, 55, 20);
+  //     pdf.setFontSize(18);
+  //     pdf.text('Reçu de Paiement - BEPC', 105, 50, { align: 'center' });
+  //     pdf.setFontSize(12);
+  //     pdf.setFont('helvetica', 'normal');
+  //     pdf.text(`Nom et Prénom: ${recuData.prenom} ${recuData.nom}`, 20, 70);
+  //     pdf.text(`Matricule: ${recuData.matricule}`, 20, 80);
+  //     pdf.text(`Date de Naissance: ${new Date(recuData.dateNaissance).toLocaleDateString()}`, 20, 90);
+  //     pdf.text(`Établissement: ${recuData.nomEtablissement}`, 20, 100);
+  //     pdf.text(`Région Établissement: ${recuData.regionEtablissement}`, 20, 110);
+  //     pdf.text(`Classe: ${recuData.classe}`, 20, 120);
+  //     pdf.setFont('helvetica', 'bold');
+  //     pdf.text('Détails de Paiement:', 20, 130);
+  //     pdf.setFont('helvetica', 'normal');
+  //     pdf.text(`Montant: ${recuData.montantPaiement} FCFA`, 20, 140);
+  //     pdf.text(`Référence Paiement: ${recuData.referencePaiement}`, 20, 150);
+  //     pdf.text(`Nom de l'Agent: ${recuData.agentId?.name || 'Non spécifié'}`, 20, 160);
+
+  //     pdf.setFont('helvetica', 'italic');
+  //     pdf.text(
+  //       'Ce reçu atteste le paiement effectué pour l\'inscription. Conservez-le précieusement comme preuve de règlement.',
+  //       20, 170, { maxWidth: 170 }
+  //     );
+  
+  //     const qrData = `Nom: ${recuData.nom} ${recuData.prenom}\nMatricule: ${recuData.matricule}\nRéférence Paiement: ${recuData.referencePaiement}`;
+  //     try {
+  //       const qrCodeDataURL = await QRCode.toDataURL(qrData);
+  //       pdf.addImage(qrCodeDataURL, 'PNG', 150, 80, 40, 40);
+  //       pdf.save(`Recu_Paiement_${recuData.nom}_${recuData.prenom}.pdf`);
+  //     } catch (error) {
+  //       console.error("Erreur lors de la génération du QR code:", error);
+  //       alert("Échec de la génération du QR code.");
+  //     }
+  //   };
+  
+  //   img.onerror = (error) => {
+  //     console.error("Erreur lors du chargement de l'image ou de la génération du PDF:", error);
+  //     alert("Échec du chargement du logo. Vérifiez le chemin d'accès ou réessayez.");
+  //   };
+  // };
+  
+
+
+  const handleDownloadPDF = () => {
+    if (!recuData) {
+      alert("Aucune donnée disponible pour générer le PDF.");
+      return;
+    }
+  
     const pdf = new jsPDF('portrait', 'mm', 'a4');
     const img = new Image();
     img.src = logoMinistere;
-
+  
     img.onload = async () => {
       pdf.addImage(img, 'PNG', 20, 10, 30, 30);
       pdf.setFontSize(10);
@@ -228,43 +296,52 @@ const InscriptionPageBEPC = () => {
       pdf.text(titleText, 55, 20);
       pdf.setFontSize(18);
       pdf.text('Reçu de Paiement - BEPC', 105, 50, { align: 'center' });
+  
       pdf.setFontSize(12);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`Nom et Prénom: ${data.prenom} ${data.nom}`, 20, 70);
-      pdf.text(`Matricule: ${data.matricule}`, 20, 80);
-      pdf.text(`Date de Naissance: ${new Date(data.dateNaissance).toLocaleDateString()}`, 20, 90);
-      pdf.text(`Établissement: ${data.nomEtablissement}`, 20, 100);
-      pdf.text(`Région Établissement: ${data.regionEtablissement}`, 20, 110);
-      pdf.text(`Classe: ${data.classe}`, 20, 120);
+      pdf.text(`Nom et Prénom: ${recuData.prenom} ${recuData.nom}`, 20, 70);
+      pdf.text(`Matricule: ${recuData.matricule}`, 20, 80);
+      pdf.text(`Date de Naissance: ${new Date(recuData.dateNaissance).toLocaleDateString()}`, 20, 90);
+      pdf.text(`Établissement: ${recuData.nomEtablissement}`, 20, 100);
+      pdf.text(`Région Établissement: ${recuData.regionEtablissement}`, 20, 110);
+      pdf.text(`Classe: ${recuData.classe}`, 20, 120);
+  
       pdf.setFont('helvetica', 'bold');
       pdf.text('Détails de Paiement:', 20, 130);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`Montant: ${data.montantPaiement} FCFA`, 20, 140);
-      pdf.text(`Référence de Paiement: ${data.referencePaiement}`, 20, 150);
+      pdf.text(`Montant: ${recuData.montantPaiement} FCFA`, 20, 140);
+      pdf.text(`Référence Paiement: ${recuData.referencePaiement}`, 20, 150);
+  
+      
       pdf.setFont('helvetica', 'italic');
       pdf.text(
         'Ce reçu atteste le paiement effectué pour l\'inscription. Conservez-le précieusement comme preuve de règlement.',
-        20, 170, { maxWidth: 170 }
+        20,
+        170,
+        { maxWidth: 170 }
       );
 
-      const qrData = `Nom: ${data.nom} ${data.prenom}\nMatricule: ${data.matricule}\nRéférence Paiement: ${data.referencePaiement}`;
+      // Ajouter le nom de l'agent ici
+      pdf.text(`Nom de l'Agent de Saisie: ${recuData.agentName || 'Non spécifié'}`, 20, 160);
+  
+  
+      const qrData = `Nom: ${recuData.nom} ${recuData.prenom}\nMatricule: ${recuData.matricule}\nRéférence Paiement: ${recuData.referencePaiement}`;
       try {
         const qrCodeDataURL = await QRCode.toDataURL(qrData);
         pdf.addImage(qrCodeDataURL, 'PNG', 150, 80, 40, 40);
-        pdf.save(`Recu_Paiement_${data.nom}_${data.prenom}.pdf`);
+        pdf.save(`Recu_Paiement_${recuData.nom}_${recuData.prenom}.pdf`);
       } catch (error) {
         console.error("Erreur lors de la génération du QR code:", error);
         alert("Échec de la génération du QR code.");
       }
     };
-
+  
     img.onerror = (error) => {
       console.error("Erreur lors du chargement de l'image ou de la génération du PDF:", error);
       alert("Échec du chargement du logo. Vérifiez le chemin d'accès ou réessayez.");
     };
   };
-
-
+  
   return (
     <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
 
@@ -596,6 +673,23 @@ const InscriptionPageBEPC = () => {
                   </Typography>
                 </Box>
 
+
+
+
+
+{/* 
+                <Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
+  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+    Nom de l'agent: 
+    <Typography component="span" sx={{ fontWeight: 'normal' }}>
+      {recuData.agentName ? recuData.agentName : 'Non spécifié'}
+    </Typography>
+  </Typography>
+</Box> */}
+
+
+
+
                 <Box sx={{ mb: 1, textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
                   <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                     Montant des frais:
@@ -619,6 +713,22 @@ const InscriptionPageBEPC = () => {
                     Conservez ce reçu pour vos archives.
                   </Typography>
                 </Box>
+
+
+
+
+                <Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
+  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+    Nom de l'agent de Saisie: 
+    <Typography component="span" sx={{ fontWeight: 'normal' }}>
+      {recuData.agentName ? recuData.agentName : 'Non spécifié'}
+    </Typography>
+  </Typography>
+</Box>
+
+
+
+
               </Box>
 
               <Button 

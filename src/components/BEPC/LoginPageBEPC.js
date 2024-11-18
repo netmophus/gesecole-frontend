@@ -118,11 +118,11 @@ const apiBaseUrl = process.env.REACT_APP_API_URL;
             >
               Se Connecter
             </Button>
-            <Link to="/register-bepc" style={{ textDecoration: 'none', color: '#FF8C00' }}>
+            {/* <Link to="/register-bepc" style={{ textDecoration: 'none', color: '#FF8C00' }}>
               <Typography variant="body2" align="center">
                 Pas encore inscrit ? Créez un compte.
               </Typography>
-            </Link>
+            </Link> */}
           </Box>
 
 

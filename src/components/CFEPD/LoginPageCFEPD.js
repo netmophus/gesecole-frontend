@@ -108,11 +108,11 @@ const LoginPageCFEPD = () => {
             >
               Se Connecter
             </Button>
-            <Link to="/register-cfepd" style={{ textDecoration: 'none', color: '#FF8C00' }}>
+            {/* <Link to="/register-cfepd" style={{ textDecoration: 'none', color: '#FF8C00' }}>
               <Typography variant="body2" align="center">
                 Pas encore inscrit ? Créez un compte.
               </Typography>
-            </Link>
+            </Link> */}
           </Box>
 
           <Snackbar

@@ -3,7 +3,8 @@
 import React from 'react';
 import { Box, Typography, Button, Paper, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
+import InfoIcon from '@mui/icons-material/Info';
 
 const BepcAccessPage = () => {
 
@@ -28,7 +29,7 @@ const BepcAccessPage = () => {
         fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } 
       }}
     >
-      Bienvenue au processus d’inscription CFEPD/BEPC
+      Bienvenue au processus d’inscription BEPC
     </Typography>
 
     <Typography 
@@ -56,7 +57,7 @@ const BepcAccessPage = () => {
 
 
 
-      <Button 
+      {/* <Button 
         component={Link} 
         to="/register-bepc" 
         variant="contained" 
@@ -69,7 +70,7 @@ const BepcAccessPage = () => {
         }}
       >
         S'inscrire
-      </Button>
+      </Button> */}
 
     
       <Button 
@@ -91,17 +92,69 @@ const BepcAccessPage = () => {
  
 
     <Box sx={{ mt: { xs: 3, md: 4 }, textAlign: 'center' }}>
-      <CalendarTodayIcon sx={{ fontSize: { xs: 30, md: 50 }, color: '#004d40' }} />
-      <Typography 
-        variant="body2" 
-        sx={{ 
-          color: '#757575', 
-          mt: 1, 
-          fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' } 
-        }}
-      >
-        Les inscriptions sont ouvertes du 1er au 30 novembre pour le CFEPD et du 1er novembre au 2 Fevrier pour le BEPC.
-      </Typography>
+      
+    <Box
+  sx={{
+    backgroundColor: '#f9f9f9',
+    borderRadius: '8px',
+    padding: '16px',
+    marginTop: '16px',
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+  }}
+>
+<Box
+  sx={{
+    backgroundColor: '#f9f9f9',
+    padding: '16px',
+    borderRadius: '8px',
+    marginTop: '16px',
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+  }}
+>
+  <Typography
+    variant="h6"
+    sx={{
+      fontWeight: 'bold',
+      color: '#004d40',
+      marginBottom: '8px',
+    }}
+  >
+    <InfoIcon
+      sx={{
+        fontSize: '1.5rem',
+        color: '#FF8C00',
+        verticalAlign: 'middle',
+        marginRight: '8px',
+      }}
+    />
+    Informations Importantes :
+  </Typography>
+  <Typography
+    variant="body1"
+    sx={{
+      color: '#555',
+      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+      marginBottom: '16px',
+    }}
+  >
+    Les inscriptions pour le <strong>BEPC</strong> sont ouvertes aux dates suivantes :
+  </Typography>
+  <Typography
+    variant="body1"
+    sx={{
+      color: '#d32f2f',
+      fontWeight: 'bold',
+      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+    }}
+  >
+    Du <strong>1er novembre 2024</strong> au <strong>2 février 2025</strong>.
+  </Typography>
+</Box>
+
+</Box>
+
     </Box>
   </Paper>
 </Container>
