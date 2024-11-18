@@ -1301,7 +1301,7 @@ const HomePage = () => {
     sx={{
       display: { xs: 'block', sm: 'none' }, // Visible uniquement pour les petits écrans
       padding: '20px',
-      backgroundColor: '#f9f9f9',
+      backgroundColor: '#ffff',
       borderRadius: '12px',
       boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
     }}
