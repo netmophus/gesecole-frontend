@@ -1010,7 +1010,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import SlidingPageDrawer from '../components/SlidingPageDrawer';
-import { Box, Typography, Button, Collapse, Grid,Paper, Card, Tab,Tabs, CardContent, IconButton, Divider, Container, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, Typography, Button,  Grid,Paper, Card, Tab,Tabs, CardContent, IconButton, Divider, Container, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
 //import logo from '../assets/images/armoiries-niger.png';  // Assurez-vous que le chemin est correct
 import logo1 from '../assets/images/logo-ministere.png';  // Assurez-vous que le chemin est correct
@@ -1028,7 +1028,7 @@ import LottieLego from '../assets/animations/LottieLego.json'; // Animation Lott
 import { Player } from '@lottiefiles/react-lottie-player';
 import animeavis from '../assets/animations/lottieAvis.json';
 import administrateurbepc from '../assets/animations/administrateurbepc.json';
-import educations from '../assets/animations/educations.json';
+import educations1 from '../assets/animations/educations1.json';
 
 import SchoolIcon from '@mui/icons-material/School';
 import InfoIcon from '@mui/icons-material/Info';
@@ -1051,17 +1051,12 @@ const HomePage = () => {
   //const { setUser } = useContext(AuthContext);  // Assuming you manage user context
   
 
-  const [showObjectives, setShowObjectives] = useState(false);
-
+ 
 
   const [tabIndex, setTabIndex] = useState(0); // État pour gérer les onglets
   //const [showObjectives, setShowObjectives] = useState(false);
 
 
-  // Fonction pour basculer l'affichage des objectifs
-  const toggleObjectives = () => {
-    setShowObjectives(!showObjectives);
-  };
 
 
   useEffect(() => {
@@ -1200,7 +1195,7 @@ const HomePage = () => {
     <Player
       autoplay
       loop
-      src={LottieLego} // Remplace par l'animation de ton choix
+      src={educations1} // Remplace par l'animation de ton choix
       style={{
         height: '150px', // Taille de l'animation
         width: '150px',
@@ -1227,7 +1222,7 @@ const HomePage = () => {
     marginBottom: '10px',
   }}
 >
-  Inscriptions ouvertes pour le BEPC et le CFEPD !
+  Pré-inscriptions ouvertes pour le BEPC et le CFEPD !
 </Typography>
 <Typography
   variant="body1"
@@ -1391,25 +1386,33 @@ const HomePage = () => {
   <Box
     sx={{
       display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
       alignItems: 'center',
-      justifyContent: 'center',
-      gap: '20px', // Espacement entre les colonnes
-      flexWrap: 'nowrap', // Pas de wrap pour maintenir la proportion
+      justifyContent: 'space-between', // Laisser un espace vide à gauche
+      
+      gap:3,
       padding: '20px',
       backgroundColor: '#fff',
-      borderRadius: '12px',
+      borderRadius: '16px',
     }}
   >
-    {/* Colonne gauche : Logo et texte d'accueil */}
+    {/* Place vide à gauche */}
     <Box
       sx={{
-        flex: '2 1 60%', // Occuper environ 2/3 de l'espace
-        textAlign: 'center',
+        flex:1, // Prend de l'espace mais reste vide
+        display: { xs: 'none', md: 'block' }, // N'apparaît que sur les grands écrans
+      }}
+    ></Box>
+
+    {/* Logo et texte centrés */}
+    <Box
+      sx={{
+        flex:2, // Augmenter la largeur pour compenser
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
+        alignItems: 'center', // Centrer horizontalement
+        textAlign: 'center', // Centrer le texte
       }}
     >
       <img
@@ -1417,49 +1420,39 @@ const HomePage = () => {
         alt="Armoiries du Niger"
         style={{
           height: '220px',
-          marginBottom: '10px',
+          marginBottom: '20px',
         }}
       />
       <Typography
-        variant="h5"
+        variant="h6"
         sx={{
           fontWeight: 'bold',
-          textAlign: 'center',
-          textTransform: 'uppercase',
-          fontSize: {
-            xs: '1.2rem',
-            sm: '1.5rem',
-            md: '1.8rem',
-            lg: '2rem',
-          },
-          background: 'linear-gradient(90deg, #004d40, #00acc1)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          textShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+          marginBottom: '20px',
+          fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille responsive
+          color: '#004d40',
         }}
       >
-        Bienvenue sur la plateforme officielle du Ministère de l'Éducation Nationale
+        Une plateforme innovante pour une éducation connectée et participative
       </Typography>
+      
     </Box>
 
-    {/* Colonne droite : Animation Lottie et texte */}
+    {/* Animation Lottie au centre */}
     <Box
       sx={{
-        flex: '1 1 40%', // Occuper environ 1/3 de l'espace
+        flex: 3, // Taille de la boîte à droite
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center', // Centrer horizontalement et verticalement
       }}
     >
       <Player
         autoplay
         loop
-        src={educations}
+        src={LottieLego} // Animation locale
         style={{
-          height: '250px',
-          maxWidth: '100%',
-          marginBottom: '10px',
+          height: '400px', // Taille de l'animation
+          maxWidth: '100%', // Limite la largeur maximale
         }}
       />
     </Box>
@@ -1478,7 +1471,15 @@ const HomePage = () => {
       justifyContent: 'space-between',
     }}
   >
-    {/* Texte à gauche */}
+    {/* Place vide à gauche */}
+    <Box
+      sx={{
+        flex: 0.5, // Occupe un espace réduit à gauche
+        display: { xs: 'none', md: 'block' }, // Visible uniquement sur les grands écrans
+      }}
+    ></Box>
+
+    {/* Texte au centre */}
     <Box
       sx={{
         flex: 1,
@@ -1495,7 +1496,7 @@ const HomePage = () => {
         Les <strong>candidats libres</strong> sont invités à effectuer leurs inscriptions auprès des <strong>directions régionales</strong> ou des <strong>inspections régionales</strong>.
       </Typography>
       <Typography sx={{ marginBottom: '10px' }}>
-        Pour toute information complémentaire, veuillez appeler les numéros suivants : <strong>+227 20 20 00 00</strong> ou <strong>+227 99 99 00 00</strong>.
+        Pour toute information complémentaire, veuillez appeler les numéros suivants : <strong>+227 96 98 61 74</strong> ou <strong>+227 80 64 83 83</strong>.
       </Typography>
     </Box>
 
@@ -1520,6 +1521,7 @@ const HomePage = () => {
 )}
 
 
+
 {tabIndex === 2 && (
   <Box
     sx={{
@@ -1534,6 +1536,8 @@ const HomePage = () => {
       
     }}
   >
+
+ 
     {/* Animation Lottie à gauche */}
     <Box
       sx={{
@@ -1572,15 +1576,45 @@ const HomePage = () => {
         Espace réservé aux administrateurs BEPC et CFEPD
       </Typography>
       <Typography
-        sx={{
-          marginBottom: '20px',
-          fontSize: { xs: '0.9rem', md: '1rem' }, // Taille responsive
-          color: '#555',
-        }}
-      >
-        En cas de problème, veuillez appeler les numéros suivants :{' '}
-        <strong>+227 20 20 00 00</strong> ou <strong>+227 99 99 00 00</strong>.
-      </Typography>
+  sx={{
+    marginBottom: '20px',
+    fontSize: { xs: '1rem', md: '1.2rem' }, // Taille responsive
+    color: '#004d40',
+    fontWeight: 'bold',
+    textAlign: 'center', // Centrer le texte
+  }}
+>
+  En cas de problème, veuillez appeler les numéros suivants :
+</Typography>
+<Box
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', sm: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2, // Espacement entre les numéros
+    marginTop: '10px',
+  }}
+>
+  <Typography
+    sx={{
+      fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille des numéros
+      color: '#FF8C00',
+      fontWeight: 'bold',
+    }}
+  >
+    +227 96 98 61 74
+  </Typography>
+  <Typography
+    sx={{
+      fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille des numéros
+      color: '#00ACC1',
+      fontWeight: 'bold',
+    }}
+  >
+    +227 80 64 83 83
+  </Typography>
+</Box>
 
       {/* Boutons d'accès */}
       <Box
