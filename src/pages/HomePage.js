@@ -1028,7 +1028,7 @@ import LottieLego from '../assets/animations/LottieLego.json'; // Animation Lott
 import { Player } from '@lottiefiles/react-lottie-player';
 import animeavis from '../assets/animations/lottieAvis.json';
 import administrateurbepc from '../assets/animations/administrateurbepc.json';
-import educations1 from '../assets/animations/educations1.json';
+import educations1 from '../assets/images/educationss.png';
 
 import SchoolIcon from '@mui/icons-material/School';
 import InfoIcon from '@mui/icons-material/Info';
@@ -1178,7 +1178,7 @@ const HomePage = () => {
     padding: '20px',
     borderRadius: '12px',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-    marginBottom: '20px',
+    marginBottom: '10px',
     gap: '20px', // Espace entre les éléments
     flexWrap: 'wrap', // Permet l'adaptation pour les petits écrans
   }}
@@ -1197,8 +1197,8 @@ const HomePage = () => {
       loop
       src={LottieLego} // Remplace par l'animation de ton choix
       style={{
-        height: '150px', // Taille de l'animation
-        width: '150px',
+        height: '250px', // Taille de l'animation
+        width: '250px',
       }}
     />
   </Box>
@@ -1227,7 +1227,7 @@ const HomePage = () => {
 <Typography
   variant="body1"
   sx={{
-    fontSize: '1rem',
+    fontSize: '1.2rem',
     marginBottom: '10px',
   }}
 >
@@ -1389,8 +1389,7 @@ const HomePage = () => {
       flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
       alignItems: 'center',
       justifyContent: 'space-between', // Laisser un espace vide à gauche
-      
-      gap:3,
+      gap: 3,
       padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '16px',
@@ -1399,7 +1398,7 @@ const HomePage = () => {
     {/* Place vide à gauche */}
     <Box
       sx={{
-        flex:1, // Prend de l'espace mais reste vide
+        flex: 1, // Prend de l'espace mais reste vide
         display: { xs: 'none', md: 'block' }, // N'apparaît que sur les grands écrans
       }}
     ></Box>
@@ -1407,7 +1406,7 @@ const HomePage = () => {
     {/* Logo et texte centrés */}
     <Box
       sx={{
-        flex:2, // Augmenter la largeur pour compenser
+        flex: 2, // Augmenter la largeur pour compenser
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -1428,16 +1427,15 @@ const HomePage = () => {
         sx={{
           fontWeight: 'bold',
           marginBottom: '20px',
-          fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille responsive
+          fontSize: { xs: '1.5rem', md: '1.5rem' }, // Taille responsive
           color: '#004d40',
         }}
       >
         Une plateforme innovante pour une éducation connectée et participative
       </Typography>
-      
     </Box>
 
-    {/* Animation Lottie au centre */}
+    {/* Animation Lottie ou image responsive */}
     <Box
       sx={{
         flex: 3, // Taille de la boîte à droite
@@ -1446,13 +1444,13 @@ const HomePage = () => {
         alignItems: 'center', // Centrer horizontalement et verticalement
       }}
     >
-      <Player
-        autoplay
-        loop
-        src={LottieLego} // Animation locale
+      <img
+        alt="Education"
+        src={educations1} // Animation locale
         style={{
-          height: '400px', // Taille de l'animation
+          height: 'auto', // Ajuste automatiquement la hauteur
           maxWidth: '100%', // Limite la largeur maximale
+          maxHeight: { xs: '200px', sm: '300px', md: '400px' }, // Ajustement dynamique selon l'écran
         }}
       />
     </Box>
@@ -1486,16 +1484,16 @@ const HomePage = () => {
         textAlign: { xs: 'center', md: 'left' },
       }}
     >
-      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>
+      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px', fontSize:'1.5rem' }}>
         Espace réservé aux candidats officiels et libres
       </Typography>
-      <Typography sx={{ marginBottom: '10px' }}>
+      <Typography sx={{ marginBottom: '10px', fontSize:'1.1rem' }}>
         Les <strong>candidats officiels</strong> doivent préparer leurs dossiers conformément aux instructions fournies par les établissements où ils sont inscrits et suivre leurs recommandations.
       </Typography>
       <Typography sx={{ marginBottom: '10px' }}>
         Les <strong>candidats libres</strong> sont invités à effectuer leurs inscriptions auprès des <strong>directions régionales</strong> ou des <strong>inspections régionales</strong>.
       </Typography>
-      <Typography sx={{ marginBottom: '10px' }}>
+      <Typography sx={{ marginBottom: '10px',  fontSize:'1.2rem' }}>
         Pour toute information complémentaire, veuillez appeler les numéros suivants : <strong>+227 96 98 61 74</strong> ou <strong>+227 80 64 83 83</strong>.
       </Typography>
     </Box>
@@ -1533,11 +1531,8 @@ const HomePage = () => {
       padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '16px',
-      
     }}
   >
-
- 
     {/* Animation Lottie à gauche */}
     <Box
       sx={{
@@ -1571,56 +1566,61 @@ const HomePage = () => {
           fontWeight: 'bold',
           marginBottom: '20px',
           color: '#004d40',
+          fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille responsive
         }}
       >
         Espace réservé aux administrateurs BEPC et CFEPD
       </Typography>
+
       <Typography
-  sx={{
-    marginBottom: '20px',
-    fontSize: { xs: '1rem', md: '1.2rem' }, // Taille responsive
-    color: '#004d40',
-    fontWeight: 'bold',
-    textAlign: 'center', // Centrer le texte
-  }}
->
-  En cas de problème, veuillez appeler les numéros suivants :
-</Typography>
-<Box
-  sx={{
-    display: 'flex',
-    flexDirection: { xs: 'column', sm: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 2, // Espacement entre les numéros
-    marginTop: '10px',
-  }}
->
-  <Typography
-    sx={{
-      fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille des numéros
-      color: '#FF8C00',
-      fontWeight: 'bold',
-    }}
-  >
-    +227 96 98 61 74
-  </Typography>
-  <Typography
-    sx={{
-      fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille des numéros
-      color: '#00ACC1',
-      fontWeight: 'bold',
-    }}
-  >
-    +227 80 64 83 83
-  </Typography>
-</Box>
+        sx={{
+          marginBottom: '10px',
+          fontSize: { xs: '1rem', md: '1.2rem' },
+          color: '#004d40',
+          fontWeight: 'bold',
+        }}
+      >
+        En cas de problème, veuillez appeler :
+      </Typography>
+
+      {/* Numéros de téléphone en ligne */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 2,
+          marginBottom: '20px',
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: { xs: '1.2rem', md: '1.5rem' },
+            color: '#FF8C00',
+            fontWeight: 'bold',
+            textAlign: 'center',
+          }}
+        >
+          +227 96 98 61 74
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: '1.2rem', md: '1.5rem' },
+            color: '#00ACC1',
+            fontWeight: 'bold',
+            textAlign: 'center',
+          }}
+        >
+          +227 80 64 83 83
+        </Typography>
+      </Box>
 
       {/* Boutons d'accès */}
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' }, // Boutons empilés sur petits écrans
+          flexDirection: { xs: 'column', sm: 'row' },
           justifyContent: 'center',
           gap: 2,
         }}
@@ -1632,11 +1632,11 @@ const HomePage = () => {
           sx={{
             backgroundColor: '#FF8C00',
             color: '#fff',
-            fontSize: { xs: '0.9rem', md: '1rem' }, // Taille responsive
+            fontSize: { xs: '0.9rem', md: '1rem' },
             padding: '10px 20px',
             borderRadius: '8px',
             boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-            width: { xs: '100%', sm: 'auto' }, // Pleine largeur pour petits écrans
+            width: { xs: '100%', sm: 'auto' },
             '&:hover': { backgroundColor: '#e67e22' },
           }}
         >
@@ -1650,11 +1650,11 @@ const HomePage = () => {
           sx={{
             backgroundColor: '#00ACC1',
             color: '#fff',
-            fontSize: { xs: '0.9rem', md: '1rem' }, // Taille responsive
+            fontSize: { xs: '0.9rem', md: '1rem' },
             padding: '10px 20px',
             borderRadius: '8px',
             boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-            width: { xs: '100%', sm: 'auto' }, // Pleine largeur pour petits écrans
+            width: { xs: '100%', sm: 'auto' },
             '&:hover': { backgroundColor: '#00838F' },
           }}
         >
@@ -1664,6 +1664,7 @@ const HomePage = () => {
     </Box>
   </Box>
 )}
+
 
 
 
