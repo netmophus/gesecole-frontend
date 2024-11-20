@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Container, Grid, TextField, Button, Modal } from '@mui/material';
+import { Box, Typography, Paper, Container, Grid, Alert, Snackbar, TextField, Button, Modal } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import PersonIcon from '@mui/icons-material/Person';
 import { jsPDF } from 'jspdf';
@@ -36,109 +36,84 @@ const InscriptionPageCFEPD = () => {
   const [recuData, setRecuData] = useState(null);
   const [matricule, setMatricule] = useState('');
   
+
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('error');
+
   // Handler pour générer le rapport de liste des inscriptions CFEPD
-  const handleDownloadReport = async () => {
-    try {
-      console.log("Tentative de téléchargement du rapport CFEPD...");
+//   const handleDownloadReport = async () => {
+//     try {
+//       console.log("Tentative de téléchargement du rapport CFEPD...");
 
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cfepd/inscription/report/inscriptions`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+//       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cfepd/inscription/report/inscriptions`, {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         },
+//       });
 
-      console.log("Réponse reçue du serveur pour le rapport:", response);
+//       console.log("Réponse reçue du serveur pour le rapport:", response);
 
-      if (response.data && response.data.length > 0) {
-        console.log("Données du rapport :", response.data);
+//       if (response.data && response.data.length > 0) {
+//         console.log("Données du rapport :", response.data);
 
-        // Initialiser un nouveau document PDF
-        const pdf = new jsPDF('landscape', 'mm', 'a4');
+//         // Initialiser un nouveau document PDF
+//         const pdf = new jsPDF('landscape', 'mm', 'a4');
         
-        // En-tête du PDF
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text("Ministère de l'Éducation Nationale", 10, 10);
-        pdf.text("Rapport des Inscriptions CFEPD avec Paiement Confirmé", 105, 20, { align: 'center' });
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(10);
-        pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
+//         // En-tête du PDF
+//         pdf.setFontSize(12);
+//         pdf.setFont('helvetica', 'bold');
+//         pdf.text("Ministère de l'Éducation Nationale", 10, 10);
+//         pdf.text("Rapport des Inscriptions CFEPD avec Paiement Confirmé", 105, 20, { align: 'center' });
+//         pdf.setFont('helvetica', 'normal');
+//         pdf.setFontSize(10);
+//         pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
 
-        // En-têtes de tableau
-        const headers = ["Matricule", "Nom", "Prénom", "Date Naiss.", "Lieu Naiss.", "Genre", "Téléphone Parent", "Montant"];
-        const startX = 10;
-        let startY = 40;
+//         // En-têtes de tableau
+//         const headers = ["Matricule", "Nom", "Prénom", "Date Naiss.", "Lieu Naiss.", "Genre", "Téléphone Parent", "Montant"];
+//         const startX = 10;
+//         let startY = 40;
         
-        pdf.setFont('helvetica', 'bold');
-        headers.forEach((header, index) => {
-          pdf.text(header, startX + index * 35, startY);
-        });
+//         pdf.setFont('helvetica', 'bold');
+//         headers.forEach((header, index) => {
+//           pdf.text(header, startX + index * 35, startY);
+//         });
 
-        pdf.setFont('helvetica', 'normal');
-        startY += 10;
+//         pdf.setFont('helvetica', 'normal');
+//         startY += 10;
 
-        // Ajout des données des inscriptions
-        response.data.forEach((inscription) => {
-          pdf.text(inscription.matricule, startX, startY);
-          pdf.text(inscription.nom, startX + 35, startY);
-          pdf.text(inscription.prenom, startX + 70, startY);
-          pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 105, startY);
-          pdf.text(inscription.lieuNaissance, startX + 140, startY);
-          pdf.text(inscription.genre, startX + 175, startY);
-          pdf.text(inscription.telephoneParent, startX + 210, startY);
-          pdf.text(`${inscription.montantPaiement} FCFA`, startX + 245, startY);
+//         // Ajout des données des inscriptions
+//         response.data.forEach((inscription) => {
+//           pdf.text(inscription.matricule, startX, startY);
+//           pdf.text(inscription.nom, startX + 35, startY);
+//           pdf.text(inscription.prenom, startX + 70, startY);
+//           pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 105, startY);
+//           pdf.text(inscription.lieuNaissance, startX + 140, startY);
+//           pdf.text(inscription.genre, startX + 175, startY);
+//           pdf.text(inscription.telephoneParent, startX + 210, startY);
+//           pdf.text(`${inscription.montantPaiement} FCFA`, startX + 245, startY);
 
-          startY += 10;
-          if (startY > 190) { // Si la page est remplie, créer une nouvelle page
-            pdf.addPage();
-            startY = 20;
-          }
-        });
+//           startY += 10;
+//           if (startY > 190) { // Si la page est remplie, créer une nouvelle page
+//             pdf.addPage();
+//             startY = 20;
+//           }
+//         });
 
-        // Sauvegarder le PDF
-        pdf.save('Rapport_Inscriptions_CFEPD.pdf');
-      } else {
-        console.warn("Aucune donnée trouvée pour le rapport.");
-        alert("Aucune inscription à afficher dans le rapport.");
-      }
-    } catch (error) {
-      console.error("Erreur lors du téléchargement du rapport:", error);
-      alert("Erreur lors du téléchargement du rapport.");
-    }
-};
-
-
-// const handleGenerateReceipt = async () => {
-//   try {
-//     const token = localStorage.getItem('token');
-//     if (!matricule) {
-//       alert("Veuillez entrer un matricule valide.");
-//       return;
+//         // Sauvegarder le PDF
+//         pdf.save('Rapport_Inscriptions_CFEPD.pdf');
+//       } else {
+//         console.warn("Aucune donnée trouvée pour le rapport.");
+//         alert("Aucune inscription à afficher dans le rapport.");
+//       }
+//     } catch (error) {
+//       console.error("Erreur lors du téléchargement du rapport:", error);
+//       alert("Erreur lors du téléchargement du rapport.");
 //     }
-
-//     console.log("Tentative de génération du reçu avec le matricule :", matricule);
-    
-//     const response = await axios.get(`${apiBaseUrl}/api/cfepd/inscription/inscription/${matricule}`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-
-//     const studentData = response.data;
-//     console.log("Données de l'élève :", studentData);
-
-//     // Vérifions ici avant d'appeler handleDownloadPDF
-//     if (studentData) {
-//       console.log("Appel de la fonction handleDownloadPDF avec les données de l'élève.");
-//       handleDownloadPDF(studentData); // Assurez-vous que handleDownloadPDF est accessible
-//     } else {
-//       alert("Aucun élève trouvé avec le numéro de matricule fourni.");
-//     }
-//   } catch (error) {
-//     console.error("Erreur lors de la récupération des informations de l'élève :", error);
-//     alert("Une erreur est survenue lors de la récupération des informations de l'élève.");
-//   }
 // };
+
+
 
 const handleGenerateReceipt = async () => {
   try {
@@ -187,6 +162,10 @@ const handleGenerateReceipt = async () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -225,8 +204,27 @@ const handleGenerateReceipt = async () => {
       setOpenModal(true);
     } catch (err) {
       console.error("Erreur lors de l'inscription:", err);
+
+      if (err.response?.status === 409) {
+        setSnackbarMessage(err.response.data.msg);
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage('Une erreur est survenue lors de la soumission du formulaire.');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      }
+      
+
+
+
     }
   };
+
+
+
+
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -243,11 +241,53 @@ const handleGenerateReceipt = async () => {
     });
   };
 
+  // const handleDownloadPDF = async (data) => {
+  //   const pdf = new jsPDF('portrait', 'mm', 'a4');
+  //   const img = new Image();
+  //   img.src = logoMinistere;
+
+  //   img.onload = async () => {
+  //     pdf.addImage(img, 'PNG', 20, 10, 30, 30);
+  //     pdf.setFontSize(10);
+  //     pdf.setFont('helvetica', 'bold');
+  //     const titleText = pdf.splitTextToSize(
+  //       "Ministère de l'Éducation Nationale, de l'Alphabétisation, de l'Enseignement Professionnel et de la Promotion des Langues Nationales",
+  //       130
+  //     );
+  //     pdf.text(titleText, 55, 20);
+  //     pdf.setFontSize(18);
+  //     pdf.text('Reçu de Paiement - CFEPD', 105, 50, { align: 'center' });
+  //     pdf.setFontSize(12);
+  //     pdf.setFont('helvetica', 'normal');
+  //     pdf.text(`Nom et Prénom: ${data.prenom} ${data.nom}`, 20, 70);
+  //     pdf.text(`Matricule: ${data.matricule}`, 20, 80);
+  //     pdf.text(`Date de Naissance: ${new Date(data.dateNaissance).toLocaleDateString()}`, 20, 90);
+  //     pdf.text(`Établissement: ${data.nomEtablissement}`, 20, 100);
+  //     pdf.text(`Région Établissement: ${data.regionEtablissement}`, 20, 110);
+  //     pdf.text(`Classe: ${data.classe}`, 20, 120);
+  //     pdf.setFont('helvetica', 'bold');
+  //     pdf.text('Détails de Paiement:', 20, 130);
+  //     pdf.setFont('helvetica', 'normal');
+  //     pdf.text(`Montant: ${data.montantPaiement} FCFA`, 20, 140);
+  //     pdf.text(`Référence de Paiement: ${data.referencePaiement}`, 20, 150);
+
+  //     const qrData = `Nom: ${data.nom} ${data.prenom}\nMatricule: ${data.matricule}\nRéférence Paiement: ${data.referencePaiement}`;
+  //     try {
+  //       const qrCodeDataURL = await QRCode.toDataURL(qrData);
+  //       pdf.addImage(qrCodeDataURL, 'PNG', 150, 80, 40, 40);
+  //       pdf.save(`Recu_Paiement_${data.nom}_${data.prenom}.pdf`);
+  //     } catch (error) {
+  //       console.error("Erreur lors de la génération du QR code:", error);
+  //       alert("Échec de la génération du QR code.");
+  //     }
+  //   };
+  // };
+
   const handleDownloadPDF = async (data) => {
     const pdf = new jsPDF('portrait', 'mm', 'a4');
     const img = new Image();
     img.src = logoMinistere;
-
+  
     img.onload = async () => {
       pdf.addImage(img, 'PNG', 20, 10, 30, 30);
       pdf.setFontSize(10);
@@ -272,7 +312,23 @@ const handleGenerateReceipt = async () => {
       pdf.setFont('helvetica', 'normal');
       pdf.text(`Montant: ${data.montantPaiement} FCFA`, 20, 140);
       pdf.text(`Référence de Paiement: ${data.referencePaiement}`, 20, 150);
+      
+      pdf.setFont('helvetica', 'italic');
+      pdf.text(
+        'Ce reçu atteste le paiement effectué pour l\'inscription. Conservez-le précieusement comme preuve de règlement.',
+        20,
+        180,
+        { maxWidth: 180 }
+      );
 
+      // Ajout du nom de l'agent de saisie
+      if (data.agentId?.name) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Agent de saisie:', 20, 160);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`${data.agentId.name}`, 90, 160);
+      }
+  
       const qrData = `Nom: ${data.nom} ${data.prenom}\nMatricule: ${data.matricule}\nRéférence Paiement: ${data.referencePaiement}`;
       try {
         const qrCodeDataURL = await QRCode.toDataURL(qrData);
@@ -284,38 +340,65 @@ const handleGenerateReceipt = async () => {
       }
     };
   };
+  
+
+
 
   return (
     <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
       {/* Section des boutons en haut */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 4 }}>
-        <Button variant="contained" sx={{ bgcolor: '#FF0000', mr: 2 }} onClick={handleLogout}>
-          Déconnexion
-        </Button>
-        <Button 
-        variant="contained" 
-        sx={{ fontSize: '0.8rem', padding: '6px 12px', mr: 2 }} 
-        color="primary" 
-        onClick={handleDownloadReport}
-      >
-        Liste des inscriptions
-      </Button>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, ml: 5, padding: '12px' }}>
-        <TextField
-          label="Matricule"
-          value={matricule}
-          onChange={(e) => setMatricule(e.target.value)}
-          sx={{ mr: 2 }}
-        />
-        <Button variant="contained" onClick={handleGenerateReceipt}>
-          Générer le Reçu
-        </Button>
-      </Box>
+     {/* Section des boutons et des champs */}
+<Box sx={{ mb: 4 }}>
+  {/* Ligne supérieure contenant le bouton de déconnexion */}
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      mb: 3,
+    }}
+  >
+    <Button
+      variant="contained"
+      sx={{
+        bgcolor: '#FF0000',
+        '&:hover': { bgcolor: '#CC0000' },
+      }}
+      onClick={handleLogout}
+    >
+      Déconnexion
+    </Button>
+  </Box>
 
-      </Box>
+  {/* Ligne inférieure contenant les champs et le bouton */}
+  <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 2,
+      flexWrap: 'wrap',
+      ml: 2,
+    }}
+  >
+    <TextField
+      label="Matricule"
+      value={matricule}
+      onChange={(e) => setMatricule(e.target.value)}
+      sx={{ width: '250px' }}
+    />
+    <Button
+      variant="contained"
+      onClick={handleGenerateReceipt}
+      sx={{ padding: '10px 20px' }}
+    >
+      Générer le Reçu
+    </Button>
+  </Box>
+</Box>
+
 
       <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#004d40', mb: 4 }}>
-        Inscription au CFEPD
+        pré-inscription au CFEPD
       </Typography>
 
       <Paper elevation={6} sx={{ padding: 5, borderRadius: 3, backgroundColor: '#f5f5f5' }}>
@@ -541,39 +624,70 @@ const handleGenerateReceipt = async () => {
 
       {/* Modal for Bordereau */}
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '50%',
-          bgcolor: 'white',
-          p: 4,
-          borderRadius: 2,
-          boxShadow: 24,
-          border: '2px solid #004d40',
-          textAlign: 'center',
-        }}>
-          {recuData && (
-            <div id="recuContent" style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
-              <Typography variant="h5" gutterBottom sx={{ color: '#004d40', fontWeight: 'bold' }}>
-                Reçu de Paiement
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#004d40', mb: 3 }}>
-                Année Scolaire 2023-2024 - Examen CFEPD
-              </Typography>
-              <Button 
-              variant="contained" 
-              sx={{ bgcolor: '#004d40', mt: 2, color: '#fff', '&:hover': { bgcolor: '#003d33' } }} 
-              onClick={() => handleDownloadPDF(recuData)}
-            >
-              Télécharger en PDF
-            </Button>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '50%',
+      bgcolor: 'white',
+      p: 4,
+      borderRadius: 2,
+      boxShadow: 24,
+      border: '2px solid #004d40',
+      textAlign: 'center',
+    }}
+  >
+    {recuData && (
+      <div id="recuContent" style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
+        <Typography variant="h5" gutterBottom sx={{ color: '#004d40', fontWeight: 'bold' }}>
+          Reçu de Paiement
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#004d40', mb: 3 }}>
+          Année Scolaire 2024-2025 - Examen CFEPD
+        </Typography>
+        
+        {/* Affichage des informations clés */}
+        <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#004d40', mb: 2 }}>
+          Nom de l'Agent de Saisie : {recuData.agentId?.name || 'Non spécifié'}
+        </Typography>
+        <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#004d40', mb: 2 }}>
+          Nom du Candidat : {recuData.prenom} {recuData.nom}
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#555', mb: 2 }}>
+          Matricule : {recuData.matricule}
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#555', mb: 2 }}>
+          Montant Payé : {recuData.montantPaiement} FCFA
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#555', mb: 2 }}>
+          Référence de Paiement : {recuData.referencePaiement}
+        </Typography>
 
-            </div>
-          )}
-        </Box>
-      </Modal>
+        <Button
+          variant="contained"
+          sx={{ bgcolor: '#004d40', mt: 2, color: '#fff', '&:hover': { bgcolor: '#003d33' } }}
+          onClick={() => handleDownloadPDF(recuData)}
+        >
+          Télécharger en PDF
+        </Button>
+      </div>
+    )}
+  </Box>
+</Modal>
+
+<Snackbar
+  open={snackbarOpen}
+  autoHideDuration={4000}
+  onClose={() => setSnackbarOpen(false)}
+>
+  <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
+
+
     </Container>
   );
 };

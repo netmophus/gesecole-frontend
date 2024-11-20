@@ -25,47 +25,47 @@ const LoginPageCFEPD = () => {
     console.log('Form Data:', formData);
   
     try {
-      const res = await fetch(`${apiBaseUrl}/api/cfepd/auth/login`, { // URL mise à jour pour CFEPD
+      const res = await fetch(`${apiBaseUrl}/api/cfepd/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
   
       const data = await res.json();
+  
       if (res.ok) {
-        localStorage.setItem('token', data.token); // Enregistrer le token dans localStorage
+        // Stocker le token
+        localStorage.setItem('token', data.token);
         console.log('Token enregistré:', data.token);
-        
-        // Redirection en fonction du rôle CFEPD
-        if (data.user.role === 'cfepdadmin') {
-          navigate('/cfepdadmin-dashboard');
-        } else if (data.user.role === 'cfepd') {
-          navigate('/dashboard-cfepd');
-        } else {
-          setSnackbarSeverity('error');
-          setSnackbarMessage('Accès non autorisé pour ce rôle.');
-          setSnackbarOpen(true);
-          return;
-        }
-
+  
         // Afficher un message de succès
         setSnackbarSeverity('success');
         setSnackbarMessage('Connexion réussie !');
         setSnackbarOpen(true);
+  
+        // Ajouter un délai avant la redirection pour afficher le Snackbar
+        setTimeout(() => {
+          if (data.user.role === 'cfepdadmin') {
+            navigate('/cfepdadmin-dashboard');
+          } else if (data.user.role === 'cfepd') {
+            navigate('/dashboard-cfepd');
+          }
+        }, 2000); // Redirection après 2 secondes
       } else {
-        // Afficher un message d'erreur si la connexion échoue
+        // Gérer les erreurs renvoyées par le serveur
         setSnackbarSeverity('error');
         setSnackbarMessage(data.msg || 'Erreur lors de la connexion.');
         setSnackbarOpen(true);
       }
     } catch (err) {
-      // Afficher un message d'erreur si le serveur ne répond pas
+      // Gérer les erreurs côté client ou serveur
+      console.error('Erreur lors de la connexion:', err);
       setSnackbarSeverity('error');
       setSnackbarMessage('Erreur serveur lors de la connexion.');
       setSnackbarOpen(true);
     }
   };
-
+  
   return (
     <Container maxWidth="sm">
       <Paper elevation={6} sx={{ padding: 4, borderRadius: 3, mt: 10, mb:10 }}>

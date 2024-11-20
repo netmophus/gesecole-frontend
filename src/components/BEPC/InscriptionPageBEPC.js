@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Container, Grid, TextField, Button, Modal } from '@mui/material';
+import { Box, Typography, Paper, Alert, Snackbar, Container, Grid, TextField, Button, Modal } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import PersonIcon from '@mui/icons-material/Person';
 import { jsPDF } from 'jspdf';
@@ -42,12 +42,19 @@ const InscriptionPageBEPC = () => {
   const [recuData, setRecuData] = useState(null);
   const [matricule, setMatricule] = useState('');
   
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'info', // 'success', 'error', 'warning', 'info'
+  });
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
 
   const handleSubmit = async (e) => {
@@ -84,11 +91,35 @@ const InscriptionPageBEPC = () => {
         }
       );
 
+       // Afficher un message de succès
+       setSnackbar({
+        open: true,
+        message: 'Inscription réussie avec succès !',
+        severity: 'success',
+      });
+
       setRecuData(response.data);
       setOpenModal(true);
 
     } catch (err) {
       console.error("Erreur lors de l'inscription:", err);
+
+       // Gérer les erreurs (exemple : duplication du matricule)
+       if (err.response?.status === 409) {
+        setSnackbar({
+          open: true,
+          message: 'Le matricule existe déjà. Veuillez vérifier vos informations.',
+          severity: 'error',
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: 'Une erreur est survenue. Veuillez réessayer.',
+          severity: 'error',
+        });
+      }
+
+
     }
   };
 
@@ -111,74 +142,74 @@ const InscriptionPageBEPC = () => {
 
 
   
-  const handleDownloadReport = async () => {
-    try {
-      const response = await axios.get(`${apiBaseUrl}/api/bepc/inscription/report/inscriptions`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  // const handleDownloadReport = async () => {
+  //   try {
+  //     const response = await axios.get(`${apiBaseUrl}/api/bepc/inscription/report/inscriptions`, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //     });
   
-      const inscriptions = response.data;
-      const pdf = new jsPDF('landscape', 'mm', 'a4');
+  //     const inscriptions = response.data;
+  //     const pdf = new jsPDF('landscape', 'mm', 'a4');
   
-      // En-tête professionnel
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text("Ministère de l'Éducation Nationale", 10, 10);
-      pdf.text("Rapport des Inscriptions BEPC avec Paiement Confirmé", 105, 20, { align: 'center' });
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
-      pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
+  //     // En-tête professionnel
+  //     pdf.setFontSize(12);
+  //     pdf.setFont('helvetica', 'bold');
+  //     pdf.text("Ministère de l'Éducation Nationale", 10, 10);
+  //     pdf.text("Rapport des Inscriptions BEPC avec Paiement Confirmé", 105, 20, { align: 'center' });
+  //     pdf.setFont('helvetica', 'normal');
+  //     pdf.setFontSize(10);
+  //     pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
   
-      // Informations générales sur l'inscription
-      if (inscriptions.length > 0) {
-        const sample = inscriptions[0];
-        pdf.text(`Région : ${sample.regionEtablissement}`, 10, 30);
-        pdf.text(`Direction Régionale : ${sample.directionRegionale}`, 100, 30);
-        pdf.text(`Inspection Régionale : ${sample.inspectionRegionale}`, 200, 30);
-        pdf.text(`Établissement : ${sample.nomEtablissement}`, 10, 40);
-        pdf.text(`Classe : ${sample.classe}`, 100, 40);
-        pdf.text(`Année Scolaire : ${sample.anneeScolaire}`, 200, 40);
-      }
+  //     // Informations générales sur l'inscription
+  //     if (inscriptions.length > 0) {
+  //       const sample = inscriptions[0];
+  //       pdf.text(`Région : ${sample.regionEtablissement}`, 10, 30);
+  //       pdf.text(`Direction Régionale : ${sample.directionRegionale}`, 100, 30);
+  //       pdf.text(`Inspection Régionale : ${sample.inspectionRegionale}`, 200, 30);
+  //       pdf.text(`Établissement : ${sample.nomEtablissement}`, 10, 40);
+  //       pdf.text(`Classe : ${sample.classe}`, 100, 40);
+  //       pdf.text(`Année Scolaire : ${sample.anneeScolaire}`, 200, 40);
+  //     }
   
-      // En-têtes du tableau
-      pdf.setFont('helvetica', 'bold');
-      const headers = ["Matricule", "Nom", "Prénom", "Date Naiss.", "Lieu Naiss.", "Genre", "Téléphone Parent", "Montant"];
-      const startX = 10;
-      let startY = 60;
+  //     // En-têtes du tableau
+  //     pdf.setFont('helvetica', 'bold');
+  //     const headers = ["Matricule", "Nom", "Prénom", "Date Naiss.", "Lieu Naiss.", "Genre", "Téléphone Parent", "Montant"];
+  //     const startX = 10;
+  //     let startY = 60;
   
-      headers.forEach((header, index) => {
-        pdf.text(header, startX + index * 35, startY);
-      });
+  //     headers.forEach((header, index) => {
+  //       pdf.text(header, startX + index * 35, startY);
+  //     });
   
-      pdf.setFont('helvetica', 'normal');
-      startY += 10;
+  //     pdf.setFont('helvetica', 'normal');
+  //     startY += 10;
   
-      // Remplir les informations pour chaque inscription
-      inscriptions.forEach((inscription) => {
-        pdf.text(inscription.matricule, startX, startY);
-        pdf.text(inscription.nom, startX + 35, startY);
-        pdf.text(inscription.prenom, startX + 70, startY);
-        pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 105, startY);
-        pdf.text(inscription.lieuNaissance, startX + 140, startY);
-        pdf.text(inscription.genre, startX + 175, startY);
-        pdf.text(inscription.telephoneParent, startX + 210, startY);
-        pdf.text(`${inscription.montantPaiement} FCFA`, startX + 245, startY);
+  //     // Remplir les informations pour chaque inscription
+  //     inscriptions.forEach((inscription) => {
+  //       pdf.text(inscription.matricule, startX, startY);
+  //       pdf.text(inscription.nom, startX + 35, startY);
+  //       pdf.text(inscription.prenom, startX + 70, startY);
+  //       pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 105, startY);
+  //       pdf.text(inscription.lieuNaissance, startX + 140, startY);
+  //       pdf.text(inscription.genre, startX + 175, startY);
+  //       pdf.text(inscription.telephoneParent, startX + 210, startY);
+  //       pdf.text(`${inscription.montantPaiement} FCFA`, startX + 245, startY);
   
-        startY += 10;
-        if (startY > 190) {
-          pdf.addPage();
-          startY = 20;
-        }
-      });
+  //       startY += 10;
+  //       if (startY > 190) {
+  //         pdf.addPage();
+  //         startY = 20;
+  //       }
+  //     });
   
-      pdf.save('Rapport_Inscriptions_Payees.pdf');
-    } catch (error) {
-      console.error("Erreur lors du téléchargement du rapport:", error);
-      alert("Erreur lors du téléchargement du rapport.");
-    }
-  };
+  //     pdf.save('Rapport_Inscriptions_Payees.pdf');
+  //   } catch (error) {
+  //     console.error("Erreur lors du téléchargement du rapport:", error);
+  //     alert("Erreur lors du téléchargement du rapport.");
+  //   }
+  // };
 
 
 
@@ -345,33 +376,70 @@ const InscriptionPageBEPC = () => {
   return (
     <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
 
-      {/* Section des boutons en haut */}
-  <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 4 }}>
-    <Button variant="contained" sx={{ bgcolor: '#FF0000', mr: 2 }} onClick={handleLogout}>
+     {/* Section des boutons en haut */}
+<Box sx={{ mb: 4 }}>
+  {/* Ligne supérieure contenant le bouton de déconnexion */}
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      mb: 3,
+    }}
+  >
+    <Button
+      variant="contained"
+      sx={{
+        bgcolor: '#FF0000',
+        '&:hover': { bgcolor: '#CC0000' },
+      }}
+      onClick={handleLogout}
+    >
       Déconnexion
     </Button>
-    <Button 
-      variant="contained" 
-      sx={{ fontSize: '0.8rem', padding: '6px 12px' }} 
-      color="primary" 
+  </Box>
+
+  {/* Ligne inférieure contenant le reste des éléments */}
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: 2,
+    }}
+  >
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <TextField
+        label="Matricule"
+        value={matricule}
+        onChange={(e) => setMatricule(e.target.value)}
+        sx={{ mr: 2, width: '200px' }}
+      />
+      <Button
+        variant="contained"
+        onClick={handleGenerateReceipt}
+        sx={{ padding: '8px 16px' }}
+      >
+        Générer le Reçu
+      </Button>
+    </Box>
+
+    {/* Optionnel : Bouton Liste des inscriptions (décommenter si nécessaire) */}
+    {/* <Button
+      variant="contained"
+      sx={{
+        fontSize: '0.8rem',
+        padding: '6px 12px',
+        bgcolor: '#1976d2',
+        '&:hover': { bgcolor: '#115293' },
+      }}
       onClick={handleDownloadReport}
     >
       Liste des inscriptions
-    </Button>
-
-    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, ml:5, padding: '12px' }}>
-        <TextField
-          label="Matricule"
-          value={matricule}
-          onChange={(e) => setMatricule(e.target.value)}
-          sx={{ mr: 2 }}
-        />
-        <Button variant="contained" onClick={handleGenerateReceipt}>
-          Générer le Reçu
-        </Button>
-      </Box>
+    </Button> */}
   </Box>
-
+</Box>
 
 
     {/* Titre du formulaire */}
@@ -627,6 +695,19 @@ const InscriptionPageBEPC = () => {
             <Button variant="contained" sx={{ bgcolor: '#004d40' }} type="submit">
               Soumettre et Générer le reçu de paiement
             </Button>
+
+
+            {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
           </Box>
         </form>
       </Paper>
@@ -677,15 +758,6 @@ const InscriptionPageBEPC = () => {
 
 
 
-{/* 
-                <Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
-  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-    Nom de l'agent: 
-    <Typography component="span" sx={{ fontWeight: 'normal' }}>
-      {recuData.agentName ? recuData.agentName : 'Non spécifié'}
-    </Typography>
-  </Typography>
-</Box> */}
 
 
 
@@ -743,6 +815,9 @@ const InscriptionPageBEPC = () => {
           )}
         </Box>
       </Modal>
+
+
+      
 
     </Container>
   );

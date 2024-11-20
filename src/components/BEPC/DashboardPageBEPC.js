@@ -25,7 +25,7 @@ const DashboardPageBEPC = () => {
       <Paper elevation={6} sx={{ padding: 5, borderRadius: 3, backgroundColor: '#f5f5f5' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#004d40' }}>
-            Tableau de Bord inscriptions BEPC
+            Tableau de Bord de pré-inscription BEPC
           </Typography>
           {/* Logout button */}
           <Button variant="contained" sx={{ bgcolor: '#FF0000' }} onClick={handleLogout}>
@@ -46,14 +46,14 @@ const DashboardPageBEPC = () => {
                 <SchoolIcon sx={{ fontSize: 50 }} />
               </Avatar>
               <Typography variant="h5" sx={{ mb: 2, color: '#333' }}>
-                Inscription BEPC
+                Pré-inscription BEPC
               </Typography>
               <Typography variant="body1" sx={{ color: '#757575', mb: 3 }}>
-                Inscrivez vos élèves à l'examen du BEPC pour l'année scolaire en cours.
+                Inscrivez les élèves à l'examen du BEPC pour l'année scolaire en cours.
               </Typography>
               {/* Button to go to inscription */}
               <Button variant="contained" sx={{ bgcolor: '#004d40' }} onClick={goToInscription}>
-                Inscrivez vos élèves au BEPC
+                Inscrivez les élèves au BEPC
               </Button>
             </Paper>
           </Grid>
@@ -67,7 +67,7 @@ const DashboardPageBEPC = () => {
                 Résultats
               </Typography>
               <Typography variant="body1" sx={{ color: '#757575', mb: 3 }}>
-                Consultez vos résultats aux examens du BEPC de l'année scolaire 2024-2025
+                Consultez les résultats aux examens du BEPC de l'année scolaire 2024-2025
               </Typography>
               <Button variant="contained" sx={{ bgcolor: '#004d40' }}>
                 Voir les résultats

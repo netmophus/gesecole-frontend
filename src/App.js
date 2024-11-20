@@ -76,7 +76,7 @@ import PaymentPageBEPC from './components/BEPC/PaymentPageBEPC';
 import ResultsPageBEPC from './components/BEPC/ResultsPageBEPC';
 import BepcAccessPage from './components/BEPC/BepcAccessPage'
 import InscriptionPage from './components/BEPC/InscriptionPageBEPC'; // Assuming you have an InscriptionPage component
-import AdminDashboardPageBEPC from './components/BEPC/AdminDashboardPageBEPC';
+import AdminDashboardPageBEPC from './components/BEPC/AdminDashboardBEPC';
 import AdminCentralDashboardBEPC from './components/BEPC/AdminCentralDashboardBEPC';
 import ReportAnalysisPage from './pages/etablissement/ReportAnalysisPage';
 
@@ -87,6 +87,8 @@ import RegisterPageCFEPD from './components/CFEPD/RegisterPageCFEPD'; // Importe
 import LoginPageCFEPD from './components/CFEPD/LoginPageCFEPD'; // Importez le composant de connexion CFEPD
 import DashboardPageCFEPD from './components/CFEPD/DashboardPageCFEPD';
 import InscriptionPageCFEPD from './components/CFEPD/InscriptionPageCFEPD'; // Assuming you have an InscriptionPage component
+import AdminDashboardCFEPD from './components/CFEPD/AdminDashboardCFEPD';
+import AdminDashboardBEPC from './components/BEPC/AdminDashboardBEPC';
 const App = () => {
 
  
@@ -163,6 +165,7 @@ const App = () => {
   <Route path="/login-cfepd" element={<LoginPageCFEPD />} />
 
   <Route path="dashboard-cfepd" element={<DashboardPageCFEPD />} />
+  <Route path="/cfepdadmin-dashboard" element={<AdminDashboardCFEPD />} />
   <Route path="/inscription-cfepd" element={<InscriptionPageCFEPD />} /> {/* This route points to the inscription page */}
 
 
@@ -173,6 +176,7 @@ const App = () => {
         <Route path="payment" element={<PaymentPageBEPC />} />
         <Route path="results" element={<ResultsPageBEPC />} />
         <Route path="/bepc-access" element={<BepcAccessPage />} />
+        <Route path="/bepcadmin-dashboard" element={<AdminDashboardBEPC />} />
         <Route path="/inscription" element={<InscriptionPage />} /> {/* This route points to the inscription page */}
 
 

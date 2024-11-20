@@ -23,7 +23,7 @@ const DashboardPageCFEPD = () => {
       <Paper elevation={6} sx={{ padding: 5, borderRadius: 3, backgroundColor: '#f5f5f5' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#004d40' }}>
-            Tableau de Bord Inscription CFEPD
+            Tableau de Bord pré-inscription CFEPD
           </Typography>
           {/* Bouton de déconnexion */}
           <Button variant="contained" sx={{ bgcolor: '#FF0000' }} onClick={handleLogout}>
@@ -39,13 +39,13 @@ const DashboardPageCFEPD = () => {
                 <SchoolIcon sx={{ fontSize: 50 }} />
               </Avatar>
               <Typography variant="h5" sx={{ mb: 2, color: '#333' }}>
-                Inscription CFEPD
+                pré-inscription CFEPD
               </Typography>
               <Typography variant="body1" sx={{ color: '#757575', mb: 3 }}>
-                Inscrivez vos élèves à l'examen du CFEPD pour l'année scolaire en cours.
+                Inscrivez les élèves à l'examen du CFEPD pour l'année scolaire en cours.
               </Typography>
               <Button variant="contained" sx={{ bgcolor: '#004d40' }} onClick={goToInscriptionCFEPD}>
-                Inscrivez vos élèves
+                Inscrivez les élèves
               </Button>
             </Paper>
           </Grid>
@@ -59,7 +59,7 @@ const DashboardPageCFEPD = () => {
                 Résultats CFEPD
               </Typography>
               <Typography variant="body1" sx={{ color: '#757575', mb: 3 }}>
-                Consultez vos résultats aux examens du CFEPD de l'année scolaire 2024-2025
+                Consultez les résultats aux examens du CFEPD de l'année scolaire 2024-2025
               </Typography>
               <Button variant="contained" sx={{ bgcolor: '#004d40' }}>
                 Voir les résultats

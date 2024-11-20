@@ -29,7 +29,7 @@ const BepcAccessPage = () => {
         fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } 
       }}
     >
-      Bienvenue au processus d’inscription BEPC
+      Bienvenue au processus de pré-inscription au BEPC
     </Typography>
 
     <Typography 
@@ -40,7 +40,7 @@ const BepcAccessPage = () => {
         fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }
       }}
     >
-      Processus d’inscription simplifié
+      Processus de pré-inscription simplifié
     </Typography>
 
 
@@ -139,7 +139,7 @@ const BepcAccessPage = () => {
       marginBottom: '16px',
     }}
   >
-    Les inscriptions pour le <strong>BEPC</strong> sont ouvertes aux dates suivantes :
+    Les pré-inscriptions pour le <strong>BEPC</strong> sont ouvertes aux dates suivantes :
   </Typography>
   <Typography
     variant="body1"
@@ -149,7 +149,7 @@ const BepcAccessPage = () => {
       fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
     }}
   >
-    Du <strong>1er novembre 2024</strong> au <strong>2 février 2025</strong>.
+    Du <strong>1er decembre 2024</strong> au <strong>30 mars 2025</strong>.
   </Typography>
 </Box>
 

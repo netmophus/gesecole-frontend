@@ -10,6 +10,10 @@ import { Download } from '@mui/icons-material';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import QRCode from 'qrcode';
+import logoMinistere from '../../assets/images/logo-ministere.png';
+import armoirieNiger from '../../assets/images/armoiries-niger.png';
+
+
 const apiBaseUrl = process.env.REACT_APP_API_URL;
 
 
@@ -120,17 +124,50 @@ const handleDownloadPDF = async () => {
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    // Positionner le QR code en haut à droite
-    const qrCodeSize = 20;
-    const qrCodeX = pdfWidth - qrCodeSize - 5;
-    const qrCodeY = 10;
-    pdf.addImage(qrCodeDataURL, 'PNG', qrCodeX, qrCodeY, qrCodeSize, qrCodeSize);
+
+
+     // **1. Ajouter le logo du ministère**
+     const logoWidth = 30;
+     const logoHeight = 30;
+     const logoX = 10; // Position X du logo
+     const logoY = 10; // Position Y du logo
+     pdf.addImage(logoMinistere, 'PNG', logoX, logoY, logoWidth, logoHeight);
+ 
+
+
+    // **2. Ajouter l'armoirie du Niger**
+    const armoirieWidth = 30;
+    const armoirieHeight = 30;
+    const armoirieX = pdfWidth - armoirieWidth - 10; // Position X de l'armoirie
+    const armoirieY = 10; // Position Y de l'armoirie
+    pdf.addImage(armoirieNiger, 'PNG', armoirieX, armoirieY, armoirieWidth, armoirieHeight);
+
+
+
+
+
+
+
+
+    // // Positionner le QR code en haut à droite
+    // const qrCodeSize = 20;
+    // const qrCodeX = pdfWidth - qrCodeSize - 5;
+    // const qrCodeY = 10;
+    // pdf.addImage(qrCodeDataURL, 'PNG', qrCodeX, qrCodeY, qrCodeSize, qrCodeSize);
+
+// Positionner le QR Code en bas de la section Statistique de classe
+const qrCodeSize = 25; // Taille du QR code
+const qrCodeX = pdfWidth - qrCodeSize - 70; // Position X
+const qrCodeY = 17; // Ajustez cette valeur en fonction de la hauteur de la section Statistique de classe
+pdf.addImage(qrCodeDataURL, 'PNG', qrCodeX, qrCodeY, qrCodeSize, qrCodeSize);
+
+
 
     // Positionner l'image de l'élève à gauche en haut
-    const studentImgWidth = 20;
-    const studentImgHeight = 20;
-    const imageX = 10;
-    const imageY = 10;
+    const studentImgWidth = 30;
+    const studentImgHeight = 30;
+    const imageX = 70;
+    const imageY = 15;
     pdf.addImage(imgElement, 'PNG', imageX, imageY, studentImgWidth, studentImgHeight);
 
     // Ajouter une ligne de séparation

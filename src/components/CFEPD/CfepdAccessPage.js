@@ -25,7 +25,7 @@ const CfepdAccessPage = () => {
             fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } 
           }}
         >
-          Bienvenue au processus d’inscription CFEPD
+          Bienvenue au processus de pré-inscription au CFEPD
         </Typography>
 
         <Typography 
@@ -36,7 +36,7 @@ const CfepdAccessPage = () => {
             fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }
           }}
         >
-          Processus d’inscription simplifié pour le CFEPD
+          Processus de pré-inscription simplifié pour le CFEPD
         </Typography>
 
         <Box 
@@ -107,7 +107,7 @@ const CfepdAccessPage = () => {
       fontSize: { xs: '0.9rem', sm: '1rem', md: '1.2rem' }, // Ajustement pour différents écrans
     }}
   >
-    Les inscriptions sont ouvertes du <strong>1er novembre 2024</strong> au <strong>30 mars 2025</strong> pour le <strong>CFEPD</strong>.
+    Les pré-inscriptions sont ouvertes du <strong>1er novembre 2024</strong> au <strong>30 mars 2025</strong> pour le <strong>CFEPD</strong>.
   </Typography>
 </Box>
 
