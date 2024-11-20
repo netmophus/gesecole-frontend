@@ -60,6 +60,9 @@ const InscriptionPageBEPC = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("Données à envoyer :", formData); // Vérifiez ici si `typeCandidat` a la bonne valeur
+
+
     const token = localStorage.getItem('token');
     if (!token) {
       alert("Vous devez être connecté pour soumettre une inscription.");
@@ -90,6 +93,9 @@ const InscriptionPageBEPC = () => {
           },
         }
       );
+
+      console.log("Réponse du backend après inscription :", response.data);
+
 
        // Afficher un message de succès
        setSnackbar({
@@ -139,80 +145,7 @@ const InscriptionPageBEPC = () => {
       }
     });
   };
-
-
-  
-  // const handleDownloadReport = async () => {
-  //   try {
-  //     const response = await axios.get(`${apiBaseUrl}/api/bepc/inscription/report/inscriptions`, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       },
-  //     });
-  
-  //     const inscriptions = response.data;
-  //     const pdf = new jsPDF('landscape', 'mm', 'a4');
-  
-  //     // En-tête professionnel
-  //     pdf.setFontSize(12);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.text("Ministère de l'Éducation Nationale", 10, 10);
-  //     pdf.text("Rapport des Inscriptions BEPC avec Paiement Confirmé", 105, 20, { align: 'center' });
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.setFontSize(10);
-  //     pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
-  
-  //     // Informations générales sur l'inscription
-  //     if (inscriptions.length > 0) {
-  //       const sample = inscriptions[0];
-  //       pdf.text(`Région : ${sample.regionEtablissement}`, 10, 30);
-  //       pdf.text(`Direction Régionale : ${sample.directionRegionale}`, 100, 30);
-  //       pdf.text(`Inspection Régionale : ${sample.inspectionRegionale}`, 200, 30);
-  //       pdf.text(`Établissement : ${sample.nomEtablissement}`, 10, 40);
-  //       pdf.text(`Classe : ${sample.classe}`, 100, 40);
-  //       pdf.text(`Année Scolaire : ${sample.anneeScolaire}`, 200, 40);
-  //     }
-  
-  //     // En-têtes du tableau
-  //     pdf.setFont('helvetica', 'bold');
-  //     const headers = ["Matricule", "Nom", "Prénom", "Date Naiss.", "Lieu Naiss.", "Genre", "Téléphone Parent", "Montant"];
-  //     const startX = 10;
-  //     let startY = 60;
-  
-  //     headers.forEach((header, index) => {
-  //       pdf.text(header, startX + index * 35, startY);
-  //     });
-  
-  //     pdf.setFont('helvetica', 'normal');
-  //     startY += 10;
-  
-  //     // Remplir les informations pour chaque inscription
-  //     inscriptions.forEach((inscription) => {
-  //       pdf.text(inscription.matricule, startX, startY);
-  //       pdf.text(inscription.nom, startX + 35, startY);
-  //       pdf.text(inscription.prenom, startX + 70, startY);
-  //       pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 105, startY);
-  //       pdf.text(inscription.lieuNaissance, startX + 140, startY);
-  //       pdf.text(inscription.genre, startX + 175, startY);
-  //       pdf.text(inscription.telephoneParent, startX + 210, startY);
-  //       pdf.text(`${inscription.montantPaiement} FCFA`, startX + 245, startY);
-  
-  //       startY += 10;
-  //       if (startY > 190) {
-  //         pdf.addPage();
-  //         startY = 20;
-  //       }
-  //     });
-  
-  //     pdf.save('Rapport_Inscriptions_Payees.pdf');
-  //   } catch (error) {
-  //     console.error("Erreur lors du téléchargement du rapport:", error);
-  //     alert("Erreur lors du téléchargement du rapport.");
-  //   }
-  // };
-
-
-
+ 
   const handleGenerateReceipt = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -226,6 +159,9 @@ const InscriptionPageBEPC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      console.log("Données reçues pour le matricule :", response.data);
+
   
       const studentData = response.data;
       if (studentData) {
@@ -244,66 +180,6 @@ const InscriptionPageBEPC = () => {
   };
   
  
-
-  // const handleDownloadPDF = () => {
-  //   if (!recuData) {
-  //     alert("Aucune donnée disponible pour générer le PDF.");
-  //     return;
-  //   }
-  
-  //   const pdf = new jsPDF('portrait', 'mm', 'a4');
-  //   const img = new Image();
-  //   img.src = logoMinistere;
-  
-  //   img.onload = async () => {
-  //     pdf.addImage(img, 'PNG', 20, 10, 30, 30);
-  //     pdf.setFontSize(10);
-  //     pdf.setFont('helvetica', 'bold');
-  //     const titleText = pdf.splitTextToSize(
-  //       "Ministère de l'Éducation Nationale, de l'Alphabétisation, de l'Enseignement Professionnel et de la Promotion des Langues Nationales",
-  //       130
-  //     );
-  //     pdf.text(titleText, 55, 20);
-  //     pdf.setFontSize(18);
-  //     pdf.text('Reçu de Paiement - BEPC', 105, 50, { align: 'center' });
-  //     pdf.setFontSize(12);
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.text(`Nom et Prénom: ${recuData.prenom} ${recuData.nom}`, 20, 70);
-  //     pdf.text(`Matricule: ${recuData.matricule}`, 20, 80);
-  //     pdf.text(`Date de Naissance: ${new Date(recuData.dateNaissance).toLocaleDateString()}`, 20, 90);
-  //     pdf.text(`Établissement: ${recuData.nomEtablissement}`, 20, 100);
-  //     pdf.text(`Région Établissement: ${recuData.regionEtablissement}`, 20, 110);
-  //     pdf.text(`Classe: ${recuData.classe}`, 20, 120);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.text('Détails de Paiement:', 20, 130);
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.text(`Montant: ${recuData.montantPaiement} FCFA`, 20, 140);
-  //     pdf.text(`Référence Paiement: ${recuData.referencePaiement}`, 20, 150);
-  //     pdf.text(`Nom de l'Agent: ${recuData.agentId?.name || 'Non spécifié'}`, 20, 160);
-
-  //     pdf.setFont('helvetica', 'italic');
-  //     pdf.text(
-  //       'Ce reçu atteste le paiement effectué pour l\'inscription. Conservez-le précieusement comme preuve de règlement.',
-  //       20, 170, { maxWidth: 170 }
-  //     );
-  
-  //     const qrData = `Nom: ${recuData.nom} ${recuData.prenom}\nMatricule: ${recuData.matricule}\nRéférence Paiement: ${recuData.referencePaiement}`;
-  //     try {
-  //       const qrCodeDataURL = await QRCode.toDataURL(qrData);
-  //       pdf.addImage(qrCodeDataURL, 'PNG', 150, 80, 40, 40);
-  //       pdf.save(`Recu_Paiement_${recuData.nom}_${recuData.prenom}.pdf`);
-  //     } catch (error) {
-  //       console.error("Erreur lors de la génération du QR code:", error);
-  //       alert("Échec de la génération du QR code.");
-  //     }
-  //   };
-  
-  //   img.onerror = (error) => {
-  //     console.error("Erreur lors du chargement de l'image ou de la génération du PDF:", error);
-  //     alert("Échec du chargement du logo. Vérifiez le chemin d'accès ou réessayez.");
-  //   };
-  // };
-  
 
 
   const handleDownloadPDF = () => {
@@ -340,21 +216,23 @@ const InscriptionPageBEPC = () => {
       pdf.setFont('helvetica', 'bold');
       pdf.text('Détails de Paiement:', 20, 130);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`Montant: ${recuData.montantPaiement} FCFA`, 20, 140);
-      pdf.text(`Référence Paiement: ${recuData.referencePaiement}`, 20, 150);
+      pdf.text(`Type de Candidat: ${recuData.typeCandidat}`, 20, 140);
+      pdf.text(`Montant: ${recuData.montantPaiement} FCFA`, 20, 150);
+      pdf.text(`Référence Paiement: ${recuData.referencePaiement}`, 20, 170);
   
       
       pdf.setFont('helvetica', 'italic');
       pdf.text(
         'Ce reçu atteste le paiement effectué pour l\'inscription. Conservez-le précieusement comme preuve de règlement.',
         20,
-        170,
-        { maxWidth: 170 }
+        180,
+        { maxWidth: 180 }
       );
 
       // Ajouter le nom de l'agent ici
-      pdf.text(`Nom de l'Agent de Saisie: ${recuData.agentName || 'Non spécifié'}`, 20, 160);
-  
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Nom de l'Agent de Saisie: ${recuData.agentId?.name || 'Non spécifié'}`, 20, 160);
+      
   
       const qrData = `Nom: ${recuData.nom} ${recuData.prenom}\nMatricule: ${recuData.matricule}\nRéférence Paiement: ${recuData.referencePaiement}`;
       try {
@@ -576,7 +454,7 @@ const InscriptionPageBEPC = () => {
               </Grid>
 
               
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   label="Région de l'Établissement"
                   name="regionEtablissement"
@@ -585,7 +463,33 @@ const InscriptionPageBEPC = () => {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
+
+<Grid item xs={12} sm={12}>
+  <TextField
+    select
+    label="Région de l'Établissement"
+    name="regionEtablissement"
+    value={formData.regionEtablissement}
+    onChange={handleChange}
+    fullWidth
+    required
+    SelectProps={{
+      native: true, // Pour un rendu natif du menu déroulant
+    }}
+  >
+    <option value="">-- Sélectionnez une région --</option>
+    <option value="Agadez">Agadez</option>
+    <option value="Dosso">Dosso</option>
+    <option value="Maradi">Maradi</option>
+    <option value="Diffa">Diffa</option>
+    <option value="Zinder">Zinder</option>
+    <option value="Niamey">Niamey</option>
+    <option value="Tillabery">Tillabery</option>
+    <option value="Tahoua">Tahoua</option>
+  </TextField>
+</Grid>
+
               {/* Nouveau champ : Direction Régionale */}
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -611,7 +515,7 @@ const InscriptionPageBEPC = () => {
               </Grid>
 
               
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   label="Région"
                   name="regionEtablissement"
@@ -620,7 +524,7 @@ const InscriptionPageBEPC = () => {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Classe"
@@ -642,8 +546,82 @@ const InscriptionPageBEPC = () => {
   <Typography variant="h5" sx={{ color: '#004d40', mb: 2 }}>
     Informations de Paiement
   </Typography>
+
+
+  <Grid item xs={12} sm={12}>
+  <TextField
+    select
+    label="Type de Candidat"
+    name="typeCandidat"
+    value={formData.typeCandidat}
+    onChange={(e) => {
+      handleChange(e); // Mettre à jour le formData
+      const selectedType = e.target.value;
+      console.log("Type de candidat sélectionné :", selectedType);
+
+      // Mettre à jour le montant en fonction du type de candidat
+      const montant = selectedType === "Ecole publique"
+        ? 5000
+        : selectedType === "Ecole privée"
+        ? 5500
+        : selectedType === "Candidat libre national"
+        ? 7500
+        : selectedType === "Candidat libre étranger"
+        ? 25000
+        : 0; // Valeur par défaut pour aucun type sélectionné
+      
+      // Mettre à jour le formData avec le montant
+      setFormData((prevData) => ({
+        ...prevData,
+        montantPaiement: montant,
+      }));
+    }}
+    fullWidth
+    required
+    SelectProps={{
+      native: true,
+    }}
+  >
+    <option value="">-- Sélectionnez --</option>
+    <option value="Ecole publique">Ecole publique</option>
+    <option value="Ecole privée">Ecole privée</option>
+    <option value="Candidat libre national">Candidat libre national</option>
+    <option value="Candidat libre étranger">Candidat libre étranger</option>
+  </TextField>
+</Grid>
+
+<Grid item xs={12} sm={12}>
+  <TextField
+    label="Montant du Paiement"
+    name="montantPaiement"
+    type="number"
+    value={formData.montantPaiement}
+    fullWidth
+    disabled // Désactivé pour empêcher la modification manuelle
+  />
+</Grid>
+
+
+{/* <Grid item xs={12} sm={12}>
+  <TextField
+    label="Montant du Paiement"
+    name="montantPaiement"
+    type="number"
+    value={formData.montantPaiement}
+    fullWidth
+    disabled // Désactiver pour éviter la modification manuelle
+  />
+</Grid> */}
+
+
+
+
+
+
+
+
   <Grid container spacing={2}>
-    <Grid item xs={12} sm={12}>
+    {/* <Grid item xs={12} sm={12}>
       <TextField
         label="Montant du Paiement"
         name="montantPaiement"
@@ -653,7 +631,7 @@ const InscriptionPageBEPC = () => {
         fullWidth
         required
       />
-    </Grid>
+    </Grid> */}
   
 <Grid item xs={12} sm={6}>
   <TextField
@@ -789,14 +767,25 @@ const InscriptionPageBEPC = () => {
 
 
 
-                <Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
+                {/* <Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
   <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
     Nom de l'agent de Saisie: 
     <Typography component="span" sx={{ fontWeight: 'normal' }}>
       {recuData.agentName ? recuData.agentName : 'Non spécifié'}
     </Typography>
   </Typography>
+</Box> */}
+
+
+<Box sx={{ textAlign: 'left', padding: '10px', backgroundColor: '#e0f2f1', borderRadius: '5px' }}>
+  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+    Nom de l'Agent de Saisie: 
+    <Typography component="span" sx={{ fontWeight: 'normal' }}>
+      {recuData.agentId?.name || 'Non spécifié'}
+    </Typography>
+  </Typography>
 </Box>
+
 
 
 

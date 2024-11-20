@@ -519,7 +519,10 @@ const handleGenerateReceipt = async () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+
+
+
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   label="Région de l'Établissement"
                   name="regionEtablissement"
@@ -528,7 +531,38 @@ const handleGenerateReceipt = async () => {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
+
+
+
+<Grid item xs={12} sm={12}>
+  <TextField
+    select
+    label="Région de l'Établissement"
+    name="regionEtablissement"
+    value={formData.regionEtablissement}
+    onChange={handleChange}
+    fullWidth
+    required
+    SelectProps={{
+      native: true, // Pour un rendu natif du menu déroulant
+    }}
+  >
+    <option value="">-- Sélectionnez une région --</option>
+    <option value="Agadez">Agadez</option>
+    <option value="Dosso">Dosso</option>
+    <option value="Maradi">Maradi</option>
+    <option value="Diffa">Diffa</option>
+    <option value="Zinder">Zinder</option>
+    <option value="Niamey">Niamey</option>
+    <option value="Tillabery">Tillabery</option>
+    <option value="Tahoua">Tahoua</option>
+  </TextField>
+</Grid>
+
+
+
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Direction Régionale"
@@ -579,6 +613,8 @@ const handleGenerateReceipt = async () => {
               Informations de Paiement
             </Typography>
             <Grid container spacing={2}>
+
+{/* 
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Montant du Paiement"
@@ -589,7 +625,23 @@ const handleGenerateReceipt = async () => {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
+
+
+<Grid item xs={12} sm={6}>
+  <TextField
+    label="Montant du Paiement"
+    name="montantPaiement"
+    type="number"
+    value={formData.montantPaiement || 1000} // Valeur par défaut de 1000
+    fullWidth
+    disabled // Empêche la modification manuelle
+  />
+</Grid>
+
+
+
+
             </Grid>
           </Box>
 
