@@ -214,59 +214,62 @@ const HomePage = () => {
   <Box
   sx={{
     position: 'relative',
-    maxWidth: '500px', // Taille maximale de l'image
-    width: { xs: '90%', md: '80%', sm: '100%' },
-    marginRight:{ xs: '0px', md: '50px', sm: '40px' }, // Espacement  
-    marginTop: { xs: '10px',  md: '80px', sm: '20px' },
-    borderRadius: '12px', // Coins arrondis pour un effet moderne
-    overflow: 'hidden', // Empêche tout débordement
-   marginBottom: '50px',
-    transform: 'scale(1)', // Transformation initiale
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Effet fluide au survol
+    maxWidth: '500px',
+    width: { xs: '90%', sm: '100%', md: '80%' }, // Largeur adaptable
+    margin: {
+      xs: '10px auto', // Centré pour les petits écrans
+      sm: '20px auto',
+      md: '80px auto 50px 0', // Aligné à droite pour les écrans moyens
+    },
+    borderRadius: '12px',
+    overflow: 'hidden',
+    marginBottom: '50px',
+    transform: 'scale(1)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     '&:hover': {
-      transform: 'scale(1.05)', // Zoom léger au survol
-      boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.3)', // Ombre plus prononcée au survol
+      transform: 'scale(1.05)',
+      boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.3)',
     },
   }}
 >
   <img
-    src={educations1} // Remplacez par l'URL ou le chemin de votre image
+    src={educations1}
     alt="Illustration éducative"
     style={{
-      width: { xs: '60%', sm: '100%' },
-      height: 'auto', // Ajustement automatique de la hauteur
-      borderRadius: '12px', // Coins arrondis
+      width: '100%', // L'image occupe toujours toute la largeur
+      height: 'auto', // Maintient les proportions
+      borderRadius: '12px',
     }}
   />
 
-  {/* Badge sans texte */}
+  {/* Badge */}
   <Box
     sx={{
       position: 'absolute',
-      top: 10, // Positionné à 10px du haut
-      left: 10, // Positionné à 10px de la gauche
-      width: '80px', // Taille du badge
-      height: '80px',
-      backgroundColor: '#00ACC1', // Couleur du badge
-      borderRadius: '50%', // Forme circulaire
+      top: { xs: 5, sm: 10, md: 15 }, // Position adaptative selon l'écran
+      left: { xs: 5, sm: 10, md: 15 },
+      width: { xs: '60px', sm: '70px', md: '80px' }, // Taille du badge adaptée
+      height: { xs: '60px', sm: '70px', md: '80px' },
+      backgroundColor: '#00ACC1',
+      borderRadius: '50%',
       display: 'flex',
       alignItems: 'center',
-    
       justifyContent: 'center',
-      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', // Ombre flottante
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
     }}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="white"
       viewBox="0 0 24 24"
-      width="60px"
-      height="60px"
+      width="50%"
+      height="50%" // L'icône s'adapte automatiquement au badge
     >
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5l-5-5 1.41-1.41L11 13.17l7.59-7.59L20 7l-9 9.5z" />
     </svg>
   </Box>
 </Box>
+
 
 
 
@@ -289,24 +292,42 @@ const HomePage = () => {
   }}
 >
   {/* Animation Lottie */}
-  <Box
-    sx={{
-      flex: 1,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+{/* Animation Lottie */}
+<Box
+  sx={{
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: { xs: '10px', sm: '20px', md: '30px' }, // Padding adaptatif
+    textAlign: 'center', // Alignement pour une meilleure mise en page
+  }}
+>
+  <Player
+    autoplay
+    loop
+    src={LottieLego} // Chemin de votre animation Lottie
+    style={{
+      height: '250px', // Taille par défaut
+      maxWidth: '100%', // S'adapte à l'écran
     }}
-  >
-    <Player
-      autoplay
-      loop
-      src={LottieLego} // Chemin de votre animation Lottie
-      style={{
-        height: '250px', // Taille ajustée pour un meilleur équilibre
-        maxWidth: '100%',
-      }}
-    />
-  </Box>
+  />
+</Box>
+{/* Texte sous l'animation */}
+<Box
+  sx={{
+    textAlign: 'center',
+    marginTop: { xs: '10px', sm: '20px', md: '30px' },
+    fontSize: { xs: '14px', sm: '16px', md: '18px' }, // Font-size réduit sur les petits écrans
+    color: '#333', // Couleur du texte
+    lineHeight: { xs: '1.4', sm: '1.6', md: '1.8' }, // Espacement des lignes ajusté
+    maxWidth: { xs: '90%', sm: '80%', md: '70%' }, // Largeur maximale du texte
+    marginX: 'auto', // Centré horizontalement
+  }}
+>
+  
+</Box>
+
 
   {/* Section Texte */}
   <Box
@@ -314,7 +335,8 @@ const HomePage = () => {
       flex: 2,
       padding: '40px',
       backgroundColor: '#ffffff', // Fond blanc pour contraster avec le reste
-      marginRight: { xs: '20px', sm: '60px' }, // Espacement interne ajusté
+      marginRight: { xs: '0px', sm: '10px', md:'20px' }, // Espacement interne ajusté
+      paddingTop: { xs: '-50px', sm: '-10px', md:'0px' },
       borderRadius: '12px',     
       textAlign: { xs: 'center', md: 'left' }, // Centré sur mobile, aligné à gauche sur desktop
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // Ombre subtile
@@ -324,9 +346,10 @@ const HomePage = () => {
       variant="h3"
       sx={{
         fontWeight: 'bold',
-        fontSize: { xs: '1.8rem', sm: '2.4rem' },
+        fontSize: { xs: '1.5rem', sm: '2.4rem' },
         color: '#004d40', // Couleur verte professionnelle
         marginBottom: '20px',
+        marginTop: { xs: '20px', sm: '35px' },
         textAlign: { xs: 'center', md: 'center' },
       }}
     >
@@ -344,28 +367,21 @@ const HomePage = () => {
     >
       Les préinscriptions pour les examens du BEPC et le CFEPD commencent le <strong>1er décembre 2024</strong> et se clôturent le <strong>31 mars 2025</strong>.
     </Typography>
-    {/* <Typography
-      sx={{
-        fontSize: { xs: '0.9rem', sm: '1rem' },
-        color: '#666', // Couleur de texte secondaire
-      }}
-    >
-      Contactez-nous pour toute assistance : <strong>+227 96 98 61 74</strong>.
-    </Typography> */}
+   
   </Box>
 </Box>
 
 
 <Box
   sx={{
-    width: '100%', // Largeur totale
-    backgroundColor: '#004d40', // Fond doux
-    borderRadius: '16px', // Coins arrondis
-    paddingBottom: { xs: '20px', sm: '50px' },
-    paddingTop: { xs: '20px', sm: '50px' },
-    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+    width: '100%',
+    backgroundColor: '#004d40',
+    borderRadius: '16px',
+    paddingTop: { xs: '20px', sm: '50px' }, // Padding adaptatif
+    paddingBottom: { xs: '50px', sm: '70px' }, // Padding adaptatif
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
     display: 'flex',
-    flexDirection: 'column', // Organisation en colonne
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 3, // Espacement entre les éléments
     textAlign: 'center',
@@ -378,9 +394,8 @@ const HomePage = () => {
     variant="h4"
     sx={{
       fontWeight: 'bold',
-      fontSize: { xs: '1.5rem', sm: '2rem' }, // Taille responsive
-      color: '#fff', // Vert professionnel
-    
+      fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }, // Tailles responsives
+      color: '#fff',
       padding: '20px',
     }}
   >
@@ -390,16 +405,15 @@ const HomePage = () => {
   {/* Informations de contact */}
   <Typography
     sx={{
-      fontSize: { xs: '0.5rem', sm: '1rem' },
-      color: '#fff', // Texte sombre pour lisibilité
+      fontSize: { xs: '0.8rem', sm: '1rem', md: '1.1rem' }, // Ajustement du texte
+      color: '#fff',
       marginBottom: '10px',
-      lineHeight: '1.2',
+      lineHeight: { xs: '1.2', sm: '1.5', md: '1.8' }, // Espacement des lignes
     }}
   >
     En cas de problème, veuillez appeler :
     <br />
-    <strong>+227 96 98 61 74/+227 80 64 83 83</strong>
-    
+    <strong>+227 96 98 61 74 / +227 80 64 83 83</strong>
   </Typography>
 
   {/* Boutons */}
@@ -407,7 +421,7 @@ const HomePage = () => {
     sx={{
       display: 'flex',
       flexDirection: { xs: 'column', sm: 'row' }, // Colonne sur mobile, ligne sur desktop
-      gap: 2, // Espacement entre les boutons
+      gap: 2,
       justifyContent: 'center',
       alignItems: 'center',
     }}
@@ -417,11 +431,11 @@ const HomePage = () => {
       sx={{
         backgroundColor: '#FF8C00',
         color: '#fff',
-        fontSize: { xs: '0.9rem', sm: '1rem' },
-        padding: '10px 20px',
-        borderRadius: '8px', // Coins arrondis
-        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Ombre légère
-        '&:hover': { backgroundColor: '#e67e22' }, // Couleur au survol
+        fontSize: { xs: '0.8rem', sm: '1rem', md: '1.1rem' },
+        padding: { xs: '8px 16px', sm: '10px 20px', md: '12px 24px' },
+        borderRadius: '8px',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
+        '&:hover': { backgroundColor: '#e67e22' },
       }}
       href="/bepc-access"
     >
@@ -433,11 +447,11 @@ const HomePage = () => {
       sx={{
         backgroundColor: '#00ACC1',
         color: '#fff',
-        fontSize: { xs: '0.9rem', sm: '1rem' },
-        padding: '10px 20px',
-        borderRadius: '8px', // Coins arrondis
-        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Ombre légère
-        '&:hover': { backgroundColor: '#00838F' }, // Couleur au survol
+        fontSize: { xs: '0.8rem', sm: '1rem', md: '1.1rem' },
+        padding: { xs: '8px 16px', sm: '10px 20px', md: '12px 24px' },
+        borderRadius: '8px',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
+        '&:hover': { backgroundColor: '#00838F' },
       }}
       href="/cfepd-access"
     >
@@ -476,53 +490,63 @@ const HomePage = () => {
 
   <Box
   sx={{
-    width: '100%', // Prend toute la largeur
-    backgroundColor: '#f3f4f6', // Fond doux
-    padding: '20px',
-    borderRadius: '16px', // Coins arrondis
-    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
-    overflow: 'hidden', // Empêche les débordements
+    width: '100%',
+    backgroundColor: '#f9fafb', // Fond doux et neutre
+    padding: { xs: '20px', sm: '40px' },
+    borderRadius: '16px',
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
   }}
 >
-  <Tabs
-    value={tabIndex}
-    onChange={handleTabChange}
-    variant="fullWidth" // Les onglets prennent toute la largeur
+  {/* Conteneur des onglets */}
+  <Box
     sx={{
-      '& .MuiTabs-indicator': {
-        height: '4px',
-        backgroundColor: '#ff8c00', // Indicateur coloré
-        borderRadius: '4px',
-      },
-      '& .MuiTab-root': {
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        fontSize: { xs: '1rem', sm: '1.2rem' },
-        color: '#333',
-        padding: '12px 16px',
-       
-        transition: 'all 0.3s ease',
-        borderRadius: '8px', // Coins arrondis des onglets
-        '&:hover': {
-          backgroundColor: '#ffefd5', // Fond clair au survol
-          color: '#ff8c00', // Texte vibrant au survol
-          transform: 'scale(1.05)', // Zoom léger au survol
-        },
-        '&.Mui-selected': {
-          color: '#ffffff',
-          backgroundColor: '#ff8c00', // Couleur vive pour l'onglet sélectionné
-          boxShadow: '0px 4px 12px rgba(255, 140, 0, 0.5)', // Ombre autour de l'onglet actif
-        },
-      },
+      display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' },
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 2, // Espacement entre les onglets
     }}
   >
-    <Tab icon={<SchoolIcon />} label="Cartes & Bulletins Scolaire" />
-    <Tab icon={<InfoIcon />} label="Diplôme - Ecoles Professionnelles" />
-    <Tab icon={<CampaignIcon />} label="Informations Clés" />
-    {/* <Tab icon={<EventIcon />} label="Événements" />
-    <Tab icon={<ContactMailIcon />} label="Contact" />
-    <Tab icon={<HelpOutlineIcon />} label="FAQ" /> */}
-  </Tabs>
+    {['Cartes & Bulletins', 'Attestation Diplôme', 'Informations Clés'].map((label, index) => (
+      <Box
+        key={index}
+        onClick={() => setTabIndex(index)}
+        sx={{
+          cursor: 'pointer',
+          padding: { xs: '10px 20px', sm: '12px 30px' },
+          fontSize: { xs: '0.9rem', sm: '1.1rem' },
+          fontWeight: 'bold',
+          color: tabIndex === index ? '#ffffff' : '#333',
+          backgroundColor: tabIndex === index ? '#ff8c00' : '#e0e0e0',
+          borderRadius: '8px',
+          transition: 'all 0.3s ease',
+          boxShadow: tabIndex === index ? '0px 4px 12px rgba(255, 140, 0, 0.4)' : 'none',
+          '&:hover': {
+            backgroundColor: tabIndex === index ? '#e67e22' : '#f5f5f5',
+            transform: tabIndex === index ? 'scale(1.05)' : 'scale(1.02)',
+          },
+        }}
+      >
+        {label}
+      </Box>
+    ))}
+  </Box>
+
+  {/* Contenu des onglets */}
+  <Box
+    sx={{
+      marginTop: '20px',
+      padding: '20px',
+      backgroundColor: '#ffffff',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    }}
+  >
+    {tabIndex === 0 && <Typography variant="body1">Cartes & Bulletins Numerique</Typography>}
+    {tabIndex === 1 && <Typography variant="body1">Attestation des Diplômes des Ecoles Professionnelles.</Typography>}
+    {tabIndex === 2 && <Typography variant="body1">Informations Clés.</Typography>}
+  </Box>
 </Box>
 
 
@@ -541,10 +565,11 @@ const HomePage = () => {
     sx={{
       display: 'flex',
       flexDirection: 'column',
-      gap: 4,
-      padding: '20px',
-      backgroundColor: '#f3f4f6', // Fond principal doux
+      gap: { xs: 2, sm: 4 }, // Espacement ajusté selon l'écran
+      padding: { xs: '10px', sm: '20px', md: '40px' },
+      backgroundColor: '#f3f4f6',
       borderRadius: '16px',
+      boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
     }}
   >
     {/* Titre principal */}
@@ -554,7 +579,8 @@ const HomePage = () => {
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#004d40',
-        marginBottom: '20px',
+        marginBottom: { xs: '10px', sm: '20px' },
+        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }, // Taille adaptative
       }}
     >
       Projet de Bulletin Numérique : Informations Clés
@@ -564,33 +590,40 @@ const HomePage = () => {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
-        gap: 3,
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
       }}
     >
       {/* Cadre 1 */}
       <Box
         sx={{
           flex: 1,
-          padding: '20px',
-          backgroundColor: '#FFEBEE', // Fond rouge clair
+          padding: { xs: '15px', sm: '20px', md: '30px' },
+          backgroundColor: '#FFEBEE',
           borderRadius: '12px',
-          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.03)',
+            boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.15)',
+          },
         }}
       >
         <Typography
           variant="h6"
           sx={{
             fontWeight: 'bold',
-            color: '#D32F2F', // Texte rouge foncé
+            color: '#D32F2F',
             marginBottom: '10px',
+            fontSize: { xs: '1rem', sm: '1.2rem' },
           }}
         >
           Intégration obligatoire pour tous les établissements
         </Typography>
         <Typography
           sx={{
-            color: '#555', // Texte gris
+            color: '#555',
+            fontSize: { xs: '0.9rem', sm: '1rem' },
           }}
         >
           Le projet de bulletin numérique est à terme. Tous les établissements
@@ -603,18 +636,24 @@ const HomePage = () => {
       <Box
         sx={{
           flex: 1,
-          padding: '20px',
-          backgroundColor: '#E3F2FD', // Fond bleu clair
+          padding: { xs: '15px', sm: '20px', md: '30px' },
+          backgroundColor: '#E3F2FD',
           borderRadius: '12px',
-          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.03)',
+            boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.15)',
+          },
         }}
       >
         <Typography
           variant="h6"
           sx={{
             fontWeight: 'bold',
-            color: '#1976D2', // Texte bleu foncé
+            color: '#1976D2',
             marginBottom: '10px',
+            fontSize: { xs: '1rem', sm: '1.2rem' },
           }}
         >
           Sensibilisation et formations prévues
@@ -622,6 +661,7 @@ const HomePage = () => {
         <Typography
           sx={{
             color: '#555',
+            fontSize: { xs: '0.9rem', sm: '1rem' },
           }}
         >
           Des sessions de sensibilisation et de formation seront organisées
@@ -634,18 +674,24 @@ const HomePage = () => {
       <Box
         sx={{
           flex: 1,
-          padding: '20px',
-          backgroundColor: '#E8F5E9', // Fond vert clair
+          padding: { xs: '15px', sm: '20px', md: '30px' },
+          backgroundColor: '#E8F5E9',
           borderRadius: '12px',
-          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.03)',
+            boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.15)',
+          },
         }}
       >
         <Typography
           variant="h6"
           sx={{
             fontWeight: 'bold',
-            color: '#388E3C', // Texte vert foncé
+            color: '#388E3C',
             marginBottom: '10px',
+            fontSize: { xs: '1rem', sm: '1.2rem' },
           }}
         >
           Prochain communiqué officiel
@@ -653,6 +699,7 @@ const HomePage = () => {
         <Typography
           sx={{
             color: '#555',
+            fontSize: { xs: '0.9rem', sm: '1rem' },
           }}
         >
           Un communiqué officiel sera diffusé prochainement pour préciser les
@@ -666,29 +713,31 @@ const HomePage = () => {
 
 
 
+
 {tabIndex === 1 && (
   <Box
     sx={{
       display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
+      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour mobile, ligne pour desktop
       alignItems: 'center',
-      gap: 4,
+      gap: { xs: 2, md: 4 }, // Espacement adapté aux écrans
       justifyContent: 'space-between',
+      padding: { xs: '20px', md: '40px' }, // Padding dynamique
     }}
   >
     {/* Texte au centre */}
     <Box
       sx={{
         flex: 1,
-        textAlign: { xs: 'center', md: 'justify' }, // Texte justifié sur desktop
+        textAlign: { xs: 'center', md: 'justify' }, // Justifié sur desktop
+        padding: { xs: '0', md: '0 20px' }, // Padding pour desktop
       }}
     >
       <Typography
         sx={{
-          marginBottom: '10px',
-          fontSize: '1.1rem',
+          marginBottom: '20px',
+          fontSize: { xs: '1rem', md: '1.2rem' }, // Taille de police responsive
           lineHeight: '1.8',
-          marginLeft: '50px',
           color: '#333',
         }}
       >
@@ -700,10 +749,9 @@ const HomePage = () => {
       </Typography>
       <Typography
         sx={{
-          marginBottom: '10px',
-          fontSize: '1.1rem',
+          marginBottom: '20px',
+          fontSize: { xs: '1rem', md: '1.2rem' },
           lineHeight: '1.8',
-          marginLeft: '50px',
           color: '#333',
         }}
       >
@@ -713,7 +761,7 @@ const HomePage = () => {
       </Typography>
     </Box>
 
-    {/* Animation Lottie à droite */}
+    {/* Animation Lottie */}
     <Box
       sx={{
         flex: 1,
@@ -725,8 +773,10 @@ const HomePage = () => {
         loop
         src={animeavis} // Animation Lottie
         style={{
-          height: '350px',
-          maxWidth: '100%',
+          height: '100%', // Hauteur adaptative
+          maxHeight: '350px', // Limite maximale de hauteur
+          width: '100%', // Largeur complète
+          maxWidth: '100%', // Limite maximale de largeur
         }}
       />
     </Box>
@@ -736,17 +786,19 @@ const HomePage = () => {
 
 
 
+
 {tabIndex === 2 && (
   <Box
     sx={{
       display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
+      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour mobile, ligne pour desktop
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 4,
-      padding: '20px',
-      backgroundColor: '#f9f9f9', // Fond doux pour toute la section
+      gap: { xs: 2, md: 4 }, // Espacement dynamique
+      padding: { xs: '20px', md: '40px' }, // Padding ajusté selon les écrans
+      backgroundColor: '#f9f9f9',
       borderRadius: '16px',
+      boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.05)', // Ombre douce
     }}
   >
     {/* Animation Lottie avec cadre */}
@@ -756,10 +808,15 @@ const HomePage = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '20px',
-        backgroundColor: '#ffffff', // Fond blanc pour l'image
+        padding: { xs: '10px', md: '20px' },
+        backgroundColor: '#ffffff',
         borderRadius: '12px',
-        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+        },
       }}
     >
       <Player
@@ -767,7 +824,7 @@ const HomePage = () => {
         loop
         src={administrateurbepc} // Animation locale
         style={{
-          height: '300px', // Taille ajustée pour mieux cadrer
+          height: '300px',
           maxWidth: '100%',
         }}
       />
@@ -777,37 +834,44 @@ const HomePage = () => {
     <Box
       sx={{
         flex: 1,
-        padding: '20px',
-        backgroundColor: '#ffffff', // Fond blanc pour le texte
+        padding: { xs: '20px', md: '30px' },
+        backgroundColor: '#ffffff',
         borderRadius: '12px',
-        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
-        textAlign: 'justify', // Texte justifié
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        textAlign: 'justify',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+        },
       }}
     >
- <Typography
-      sx={{
-        fontSize: { xs: '1rem', md: '1.2rem' },
-        color: '#333', // Texte sombre pour une meilleure lisibilité
-        lineHeight: '1.8',
-      }}
-    >
-      Chers <strong>enseignants</strong>, <strong> administrateurs</strong>, et 
-      <strong> personnels éducatifs</strong>, pour toute information ou pour consulter
-      les derniers communiqués importants, veuillez vous référer à la rubrique 
-      <strong>
-        <a
-          href="#actualites-annonces" // Lien vers l'ID de la section cible
-          style={{
-            color: '#00ACC1', // Couleur pour le lien
-            textDecoration: 'none',
-          }}
-        >
-          Actualités et Annonces Importantes
-        </a>
-      </strong> disponible sur la plateforme. Cela vous permettra de rester informés
-      des nouveautés et des mises à jour concernant le système éducatif.
-    </Typography>
-
+      <Typography
+        sx={{
+          fontSize: { xs: '1rem', md: '1.2rem' },
+          color: '#333',
+          lineHeight: '1.8',
+        }}
+      >
+        Chers <strong>enseignants</strong>, <strong> administrateurs</strong>, et 
+        <strong> personnels éducatifs</strong>, pour toute information ou pour consulter
+        les derniers communiqués importants, veuillez vous référer à la rubrique 
+        <strong>
+          <a
+            href="#actualites-annonces"
+            style={{
+              color: '#00ACC1',
+              textDecoration: 'none',
+              transition: 'color 0.3s ease',
+            }}
+            onMouseEnter={(e) => (e.target.style.color = '#007B9E')}
+            onMouseLeave={(e) => (e.target.style.color = '#00ACC1')}
+          >
+            Actualités et Annonces Importantes
+          </a>
+        </strong> disponible sur la plateforme. Cela vous permettra de rester informés
+        des nouveautés et des mises à jour concernant le système éducatif.
+      </Typography>
     </Box>
   </Box>
 )}
@@ -1161,15 +1225,13 @@ const HomePage = () => {
   <Box
   sx={{
     backgroundColor: '#f9f9f9',
-    padding: '40px',
-    marginLeft:'20px',
+    padding: { xs: '20px', md: '40px' },
     width: '100%',
-    height: 'auto',
     borderRadius: '16px',
-    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre douce pour le conteneur
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
     display: 'flex',
-    flexDirection: { xs: 'column', md: 'row' }, // Empilement sur petits écrans
-    alignItems: 'center',
+    flexDirection: { xs: 'column', md: 'row' },
+    alignItems: 'stretch',
     gap: 4, // Espacement entre les sections
     justifyContent: 'space-between',
     marginTop: 4,
@@ -1187,6 +1249,11 @@ const HomePage = () => {
       backgroundColor: '#2c3e50',
       borderRadius: '12px',
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      '&:hover': {
+        transform: 'scale(1.02)',
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+      },
     }}
   >
     <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00', marginBottom: '10px' }} />
@@ -1238,6 +1305,11 @@ const HomePage = () => {
       backgroundColor: '#ffffff',
       borderRadius: '12px',
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      '&:hover': {
+        transform: 'scale(1.02)',
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+      },
     }}
   >
     {/* Image du Ministre */}
@@ -1249,8 +1321,8 @@ const HomePage = () => {
         height: '160px',
         objectFit: 'cover',
         borderRadius: '10px',
-        marginBottom: '10px',
-        marginRight: '20px',
+        marginBottom: { xs: '20px', md: '0' },
+        marginRight: { md: '20px' },
       }}
     />
     {/* Texte associé */}
@@ -1265,7 +1337,13 @@ const HomePage = () => {
       >
         Mme Elisabeth Sherif
       </Typography>
-      <Typography variant="body2" sx={{ color: '#555', marginBottom: '10px' }}>
+      <Typography
+        variant="body2"
+        sx={{
+          color: '#555',
+          marginBottom: '10px',
+        }}
+      >
         MEN/A/EP/PLN
       </Typography>
       <Typography
@@ -1273,7 +1351,7 @@ const HomePage = () => {
         sx={{
           color: '#FF8C00',
           fontWeight: 'bold',
-          fontSize: '1.1rem',
+          fontSize: { xs: '1rem', sm: '1.1rem' },
         }}
       >
         Un engagement fort pour une éducation inclusive et participative.
@@ -1281,6 +1359,7 @@ const HomePage = () => {
     </Box>
   </Box>
 </Box>
+
 
 
 
