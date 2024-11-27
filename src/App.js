@@ -12,6 +12,9 @@ import EstablishmentConfigPage from './pages/etablissement/EstablishmentConfigPa
 import EstablishmentDashboardPage from './pages/etablissement/DashboardPage'; 
 
 
+
+
+
 import { AuthProvider } from './context/AuthContext';
 //import { AuthProviderBEPC } from './context/AuthContextBEPC'; 
 
@@ -75,7 +78,7 @@ import DashboardPageBEPC from './components/BEPC/DashboardPageBEPC';
 import PaymentPageBEPC from './components/BEPC/PaymentPageBEPC';
 import ResultsPageBEPC from './components/BEPC/ResultsPageBEPC';
 import BepcAccessPage from './components/BEPC/BepcAccessPage'
-import InscriptionPage from './components/BEPC/InscriptionPageBEPC'; // Assuming you have an InscriptionPage component
+import InscriptionPageBEPC from './components/BEPC/InscriptionPageBEPC'; // Assuming you have an InscriptionPage component
 import AdminDashboardPageBEPC from './components/BEPC/AdminDashboardBEPC';
 import AdminCentralDashboardBEPC from './components/BEPC/AdminCentralDashboardBEPC';
 import ReportAnalysisPage from './pages/etablissement/ReportAnalysisPage';
@@ -91,7 +94,8 @@ import AdminDashboardCFEPD from './components/CFEPD/AdminDashboardCFEPD';
 import AdminDashboardBEPC from './components/BEPC/AdminDashboardBEPC';
 const App = () => {
 
- 
+
+
 
 
   return (
@@ -173,11 +177,12 @@ const App = () => {
         {/* <Route path="register" element={<RegisterPageBEPC />} />
         <Route path="login" element={<LoginPageBEPC />} /> */}
         <Route path="dashboard-bepc" element={<DashboardPageBEPC />} />
+        
         <Route path="payment" element={<PaymentPageBEPC />} />
         <Route path="results" element={<ResultsPageBEPC />} />
         <Route path="/bepc-access" element={<BepcAccessPage />} />
         <Route path="/bepcadmin-dashboard" element={<AdminDashboardBEPC />} />
-        <Route path="/inscription" element={<InscriptionPage />} /> {/* This route points to the inscription page */}
+        <Route path="/inscription-bepc" element={<InscriptionPageBEPC />} /> {/* This route points to the inscription page */}
 
 
         <Route

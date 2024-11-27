@@ -14,14 +14,17 @@ import {
   TablePagination,
   Modal,
   TextField,
+  MenuItem,
  
  
 } from '@mui/material';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
 
+
+
+
 const AdminDashboardCFEPD = () => {
- 
  
  
  // Gestion des filtres et modal
@@ -40,11 +43,55 @@ const AdminDashboardCFEPD = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 5;
 
+
+  //const [centres, setCentres] = useState([]); // Liste complète des centres
+  const [paginatedCentres, setPaginatedCentres] = useState([]); // Centres affichés
+  const [currentPageCentres, setCurrentPageCentres] = useState(0); // Page actuelle
+  const rowsPerPageCentres = 5; // Nombre de lignes par page
+  const [searchTerm, setSearchTerm] = useState(''); // Texte de recherche
+  
+
+
+
+  const [centreModalOpen, setCentreModalOpen] = useState(false);
+  const [centreFormData, setCentreFormData] = useState({
+  nom: '',
+  region: '',
+});
+
+
+const [centres, setCentres] = useState([]);
+
+
+const [editModalOpen, setEditModalOpen] = useState(false); // Gérer l'ouverture du modal
+const [editFormData, setEditFormData] = useState({ _id: "", nom: "", region: "" }); // Données du formulaire
+
+
+
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
     severity: 'success', // Peut être 'success', 'error', 'warning', ou 'info'
   });
+
+
+
+
+  const fetchCentres = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/centres`);
+      setCentres(res.data); // Met à jour les centres dans le state
+    } catch (err) {
+      console.error("Erreur lors de la récupération des centres :", err);
+    }
+  };
+  
+  
+  
+  useEffect(() => {
+    fetchCentres();
+  }, []);
 
 
 // Ajoutez ces lignes en haut de votre composant
@@ -159,7 +206,7 @@ useEffect(() => {
       pdf.setFontSize(10);
       inscriptions.forEach((inscription, index) => {
         pdf.text(
-          `${index + 1}. ${inscription.prenom} ${inscription.nom}, Classe: ${inscription.classe}, ` +
+          `${index + 1}. ${inscription.prenom} ${inscription.nom} ` +
           `Montant: ${inscription.montantPaiement} FCFA, Région: ${inscription.regionEtablissement}`,
           10,
           yPosition
@@ -204,82 +251,78 @@ const handleFilterChange = (e) => {
 };
 
 // Génération du rapport filtré
-const handleGenerateFilteredReport = async () => {
-  if (!selectedUser) {
-    console.error("ID utilisateur manquant.");
-    return;
-  }
+// const handleGenerateFilteredReport = async () => {
+//   if (!selectedUser) {
+//     console.error("ID utilisateur manquant.");
+//     return;
+//   }
 
-  console.log("ID utilisateur :", selectedUser);
-  console.log("Filtres envoyés :", filterValues);
+//   console.log("ID utilisateur :", selectedUser);
+//   console.log("Filtres envoyés :", filterValues);
 
-  try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/cfepdadmin/agents/${selectedUser}/report/filtered`,
-      filterValues,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+//   try {
+//     const res = await axios.post(
+//       `${process.env.REACT_APP_API_URL}/api/cfepdadmin/agents/${selectedUser}/report/filtered`,
+//       filterValues,
+//       {
+//         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//       }
+//     );
 
-    console.log("Données du rapport :", res.data);
-    const { agent, inscriptions } = res.data;
-    console.log('Données du rapport filtré :', res.data);
+//     console.log("Données du rapport :", res.data);
+//     const { agent, inscriptions } = res.data;
+//     console.log('Données du rapport filtré :', res.data);
 
-    // Génération du PDF
-    const pdf = new jsPDF();
-    let yPosition = 10;
+//     // Génération du PDF
+//     const pdf = new jsPDF();
+//     let yPosition = 10;
 
-    // En-tête
-    pdf.setFontSize(16);
-    pdf.text(`Rapport Filtré de l'Agent ${agent.name}`, 10, yPosition);
-    yPosition += 10;
+//     // En-tête
+//     pdf.setFontSize(16);
+//     pdf.text(`Rapport Filtré de l'Agent ${agent.name}`, 10, yPosition);
+//     yPosition += 10;
 
-    pdf.setFontSize(12);
-    pdf.text(`Téléphone : ${agent.phone}`, 10, yPosition);
-    yPosition += 7;
+//     pdf.setFontSize(12);
+//     pdf.text(`Téléphone : ${agent.phone}`, 10, yPosition);
+//     yPosition += 7;
 
-    pdf.text(`Total des saisies : ${agent.totalSaisies}`, 10, yPosition);
-    yPosition += 7;
+//     pdf.text(`Total des saisies : ${agent.totalSaisies}`, 10, yPosition);
+//     yPosition += 7;
 
-    pdf.text(`Montant total : ${agent.montantTotal} FCFA`, 10, yPosition);
-    yPosition += 10;
+//     pdf.text(`Montant total : ${agent.montantTotal} FCFA`, 10, yPosition);
+//     yPosition += 10;
 
-    // Détails des inscriptions
-    pdf.setFontSize(14);
-    pdf.text('Inscriptions Filtrées :', 10, yPosition);
-    yPosition += 10;
+//     // Détails des inscriptions
+//     pdf.setFontSize(14);
+//     pdf.text('Inscriptions Filtrées :', 10, yPosition);
+//     yPosition += 10;
 
-    pdf.setFontSize(10);
-    inscriptions.forEach((inscription, index) => {
-      pdf.text(
-        `${index + 1}. ${inscription.prenom} ${inscription.nom}, Classe: ${inscription.classe}, ` +
-        `Montant: ${inscription.montantPaiement} FCFA, Région: ${inscription.regionEtablissement}`,
-        10,
-        yPosition
-      );
-      yPosition += 7;
+//     pdf.setFontSize(10);
+//     inscriptions.forEach((inscription, index) => {
+//       pdf.text(
+//         `${index + 1}. ${inscription.prenom} ${inscription.nom}, Classe: ${inscription.classe}, ` +
+//         `Montant: ${inscription.montantPaiement} FCFA, Région: ${inscription.regionEtablissement}`,
+//         10,
+//         yPosition
+//       );
+//       yPosition += 7;
 
-      if (yPosition > 280) {
-        pdf.addPage();
-        yPosition = 10;
-      }
-    });
+//       if (yPosition > 280) {
+//         pdf.addPage();
+//         yPosition = 10;
+//       }
+//     });
 
-    pdf.save(`Rapport_Filtré_Agent_${agent.name}.pdf`);
-  } catch (err) {
-    console.error('Erreur lors de la génération du rapport filtré :', err);
-  }
-};
-
-
+//     pdf.save(`Rapport_Filtré_Agent_${agent.name}.pdf`);
+//   } catch (err) {
+//     console.error('Erreur lors de la génération du rapport filtré :', err);
+//   }
+// };
 
 
-const handleOpenFilterModal = (userId) => {
-  console.log("ID utilisateur pour le modal :", userId);
-  setSelectedUser(userId);
-  setFilterModalOpen(true);
-};
+
+
+
 
 
 const handleLogout = () => {
@@ -292,336 +335,225 @@ const handleLogout = () => {
 
 
 
-// const groupData = (data) => {
-//   const grouped = {};
-
-//   data.forEach((item) => {
-//     const region = item.regionEtablissement || "Non spécifié";
-//     const direction = item.directionRegionale || "Non spécifié";
-//     const inspection = item.inspectionRegionale || "Non spécifié";
-//     const etablissement = item.nomEtablissement || "Non spécifié";
-//     const classe = item.classe || "Non spécifié";
-
-//     if (!grouped[region]) grouped[region] = {};
-//     if (!grouped[region][direction]) grouped[region][direction] = {};
-//     if (!grouped[region][direction][inspection]) grouped[region][direction][inspection] = {};
-//     if (!grouped[region][direction][inspection][etablissement]) {
-//       grouped[region][direction][inspection][etablissement] = {};
-//     }
-//     if (!grouped[region][direction][inspection][etablissement][classe]) {
-//       grouped[region][direction][inspection][etablissement][classe] = [];
-//     }
-
-//     grouped[region][direction][inspection][etablissement][classe].push(item);
-//   });
-
-//   return grouped;
-// };
 
 
-
-
-
-
-// const handleDownloadReport = async () => {
-//   try {
-//     console.log("Tentative de téléchargement du rapport CFEPD...");
-
-//     const response = await axios.get(
-//       `${process.env.REACT_APP_API_URL}/api/cfepd/inscription/report/inscriptions`,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem('token')}`,
-//         },
-//       }
-//     );
-
-//     const data = response.data;
-
-//     if (!data || data.length === 0) {
-//       alert("Aucune inscription à afficher dans le rapport.");
-//       return;
-//     }
-
-//     console.log("Données reçues pour le rapport CFEPD :", data);
-
-//     // Regrouper les données
-//     const groupedData = groupData(data);
-//     console.log("Données regroupées :", groupedData);
-
-//     const pdf = new jsPDF('landscape', 'mm', 'a4');
-//     const marginTop = 20;
-//     const marginBottom = 20;
-//     const marginLeft = 10;
-//     const pageHeight = pdf.internal.pageSize.height;
-//     const contentHeight = pageHeight - marginTop - marginBottom;
-//     let startY = marginTop;
-
-//     const addNewPage = () => {
-//       pdf.addPage();
-//       startY = marginTop;
-//     };
-
-//     const addPageHeader = () => {
-//       pdf.setFontSize(12);
-//       pdf.setFont('helvetica', 'bold');
-//       pdf.text("Ministère de l'Éducation Nationale", marginLeft, startY);
-//       pdf.text("Rapport des Inscriptions CFEPD avec Paiement Confirmé", pdf.internal.pageSize.width / 2, startY + 10, {
-//         align: 'center',
-//       });
-//       pdf.setFontSize(10);
-//       pdf.setFont('helvetica', 'normal');
-//       pdf.text(`Date : ${new Date().toLocaleDateString()}`, pdf.internal.pageSize.width - marginLeft, startY, {
-//         align: 'right',
-//       });
-//       startY += 30;
-//     };
-
-//     addPageHeader();
-
-//     // Générer le PDF à partir des données regroupées
-//     for (const [region, directions] of Object.entries(groupedData)) {
-//       pdf.setFont('helvetica', 'bold');
-//       pdf.text(`Région : ${region}`, marginLeft, startY);
-//       startY += 10;
-
-//       for (const [direction, inspections] of Object.entries(directions)) {
-//         if (startY + 20 > contentHeight) {
-//           addNewPage();
-//           addPageHeader();
-//         }
-//         pdf.setFont('helvetica', 'italic');
-//         pdf.text(`Direction Régionale : ${direction}`, marginLeft + 10, startY);
-//         startY += 10;
-
-//         for (const [inspection, etablissements] of Object.entries(inspections)) {
-//           if (startY + 20 > contentHeight) {
-//             addNewPage();
-//             addPageHeader();
-//           }
-//           pdf.setFont('helvetica', 'normal');
-//           pdf.text(`Inspection Régionale : ${inspection}`, marginLeft + 20, startY);
-//           startY += 10;
-
-//           for (const [etablissement, classes] of Object.entries(etablissements)) {
-//             if (startY + 20 > contentHeight) {
-//               addNewPage();
-//               addPageHeader();
-//             }
-//             pdf.setFont('helvetica', 'bold');
-//             pdf.text(`Établissement : ${etablissement}`, marginLeft + 30, startY);
-//             startY += 10;
-
-//             for (const [classe, inscriptions] of Object.entries(classes)) {
-//               if (startY + 20 > contentHeight) {
-//                 addNewPage();
-//                 addPageHeader();
-//               }
-//               pdf.setFont('helvetica', 'italic');
-//               pdf.text(`Classe : ${classe}`, marginLeft + 40, startY);
-//               startY += 10;
-
-//               if (Array.isArray(inscriptions)) {
-//                 inscriptions.forEach((inscription) => {
-//                   if (startY + 10 > contentHeight) {
-//                     addNewPage();
-//                     addPageHeader();
-//                   }
-//                   pdf.setFont('helvetica', 'normal');
-//                   pdf.text(`${inscription.matricule}`, marginLeft + 50, startY);
-//                   pdf.text(`${inscription.nom} ${inscription.prenom}`, marginLeft + 80, startY);
-//                   pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), marginLeft + 140, startY);
-//                   pdf.text(`${inscription.montantPaiement} FCFA`, marginLeft + 180, startY);
-//                   startY += 10;
-//                 });
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-
-//     pdf.save('Rapport_Inscriptions_CFEPD.pdf');
-//   } catch (error) {
-//     console.error("Erreur lors du téléchargement du rapport :", error);
-//     alert("Erreur lors du téléchargement du rapport.");
-//   }
-// };
-
-
-
-const handleDownloadReport = async () => {
+const handleAddCentre = async () => {
   try {
-    console.log("Tentative de téléchargement du rapport CFEPD...");
-
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/cfepd/inscription/report/inscriptions`,
+    const token = localStorage.getItem('token');
+    await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/centres`,
+      centreFormData,
       {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
-    const inscriptions = response.data;
-
-    const pdf = new jsPDF('landscape', 'mm', 'a4');
-    const marginTop = 20; // Marge supérieure
-    const marginBottom = 20; // Marge inférieure
-    const marginLeft = 10; // Marge gauche
-    const marginRight = 10; // Marge droite
-    const pageHeight = pdf.internal.pageSize.height; // Hauteur de la page
-    const pageWidth = pdf.internal.pageSize.width; // Largeur de la page
-    const contentHeight = pageHeight - marginTop - marginBottom; // Hauteur utilisable
-    let startY = marginTop;
-
-    // Fonction pour passer à une nouvelle page
-    const addNewPage = () => {
-      pdf.addPage();
-      startY = marginTop;
-    };
-
-    // En-tête de la page
-    const addPageHeader = () => {
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text("Ministère de l'Éducation Nationale", marginLeft, startY);
-      pdf.text(
-        "Rapport des Inscriptions CFEPD avec Paiement Confirmé",
-        pageWidth / 2,
-        startY + 10,
-        { align: 'center' }
-      );
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
-      pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, pageWidth - marginRight, startY, {
-        align: 'right',
-      });
-      startY += 30; // Ajuster la position après l'en-tête
-    };
-
-    // Appeler l'en-tête sur la première page
-    addPageHeader();
-
-    // Générer le rapport hiérarchisé
-    for (const [region, directions] of Object.entries(
-      inscriptions.reduce((acc, inscription) => {
-        const { regionEtablissement, directionRegionale, inspectionRegionale, nomEtablissement, classe } =
-          inscription;
-
-        if (!acc[regionEtablissement]) acc[regionEtablissement] = {};
-        if (!acc[regionEtablissement][directionRegionale]) acc[regionEtablissement][directionRegionale] = {};
-        if (!acc[regionEtablissement][directionRegionale][inspectionRegionale])
-          acc[regionEtablissement][directionRegionale][inspectionRegionale] = {};
-        if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement])
-          acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement] = {};
-        if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe])
-          acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe] = [];
-        acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe].push(inscription);
-        return acc;
-      }, {})
-    )) {
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(`Région : ${region}`, marginLeft, startY);
-      startY += 10;
-
-      for (const [direction, inspections] of Object.entries(directions)) {
-        if (startY + 20 > contentHeight) {
-          addNewPage();
-          addPageHeader();
-        }
-        pdf.setFont('helvetica', 'italic');
-        pdf.text(`Direction Régionale : ${direction}`, marginLeft + 10, startY);
-        startY += 10;
-
-        for (const [inspection, etablissements] of Object.entries(inspections)) {
-          if (startY + 20 > contentHeight) {
-            addNewPage();
-            addPageHeader();
-          }
-          pdf.setFont('helvetica', 'normal');
-          pdf.text(`Inspection Régionale : ${inspection}`, marginLeft + 20, startY);
-          startY += 10;
-
-          for (const [etablissement, classes] of Object.entries(etablissements)) {
-            if (startY + 20 > contentHeight) {
-              addNewPage();
-              addPageHeader();
-            }
-            pdf.setFont('helvetica', 'bold');
-            pdf.text(`Établissement : ${etablissement}`, marginLeft + 30, startY);
-            startY += 10;
-
-            for (const [classe, students] of Object.entries(classes)) {
-              if (startY + 20 > contentHeight) {
-                addNewPage();
-                addPageHeader();
-              }
-              pdf.setFont('helvetica', 'italic');
-              pdf.text(`Classe : ${classe}`, marginLeft + 40, startY);
-              startY += 10;
-
-              // Ajouter les en-têtes du tableau
-              const headers = [
-                "Matricule",
-                "Nom",
-                "Prénom",
-                "Date Naiss.",
-                "Lieu Naiss.",
-                "Genre",
-                "Téléphone Parent",
-                "Montant",
-              ];
-              const startX = marginLeft + 50;
-
-              headers.forEach((header, index) => {
-                pdf.text(header, startX + index * 30, startY);
-              });
-
-              startY += 10;
-
-              // Ajouter les données des inscriptions
-              students.forEach((inscription) => {
-                if (startY + 10 > contentHeight) {
-                  addNewPage();
-                  addPageHeader();
-                }
-                pdf.text(inscription.matricule, startX, startY);
-                pdf.text(inscription.nom, startX + 30, startY);
-                pdf.text(inscription.prenom, startX + 60, startY);
-                pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 90, startY);
-                pdf.text(inscription.lieuNaissance, startX + 120, startY);
-                pdf.text(inscription.genre, startX + 150, startY);
-                pdf.text(inscription.telephoneParent, startX + 180, startY);
-                pdf.text(`${inscription.montantPaiement} FCFA`, startX + 210, startY);
-
-                startY += 10;
-              });
-
-              startY += 10;
-            }
-          }
-        }
-      }
-    }
-
-    pdf.save('Rapport_Inscriptions_CFEPD.pdf');
+    await fetchCentres(); // Synchronisation complète après création
 
     setSnackbar({
       open: true,
-      message: 'Rapport téléchargé avec succès.',
-      severity: 'success',
+      message: "Centre d'examen ajouté avec succès.",
+      severity: "success",
     });
-  } catch (error) {
-    console.error('Erreur lors du téléchargement du rapport:', error);
+    setCentreModalOpen(false);
+    setCentreFormData({ nom: "", region: "" }); // Réinitialiser le formulaire
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du centre :", err);
     setSnackbar({
       open: true,
-      message: 'Erreur lors du téléchargement du rapport.',
-      severity: 'error',
+      message: "Erreur lors de l'ajout du centre.",
+      severity: "error",
     });
   }
 };
 
+
+
+
+
+
+const handleCentreChange = (e) => {
+  setCentreFormData({ ...centreFormData, [e.target.name]: e.target.value });
+};
+
+
+
+
+
+
+const handleEditCentre = (centre) => {
+  console.log("Centre sélectionné pour modification :", centre); // Debugging
+  setEditFormData(centre); // Remplir le formulaire avec les données du centre
+  setEditModalOpen(true); // Ouvrir le modal
+};
+
+
+
+
+
+const handleEditChange = (e) => {
+  const { name, value } = e.target;
+  setEditFormData((prev) => ({ ...prev, [name]: value }));
+};
+
+// Fonction pour sauvegarder les modifications
+
+const handleSaveCentre = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    // Appel API pour mettre à jour le centre
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/centres/${editFormData._id}`,
+      editFormData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    console.log("Centre mis à jour :", res.data);
+
+    // Mettre à jour localement ou refetch les centres
+    await fetchCentres();
+
+    setSnackbar({
+      open: true,
+      message: "Centre d'examen mis à jour avec succès.",
+      severity: "success",
+    });
+
+    setEditModalOpen(false); // Fermer le modal
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour du centre :", err);
+    setSnackbar({
+      open: true,
+      message: "Erreur lors de la mise à jour du centre.",
+      severity: "error",
+    });
+  }
+};
+
+
+
+const handleDeleteCentre = async (centreId) => {
+  if (window.confirm('Êtes-vous sûr de vouloir supprimer ce centre ?')) {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/centres/${centreId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setSnackbar({
+        open: true,
+        message: 'Centre d\'examen supprimé avec succès.',
+        severity: 'success',
+      });
+
+      fetchCentres(); // Recharger les centres
+    } catch (err) {
+      console.error('Erreur lors de la suppression du centre :', err);
+      setSnackbar({
+        open: true,
+        message: 'Erreur lors de la suppression du centre.',
+        severity: 'error',
+      });
+    }
+  }
+};
+
+
+
+const updatePaginatedCentres = () => {
+  const filtered = centres.filter((centre) =>
+    centre.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    centre.region.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const startIndex = currentPageCentres * rowsPerPageCentres;
+  setPaginatedCentres(filtered.slice(startIndex, startIndex + rowsPerPageCentres));
+};
+
+
+
+const handleSearchChange = (event) => {
+  setSearchTerm(event.target.value);
+  setCurrentPageCentres(0); // Réinitialiser à la première page après la recherche
+};
+useEffect(() => {
+  updatePaginatedCentres();
+}, [centres, searchTerm, currentPageCentres]);
+  
+
+const handleGenerateReportCFEPD = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/cfepdadmin/report/inscriptions`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }
+    );
+
+    const { regions } = response.data;
+    const pdf = new jsPDF();
+    let yPosition = 10;
+
+    // Titre principal
+    pdf.setFontSize(16);
+    pdf.text("Rapport des Inscriptions CFEPD", 10, yPosition);
+    yPosition += 10;
+
+    // Date de génération
+    pdf.setFontSize(12);
+    pdf.text(`Date : ${new Date().toLocaleDateString()}`, 10, yPosition);
+    yPosition += 10;
+
+    // Parcourir les régions
+    Object.keys(regions).forEach((region) => {
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(`Région : ${region}`, 10, yPosition);
+      yPosition += 10;
+
+      // Centres dans la région
+      Object.keys(regions[region]).forEach((center) => {
+        pdf.setFontSize(12);
+        pdf.setFont("helvetica", "italic");
+        pdf.text(`Centre : ${center}`, 20, yPosition);
+        yPosition += 10;
+
+        // Détails des inscriptions
+        regions[region][center].forEach((inscription, index) => {
+          pdf.setFontSize(10);
+          pdf.setFont("helvetica", "normal");
+          pdf.text(
+            `${index + 1}. Nom : ${inscription.nom}, Prénom : ${inscription.prenom}, Établissement : ${inscription.nomEtablissement}`,
+            30,
+            yPosition
+          );
+
+          yPosition += 7;
+
+          // Gestion des sauts de page
+          if (yPosition > 280) {
+            pdf.addPage();
+            yPosition = 10;
+          }
+        });
+
+        yPosition += 5; // Espace entre les centres
+      });
+
+      yPosition += 10; // Espace entre les régions
+    });
+
+    // Sauvegarde du fichier
+    pdf.save("Rapport_CFEPD.pdf");
+  } catch (error) {
+    console.error("Erreur lors de la génération du rapport CFEPD :", error);
+    alert("Impossible de générer le rapport. Veuillez réessayer.");
+  }
+};
 
 
   return (
@@ -646,6 +578,7 @@ const handleDownloadReport = async () => {
           onClick={handleLogout}
           sx={{
             fontWeight: 'bold',
+            mr:2,
             boxShadow: 2,
             '&:hover': {
               backgroundColor: 'secondary.dark',
@@ -655,15 +588,24 @@ const handleDownloadReport = async () => {
           Déconnexion
         </Button>
 
-        <Button
+ 
+
+<Button
   variant="contained"
   color="primary"
-  onClick={handleDownloadReport}
-  sx={{ mr: 2 , ml:2}}
+  onClick={handleGenerateReportCFEPD}
 >
-  Télécharger le Rapport CFEPD
+Télécharger le Rapport CFEPD
 </Button>
 
+<Button
+  variant="contained"
+  color="primary"
+  sx={{ mt: 2, mb: 2, ml:2 }}
+  onClick={() => setCentreModalOpen(true)}
+>
+  Ajouter un Centre d'Examen
+</Button>
 
 {/* Résumé Statistiques */}
 <Paper
@@ -812,13 +754,13 @@ const handleDownloadReport = async () => {
         Rapport Complet
       </Button>
 
-      <Button
+      {/* <Button
   variant="contained"
   color="secondary"
-  onClick={() => handleOpenFilterModal(user._id)} // Utilisez `user._id` ou la clé correcte
+  onClick={() => handleOpenFilterModal(user._id)} 
 >
   Rapport Filtré
-</Button>
+</Button> */}
 
 
   
@@ -839,6 +781,76 @@ const handleDownloadReport = async () => {
           onPageChange={handlePageChange}
         />
       </Paper> 
+
+
+
+      <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+  <Typography variant="h6" gutterBottom>
+    Centres d'Examen
+  </Typography>
+  <Box>
+  <TextField
+    label="Rechercher un centre"
+    variant="outlined"
+    fullWidth
+    margin="normal"
+    value={searchTerm}
+    onChange={handleSearchChange}
+  />
+</Box>
+
+<TableContainer>
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>Nom</TableCell>
+        <TableCell>Région</TableCell>
+        <TableCell>Actions</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {paginatedCentres.map((centre) => (
+        <TableRow key={centre._id}>
+          <TableCell>{centre.nom}</TableCell>
+          <TableCell>{centre.region}</TableCell>
+          <TableCell>
+            {/* Actions comme modifier/supprimer */}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleEditCentre(centre)}
+              sx={{ mr: 1 }}
+            >
+              Modifier
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDeleteCentre(centre._id)}
+            >
+              Supprimer
+            </Button>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
+<TablePagination
+  rowsPerPageOptions={[5, 10, 25]}
+  component="div"
+  count={centres.filter((centre) =>
+    centre.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    centre.region.toLowerCase().includes(searchTerm.toLowerCase())
+  ).length}
+  rowsPerPage={rowsPerPageCentres}
+  page={currentPageCentres}
+  onPageChange={handlePageChange}
+/>
+
+</Paper>
+
 
       <Modal open={filterModalOpen} onClose={handleCloseFilterModal}>
   <Box
@@ -897,7 +909,7 @@ const handleDownloadReport = async () => {
 
 
     {/* Modal pour les filtres */}
-    <Modal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}>
+    {/* <Modal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}>
   <Box
     sx={{
       position: "absolute",
@@ -961,9 +973,188 @@ const handleDownloadReport = async () => {
       </Button>
     </Box>
   </Box>
+</Modal> */}
+
+
+
+
+<Modal open={centreModalOpen} onClose={() => setCentreModalOpen(false)}>
+
+  
+  
+  
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'white',
+      p: 4,
+      borderRadius: 2,
+      boxShadow: 24,
+    }}
+  >
+    <Typography variant="h6" gutterBottom>
+      Ajouter un Centre d'Examen
+    </Typography>
+    <Box>
+      <TextField
+        label="Nom du Centre"
+        name="nom"
+        fullWidth
+        margin="normal"
+        value={centreFormData.nom}
+        onChange={handleCentreChange}
+      />
+      <TextField
+        select
+        label="Région"
+        name="region"
+        fullWidth
+        margin="normal"
+        value={centreFormData.region}
+        onChange={handleCentreChange}
+      >
+        {['Agadez', 'Dosso', 'Maradi', 'Diffa', 'Zinder', 'Niamey', 'Tillabery', 'Tahoua'].map((region) => (
+          <MenuItem key={region} value={region}>
+            {region}
+          </MenuItem>
+        ))}
+      </TextField>
+    </Box>
+    <Box mt={2} textAlign="right">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleAddCentre}
+      >
+        Ajouter
+      </Button>
+    </Box>
+  </Box>
+</Modal>;
+
+
+{/* <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'white',
+      p: 4,
+      borderRadius: 2,
+      boxShadow: 24,
+    }}
+  >
+    <Typography variant="h6" gutterBottom>
+      Modifier un Centre d'Examen
+    </Typography>
+    <Box>
+      <TextField
+        label="Nom du Centre"
+        name="nom"
+        fullWidth
+        margin="normal"
+        value={editFormData.nom}
+        onChange={handleEditChange}
+      />
+      <TextField
+        select
+        label="Région"
+        name="region"
+        fullWidth
+        margin="normal"
+        value={editFormData.region}
+        onChange={handleEditChange}
+      >
+        {['Agadez', 'Dosso', 'Maradi', 'Diffa', 'Zinder', 'Niamey', 'Tillabery', 'Tahoua'].map((region) => (
+          <MenuItem key={region} value={region}>
+            {region}
+          </MenuItem>
+        ))}
+      </TextField>
+    </Box>
+    <Box mt={2} textAlign="right">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSaveCentre}
+      >
+        Sauvegarder
+      </Button>
+    </Box>
+  </Box>
+</Modal> */}
+
+<Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 400,
+      bgcolor: "white",
+      p: 4,
+      borderRadius: 2,
+      boxShadow: 24,
+    }}
+  >
+    <Typography variant="h6" gutterBottom>
+      Modifier le Centre d'Examen
+    </Typography>
+    <Box>
+      <TextField
+        label="Nom du Centre"
+        name="nom"
+        fullWidth
+        margin="normal"
+        value={editFormData.nom}
+        onChange={handleEditChange}
+      />
+      <TextField
+        select
+        label="Région"
+        name="region"
+        fullWidth
+        margin="normal"
+        value={editFormData.region}
+        onChange={handleEditChange}
+      >
+        {["Agadez", "Dosso", "Maradi", "Diffa", "Zinder", "Niamey", "Tillabery", "Tahoua"].map(
+          (region) => (
+            <MenuItem key={region} value={region}>
+              {region}
+            </MenuItem>
+          )
+        )}
+      </TextField>
+    </Box>
+    <Box mt={2} textAlign="right">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSaveCentre}
+        sx={{ mr: 1 }}
+      >
+        Enregistrer
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => setEditModalOpen(false)}
+      >
+        Annuler
+      </Button>
+    </Box>
+  </Box>
 </Modal>
 
-    
 
 
     </Box>

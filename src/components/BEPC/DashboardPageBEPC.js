@@ -11,7 +11,7 @@ const DashboardPageBEPC = () => {
 
   // Function to handle navigation
   const goToInscription = () => {
-    navigate('/inscription');  // Define the route for the inscription page
+    navigate('/inscription-bepc');  // Define the route for the inscription page
   };
 
      // Function to handle logout

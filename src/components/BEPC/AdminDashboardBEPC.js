@@ -15,6 +15,7 @@ import {
   Modal,
   TextField,
   Snackbar,
+  MenuItem,
   Alert,
 } from '@mui/material';
 import axios from 'axios';
@@ -22,17 +23,18 @@ import { jsPDF } from 'jspdf';
 
 const AdminDashboardBEPC = () => {
   const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 5;
-
+ // const [currentPage, setCurrentPage] = useState(0);
+  
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterValues, setFilterValues] = useState({
     region: '',
-    directionRegionale: '',
-    inspectionRegionale: '',
+    centreExamen: '',
     etablissement: '',
   });
+
+ 
+  const apiBaseUrl = process.env.REACT_APP_API_URL;
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -40,12 +42,148 @@ const AdminDashboardBEPC = () => {
     severity: 'info',
   });
 
+
+ 
+  const [openAddModal, setOpenAddModal] = useState(false);
+// État pour stocker les données du nouveau centre
+const [newCentre, setNewCentre] = useState({
+  nom: '',
+  region: '',
+});
+
+
+const [centresBepc, setCentresBepc] = useState([]);
+
+
+
+
+const [userPage, setUserPage] = useState(0); // Page actuelle des utilisateurs
+const [userRowsPerPage, setUserRowsPerPage] = useState(5); // Nombre de lignes par page
+
+const [centrePage, setCentrePage] = useState(0); // Page actuelle des centres
+const [centreRowsPerPage, setCentreRowsPerPage] = useState(5); // Nombre de lignes par page
+
+const [isEditing, setIsEditing] = useState(false); // Indique si on modifie un centre
+
+
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+
+  const fetchCentresBepc = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Récupérer le token du stockage local
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/bepc/centre-examen`, {
+        headers: { Authorization: `Bearer ${token}` }, // Ajouter le jeton d'autorisation
+      });
+      setCentresBepc(res.data); // Met à jour les centres BEPC dans le state
+    } catch (err) {
+      console.error("Erreur lors de la récupération des centres BEPC :", err);
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchCentresBepc(); // Récupère les centres BEPC au chargement du composant
+  }, []);
+
+
+  // const handleAddCentre = async (event) => {
+  //   event.preventDefault(); // Empêche le rafraîchissement de la page
+  
+  //   try {
+  //     const token = localStorage.getItem('token'); // Récupérer le token pour l'authentification
+  //     await axios.post(
+  //       `${process.env.REACT_APP_API_URL}/api/bepc/centre-examen`, // Remplacez par le bon endpoint pour les centres BEPC
+  //       newCentre, // Données du formulaire (nom et région)
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` }, // Inclure le token dans l'en-tête
+  //       }
+  //     );
+  
+  //     await fetchCentresBepc(); // Rechargez la liste des centres après l'ajout
+  
+  //     // Afficher une notification de succès
+  //     setSnackbar({
+  //       open: true,
+  //       message: "Centre BEPC ajouté avec succès.",
+  //       severity: "success",
+  //     });
+  
+  //     // Fermer le modal et réinitialiser le formulaire
+  //     setOpenAddModal(false);
+  //     setNewCentre({ nom: "", region: "" });
+  //   } catch (err) {
+  //     console.error("Erreur lors de l'ajout du centre BEPC :", err);
+  
+  //     // Afficher une notification d'erreur
+  //     setSnackbar({
+  //       open: true,
+  //       message: "Erreur lors de l'ajout du centre BEPC.",
+  //       severity: "error",
+  //     });
+  //   }
+  // };
+  
+  
+
   // Charger les utilisateurs BEPC
 // Charger les données des utilisateurs BEPC
+
+const handleAddCentre = async (event) => {
+  event.preventDefault(); // Empêche le rafraîchissement de la page
+
+  try {
+    const token = localStorage.getItem('token');
+    if (isEditing) {
+      // Modifier le centre existant
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/bepc/centre-examen/${newCentre._id}`,
+        newCentre, // Données modifiées
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSnackbar({
+        open: true,
+        message: 'Centre BEPC modifié avec succès.',
+        severity: 'success',
+      });
+    } else {
+      // Ajouter un nouveau centre
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/bepc/centre-examen`,
+        newCentre, // Données du formulaire
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSnackbar({
+        open: true,
+        message: 'Centre BEPC ajouté avec succès.',
+        severity: 'success',
+      });
+    }
+
+    await fetchCentresBepc(); // Rechargez la liste des centres après l'ajout/modification
+    setOpenAddModal(false); // Fermer le modal
+    setNewCentre({ nom: '', region: '' }); // Réinitialiser le formulaire
+    setIsEditing(false); // Réinitialiser le mode édition
+  } catch (err) {
+    console.error('Erreur lors de l\'opération sur le centre BEPC :', err);
+    setSnackbar({
+      open: true,
+      message: 'Erreur lors de l\'opération sur le centre BEPC.',
+      severity: 'error',
+    });
+  }
+};
+
+
+
+
+
 const fetchUsers = async () => {
   try {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/bepcadmin/agents`, {
@@ -91,28 +229,9 @@ useEffect(() => {
   };
 
   // // Générer un rapport complet
-  // const handleGenerateCompleteReport = async (userId) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/api/bepcadmin/agents/${userId}/report`,
-  //       {
-  //         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-  //       }
-  //     );
-  //     const { agent, inscriptions } = res.data;
-  //     const pdf = new jsPDF();
-  //     pdf.text(`Rapport de l'Agent : ${agent.name}`, 10, 10);
-  //     // Ajoutez des détails supplémentaires au PDF ici.
-  //     pdf.save(`Rapport_Agent_${agent.name}.pdf`);
-  //   } catch (err) {
-  //     console.error('Erreur lors de la génération du rapport complet :', err);
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Erreur lors de la génération du rapport.',
-  //       severity: 'error',
-  //     });
-  //   }
-  // };
+  
+
+  
 
 
   const handleGenerateCompleteReport = async (userId) => {
@@ -161,7 +280,7 @@ useEffect(() => {
       pdf.setFontSize(10);
       inscriptions.forEach((inscription, index) => {
         pdf.text(
-          `${index + 1}. ${inscription.prenom} ${inscription.nom}, Classe : ${inscription.classe}, ` +
+          `${index + 1}. ${inscription.prenom} ${inscription.nom} ` +
           `Montant : ${inscription.montantPaiement} FCFA, Région : ${inscription.regionEtablissement}`,
           10,
           yPosition
@@ -196,127 +315,9 @@ useEffect(() => {
   };
   
 
-  const handleOpenFilterModal = (userId) => {
-    setSelectedUser(userId);
-    setFilterModalOpen(true);
-  };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilterValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
-  // const handleGenerateFilteredReport = async () => {
-  //   try {
-  //     const res = await axios.post(
-  //       `${process.env.REACT_APP_API_URL}/api/bepcadmin/agents/${selectedUser}/report/filtered`,
-  //       filterValues,
-  //       {
-  //         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-  //       }
-  //     );
-  //     const { agent, inscriptions } = res.data;
-  //     const pdf = new jsPDF();
-  //     pdf.text(`Rapport Filtré de l'Agent : ${agent.name}`, 10, 10);
-  //     // Ajoutez des détails supplémentaires au PDF ici.
-  //     pdf.save(`Rapport_Filtré_Agent_${agent.name}.pdf`);
-  //     setFilterModalOpen(false);
-  //   } catch (err) {
-  //     console.error('Erreur lors de la génération du rapport filtré :', err);
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Erreur lors de la génération du rapport filtré.',
-  //       severity: 'error',
-  //     });
-  //   }
-  // };
-  const handleGenerateFilteredReport = async () => {
-    if (!selectedUser) {
-      setSnackbar({
-        open: true,
-        message: 'Veuillez sélectionner un utilisateur avant de générer un rapport.',
-        severity: 'warning',
-      });
-      return;
-    }
-  
-    try {
-      console.log("Filtres envoyés :", filterValues); // Debug pour vérifier les filtres envoyés
-  
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/bepcadmin/agents/${selectedUser}/report/filtered`,
-        filterValues,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      );
-  
-      const { agent, inscriptions } = res.data;
-  
-      // Initialisation du PDF
-      const pdf = new jsPDF();
-      let yPosition = 10;
-  
-      // En-tête du rapport
-      pdf.setFontSize(16);
-      pdf.text(`Rapport Filtré de l'Agent : ${agent.name}`, 10, yPosition);
-      yPosition += 10;
-  
-      pdf.setFontSize(12);
-      pdf.text(`Téléphone : ${agent.phone}`, 10, yPosition);
-      yPosition += 7;
-  
-      pdf.text(`Total des saisies : ${agent.totalSaisies}`, 10, yPosition);
-      yPosition += 7;
-  
-      pdf.text(`Montant total collecté : ${agent.montantTotal} FCFA`, 10, yPosition);
-      yPosition += 10;
-  
-      // Tableau des inscriptions
-      pdf.setFontSize(14);
-      pdf.text('Détails des inscriptions filtrées :', 10, yPosition);
-      yPosition += 10;
-  
-      pdf.setFontSize(10);
-      inscriptions.forEach((inscription, index) => {
-        pdf.text(
-          `${index + 1}. ${inscription.prenom} ${inscription.nom}, Classe : ${inscription.classe}, ` +
-          `Montant : ${inscription.montantPaiement} FCFA, Région : ${inscription.regionEtablissement}`,
-          10,
-          yPosition
-        );
-        yPosition += 7;
-  
-        // Vérifiez si la page a suffisamment d’espace
-        if (yPosition > 280) {
-          pdf.addPage();
-          yPosition = 10;
-        }
-      });
-  
-      // Enregistrer le PDF
-      pdf.save(`Rapport_Filtré_Agent_${agent.name}.pdf`);
-  
-      setSnackbar({
-        open: true,
-        message: 'Rapport filtré généré avec succès.',
-        severity: 'success',
-      });
-  
-      setFilterModalOpen(false); // Fermez le modal après la génération du rapport
-    } catch (err) {
-      console.error('Erreur lors de la génération du rapport filtré :', err);
-  
-      setSnackbar({
-        open: true,
-        message: 'Erreur lors de la génération du rapport filtré.',
-        severity: 'error',
-      });
-    }
-  };
+
 
   const handleLogout = () => {
     // Supprime le token du stockage local
@@ -328,441 +329,117 @@ useEffect(() => {
 
 
 
-  
-  // const handleDownloadReport = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/api/bepc/inscription/report/inscriptions`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       }
-  //     );
-  
-  //     const inscriptions = response.data;
-  
-  //     // Regrouper les inscriptions par région, direction régionale et inspection régionale
-  //     const groupedData = inscriptions.reduce((acc, inscription) => {
-  //       const { regionEtablissement, directionRegionale, inspectionRegionale } = inscription;
-  
-  //       if (!acc[regionEtablissement]) {
-  //         acc[regionEtablissement] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale]) {
-  //         acc[regionEtablissement][directionRegionale] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale][inspectionRegionale]) {
-  //         acc[regionEtablissement][directionRegionale][inspectionRegionale] = [];
-  //       }
-  
-  //       acc[regionEtablissement][directionRegionale][inspectionRegionale].push(inscription);
-  
-  //       return acc;
-  //     }, {});
-  
-  //     const pdf = new jsPDF('landscape', 'mm', 'a4');
-  
-  //     // En-tête professionnel
-  //     pdf.setFontSize(12);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.text("Ministère de l'Éducation Nationale", 10, 10);
-  //     pdf.text("Rapport des Inscriptions BEPC par Région", 105, 20, { align: 'center' });
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.setFontSize(10);
-  //     pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
-  
-  //     let startY = 30;
-  
-  //     // Générer le rapport hiérarchisé
-  //     for (const [region, directions] of Object.entries(groupedData)) {
-  //       pdf.setFont('helvetica', 'bold');
-  //       pdf.text(`Région : ${region}`, 10, startY);
-  //       startY += 10;
-  
-  //       for (const [direction, inspections] of Object.entries(directions)) {
-  //         pdf.setFont('helvetica', 'italic');
-  //         pdf.text(`Direction Régionale : ${direction}`, 20, startY);
-  //         startY += 10;
-  
-  //         for (const [inspection, etablissementData] of Object.entries(inspections)) {
-  //           pdf.setFont('helvetica', 'normal');
-  //           pdf.text(`Inspection Régionale : ${inspection}`, 30, startY);
-  //           startY += 10;
-  
-  //           // Ajouter les en-têtes du tableau
-  //           pdf.setFont('helvetica', 'bold');
-  //           const headers = [
-  //             "Matricule",
-  //             "Nom",
-  //             "Prénom",
-  //             "Classe",
-  //             "Téléphone Parent",
-  //             "Montant",
-  //           ];
-  //           const startX = 40;
-  //           headers.forEach((header, index) => {
-  //             pdf.text(header, startX + index * 35, startY);
-  //           });
-  
-  //           pdf.setFont('helvetica', 'normal');
-  //           startY += 10;
-  
-  //           // Ajouter les données des inscriptions
-  //           etablissementData.forEach((inscription) => {
-  //             pdf.text(inscription.matricule, startX, startY);
-  //             pdf.text(inscription.nom, startX + 35, startY);
-  //             pdf.text(inscription.prenom, startX + 70, startY);
-  //             pdf.text(inscription.classe, startX + 105, startY);
-  //             pdf.text(inscription.telephoneParent, startX + 140, startY);
-  //             pdf.text(`${inscription.montantPaiement} FCFA`, startX + 175, startY);
-  
-  //             startY += 10;
-  //             if (startY > 190) {
-  //               pdf.addPage();
-  //               startY = 20;
-  //             }
-  //           });
-  
-  //           startY += 10;
-  //         }
-  //       }
-  //     }
-  
-  //     pdf.save('Rapport_Inscriptions_Par_Region.pdf');
-  
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Rapport téléchargé avec succès.',
-  //       severity: 'success',
-  //     });
-  //   } catch (error) {
-  //     console.error('Erreur lors du téléchargement du rapport:', error);
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Erreur lors du téléchargement du rapport.',
-  //       severity: 'error',
-  //     });
-  //   }
-  // };
-  
-
-  // const handleDownloadReport = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/api/bepc/inscription/report/inscriptions`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       }
-  //     );
-  
-  //     const inscriptions = response.data;
-  
-  //     // Regrouper les inscriptions par région, direction régionale, inspection régionale, établissement et classe
-  //     const groupedData = inscriptions.reduce((acc, inscription) => {
-  //       const { regionEtablissement, directionRegionale, inspectionRegionale, nomEtablissement, classe } = inscription;
-  
-  //       if (!acc[regionEtablissement]) {
-  //         acc[regionEtablissement] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale]) {
-  //         acc[regionEtablissement][directionRegionale] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale][inspectionRegionale]) {
-  //         acc[regionEtablissement][directionRegionale][inspectionRegionale] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement]) {
-  //         acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement] = {};
-  //       }
-  
-  //       if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe]) {
-  //         acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe] = [];
-  //       }
-  
-  //       acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe].push(inscription);
-  
-  //       return acc;
-  //     }, {});
-  
-  //     const pdf = new jsPDF('landscape', 'mm', 'a4');
-  
-  //     // En-tête professionnel
-  //     pdf.setFontSize(12);
-  //     pdf.setFont('helvetica', 'bold');
-  //     pdf.text("Ministère de l'Éducation Nationale", 10, 10);
-  //     pdf.text("Rapport des Inscriptions BEPC par Région", 105, 20, { align: 'center' });
-  //     pdf.setFont('helvetica', 'normal');
-  //     pdf.setFontSize(10);
-  //     pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, 270, 10, { align: 'right' });
-  
-  //     let startY = 30;
-  
-  //     // Générer le rapport hiérarchisé
-  //     for (const [region, directions] of Object.entries(groupedData)) {
-  //       pdf.setFont('helvetica', 'bold');
-  //       pdf.text(`Région : ${region}`, 10, startY);
-  //       startY += 10;
-  
-  //       for (const [direction, inspections] of Object.entries(directions)) {
-  //         pdf.setFont('helvetica', 'italic');
-  //         pdf.text(`Direction Régionale : ${direction}`, 20, startY);
-  //         startY += 10;
-  
-  //         for (const [inspection, etablissements] of Object.entries(inspections)) {
-  //           pdf.setFont('helvetica', 'normal');
-  //           pdf.text(`Inspection Régionale : ${inspection}`, 30, startY);
-  //           startY += 10;
-  
-  //           for (const [etablissement, classes] of Object.entries(etablissements)) {
-  //             pdf.setFont('helvetica', 'bold');
-  //             pdf.text(`Établissement : ${etablissement}`, 40, startY);
-  //             startY += 10;
-  
-  //             for (const [classe, students] of Object.entries(classes)) {
-  //               pdf.setFont('helvetica', 'italic');
-  //               pdf.text(`Classe : ${classe}`, 50, startY);
-  //               startY += 10;
-  
-  //               // Ajouter les en-têtes du tableau
-  //               pdf.setFont('helvetica', 'bold');
-  //               const headers = [
-  //                 "Matricule",
-  //                 "Nom",
-  //                 "Prénom",
-  //                 "Date Naiss.",
-  //                 "Lieu Naiss.",
-  //                 "Genre",
-  //                 "Téléphone Parent",
-  //                 "Montant",
-  //               ];
-  //               const startX = 60;
-  //               headers.forEach((header, index) => {
-  //                 pdf.text(header, startX + index * 30, startY);
-  //               });
-  
-  //               pdf.setFont('helvetica', 'normal');
-  //               startY += 10;
-  
-  //               // Ajouter les données des inscriptions
-  //               students.forEach((inscription) => {
-  //                 pdf.text(inscription.matricule, startX, startY);
-  //                 pdf.text(inscription.nom, startX + 30, startY);
-  //                 pdf.text(inscription.prenom, startX + 60, startY);
-  //                 pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 90, startY);
-  //                 pdf.text(inscription.lieuNaissance, startX + 120, startY);
-  //                 pdf.text(inscription.genre, startX + 150, startY);
-  //                 pdf.text(inscription.telephoneParent, startX + 180, startY);
-  //                 pdf.text(`${inscription.montantPaiement} FCFA`, startX + 210, startY);
-  
-  //                 startY += 10;
-  //                 if (startY > 190) {
-  //                   pdf.addPage();
-  //                   startY = 20;
-  //                 }
-  //               });
-  
-  //               startY += 10;
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  
-  //     pdf.save('Rapport_Inscriptions_Par_Region.pdf');
-  
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Rapport téléchargé avec succès.',
-  //       severity: 'success',
-  //     });
-  //   } catch (error) {
-  //     console.error('Erreur lors du téléchargement du rapport:', error);
-  //     setSnackbar({
-  //       open: true,
-  //       message: 'Erreur lors du téléchargement du rapport.',
-  //       severity: 'error',
-  //     });
-  //   }
-  // };
-  
-
-
-
-
-
-
-  const handleDownloadReport = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/bepc/inscription/report/inscriptions`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-  
-      const inscriptions = response.data;
-  
-      const pdf = new jsPDF('landscape', 'mm', 'a4');
-      const marginTop = 20; // Marge supérieure
-      const marginBottom = 20; // Marge inférieure
-      const marginLeft = 10; // Marge gauche
-      const marginRight = 10; // Marge droite
-      const pageHeight = pdf.internal.pageSize.height; // Hauteur de la page
-      const pageWidth = pdf.internal.pageSize.width; // Largeur de la page
-      const contentHeight = pageHeight - marginTop - marginBottom; // Hauteur utilisable
-      let startY = marginTop;
-  
-      // Fonction pour passer à une nouvelle page
-      const addNewPage = () => {
-        pdf.addPage();
-        startY = marginTop;
-      };
-  
-      // En-tête de la page
-      const addPageHeader = () => {
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text("Ministère de l'Éducation Nationale", marginLeft, startY);
-        pdf.text(
-          "Rapport des Inscriptions BEPC avec Paiement Confirmé",
-          pageWidth / 2,
-          startY + 10,
-          { align: 'center' }
-        );
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(10);
-        pdf.text(`Date de génération : ${new Date().toLocaleDateString()}`, pageWidth - marginRight, startY, {
-          align: 'right',
-        });
-        startY += 30; // Ajuster la position après l'en-tête
-      };
-  
-      // Appeler l'en-tête sur la première page
-      addPageHeader();
-  
-      // Générer le rapport hiérarchisé
-      for (const [region, directions] of Object.entries(
-        inscriptions.reduce((acc, inscription) => {
-          const { regionEtablissement, directionRegionale, inspectionRegionale, nomEtablissement, classe } =
-            inscription;
-  
-          if (!acc[regionEtablissement]) acc[regionEtablissement] = {};
-          if (!acc[regionEtablissement][directionRegionale]) acc[regionEtablissement][directionRegionale] = {};
-          if (!acc[regionEtablissement][directionRegionale][inspectionRegionale])
-            acc[regionEtablissement][directionRegionale][inspectionRegionale] = {};
-          if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement])
-            acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement] = {};
-          if (!acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe])
-            acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe] = [];
-          acc[regionEtablissement][directionRegionale][inspectionRegionale][nomEtablissement][classe].push(inscription);
-          return acc;
-        }, {})
-      )) {
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(`Région : ${region}`, marginLeft, startY);
-        startY += 10;
-  
-        for (const [direction, inspections] of Object.entries(directions)) {
-          if (startY + 20 > contentHeight) {
-            addNewPage();
-            addPageHeader();
-          }
-          pdf.setFont('helvetica', 'italic');
-          pdf.text(`Direction Régionale : ${direction}`, marginLeft + 10, startY);
-          startY += 10;
-  
-          for (const [inspection, etablissements] of Object.entries(inspections)) {
-            if (startY + 20 > contentHeight) {
-              addNewPage();
-              addPageHeader();
-            }
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Inspection Régionale : ${inspection}`, marginLeft + 20, startY);
-            startY += 10;
-  
-            for (const [etablissement, classes] of Object.entries(etablissements)) {
-              if (startY + 20 > contentHeight) {
-                addNewPage();
-                addPageHeader();
-              }
-              pdf.setFont('helvetica', 'bold');
-              pdf.text(`Établissement : ${etablissement}`, marginLeft + 30, startY);
-              startY += 10;
-  
-              for (const [classe, students] of Object.entries(classes)) {
-                if (startY + 20 > contentHeight) {
-                  addNewPage();
-                  addPageHeader();
-                }
-                pdf.setFont('helvetica', 'italic');
-                pdf.text(`Classe : ${classe}`, marginLeft + 40, startY);
-                startY += 10;
-  
-                // Ajouter les en-têtes du tableau
-                const headers = [
-                  "Matricule",
-                  "Nom",
-                  "Prénom",
-                  "Date Naiss.",
-                  "Lieu Naiss.",
-                  "Genre",
-                  "Téléphone Parent",
-                  "Montant",
-                ];
-                const startX = marginLeft + 50;
-  
-                headers.forEach((header, index) => {
-                  pdf.text(header, startX + index * 30, startY);
-                });
-  
-                startY += 10;
-  
-                // Ajouter les données des inscriptions
-                students.forEach((inscription) => {
-                  if (startY + 10 > contentHeight) {
-                    addNewPage();
-                    addPageHeader();
-                  }
-                  pdf.text(inscription.matricule, startX, startY);
-                  pdf.text(inscription.nom, startX + 30, startY);
-                  pdf.text(inscription.prenom, startX + 60, startY);
-                  pdf.text(new Date(inscription.dateNaissance).toLocaleDateString(), startX + 90, startY);
-                  pdf.text(inscription.lieuNaissance, startX + 120, startY);
-                  pdf.text(inscription.genre, startX + 150, startY);
-                  pdf.text(inscription.telephoneParent, startX + 180, startY);
-                  pdf.text(`${inscription.montantPaiement} FCFA`, startX + 210, startY);
-  
-                  startY += 10;
-                });
-  
-                startY += 10;
-              }
-            }
-          }
-        }
+const handleDownloadReport = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/bepcadmin/report`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
+    );
+
+    const inscriptions = response.data;
+    const pdf = new jsPDF();
+
+    let yPosition = 10;
+
+    // Titre du rapport
+    pdf.setFontSize(16);
+    pdf.text("Rapport des Inscriptions BEPC", 10, yPosition);
+    yPosition += 10;
+
+    // Date de génération
+    pdf.setFontSize(12);
+    pdf.text(`Date : ${new Date().toLocaleDateString()}`, 10, yPosition);
+    yPosition += 10;
+
+    // Parcourir les données par région et centre d'examen
+    const regions = [...new Set(inscriptions.map((ins) => ins.regionEtablissement))];
+    regions.forEach((region) => {
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(`Région : ${region}`, 10, yPosition);
+      yPosition += 10;
+
+      const centres = inscriptions
+        .filter((ins) => ins.regionEtablissement === region)
+        .reduce((acc, ins) => {
+          const centreNom = ins.centreExamen?.nom || "Non spécifié";
+          if (!acc[centreNom]) acc[centreNom] = [];
+          acc[centreNom].push(ins);
+          return acc;
+        }, {});
+
+      Object.keys(centres).forEach((centre) => {
+        pdf.setFontSize(12);
+        pdf.setFont("helvetica", "italic");
+        pdf.text(`Centre : ${centre}`, 20, yPosition);
+        yPosition += 10;
+
+        centres[centre].forEach((ins, index) => {
+          pdf.setFontSize(10);
+          pdf.setFont("helvetica", "normal");
+          pdf.text(
+            `${index + 1}. Nom : ${ins.nom}, Prénom : ${ins.prenom}, Établissement : ${ins.nomEtablissement}, Centre d'Examen : ${ins.centreExamen?.nom || 'Non spécifié'}`,
+            30,
+            yPosition
+          );
+          
+          yPosition += 7;
+
+          // Vérifiez si on dépasse la page
+          if (yPosition > 280) {
+            pdf.addPage();
+            yPosition = 10;
+          }
+        });
+
+        yPosition += 5; // Espace entre les centres
+      });
+
+      yPosition += 10; // Espace entre les régions
+    });
+
+    // Enregistrement du PDF
+    pdf.save("Rapport_BEPC.pdf");
+  } catch (error) {
+    console.error("Erreur lors de la génération du PDF :", error);
+    alert("Impossible de générer le PDF. Veuillez réessayer.");
+  }
+};
+
+
+
+
+
+  const handleEditCentre = (centre) => {
+    setNewCentre(centre); // Charger les données du centre à modifier
+    setIsEditing(true); // Passer en mode modification
+    setOpenAddModal(true); // Ouvrir le modal
+  };
+
+
+
   
-      pdf.save('Rapport_Inscriptions_Par_Region.pdf');
   
+  const handleDeleteCentre = async (centreId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/bepc/centre-examen/${centreId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      await fetchCentresBepc(); // Recharger la liste après suppression
       setSnackbar({
         open: true,
-        message: 'Rapport téléchargé avec succès.',
+        message: 'Centre BEPC supprimé avec succès.',
         severity: 'success',
       });
-    } catch (error) {
-      console.error('Erreur lors du téléchargement du rapport:', error);
+    } catch (err) {
+      console.error('Erreur lors de la suppression du centre BEPC :', err);
       setSnackbar({
         open: true,
-        message: 'Erreur lors du téléchargement du rapport.',
+        message: 'Erreur lors de la suppression du centre BEPC.',
         severity: 'error',
       });
     }
@@ -810,7 +487,7 @@ useEffect(() => {
       </Box>
 
       {/* Bouton de téléchargement du rapport */}
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 3}}>
         <Button
           variant="contained"
           color="primary"
@@ -818,6 +495,19 @@ useEffect(() => {
         >
           Télécharger le Rapport BEPC
         </Button>
+
+        <Button
+        sx={{ ml: 2}}
+  variant="contained"
+  color="primary"
+  onClick={() => setOpenAddModal(true)}
+>
+  Ajouter un Centre BEPC
+</Button>
+
+
+
+
       </Box>
 
       {/* Résumé des statistiques */}
@@ -941,7 +631,8 @@ useEffect(() => {
             </TableHead>
             <TableBody>
               {users
-                .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                .slice(userPage * userRowsPerPage, userPage * userRowsPerPage + userRowsPerPage)
+
                 .map((user) => (
                   <TableRow key={user._id}>
                     <TableCell>{user.name}</TableCell>
@@ -957,6 +648,7 @@ useEffect(() => {
                     <TableCell>{user.montantTotal || 0} FCFA</TableCell>
                     <TableCell>
                       <Button
+                      sx={{ mr: 2}}
                         variant="contained"
                         color={user.isActive ? 'success' : 'error'}
                         onClick={() => toggleUserStatus(user._id)}
@@ -964,19 +656,13 @@ useEffect(() => {
                         {user.isActive ? 'Désactiver' : 'Activer'}
                       </Button>
                       <Button
+                      sx={{ mr: 2}}
                         variant="contained"
                         color="primary"
                         onClick={() => handleGenerateCompleteReport(user._id)}
                       >
                         Rapport Complet
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => handleOpenFilterModal(user._id)}
-                      >
-                        Rapport Filtré
-                      </Button>
+                      </Button>                      
                     </TableCell>
                   </TableRow>
                 ))}
@@ -987,57 +673,116 @@ useEffect(() => {
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={users.length}
-          rowsPerPage={rowsPerPage}
-          page={currentPage}
-          onPageChange={(event, newPage) => setCurrentPage(newPage)}
+          rowsPerPage={userRowsPerPage}
+          page={userPage}
+          onPageChange={(event, newPage) => setUserPage(newPage)}
+          onRowsPerPageChange={(event) => setUserRowsPerPage(parseInt(event.target.value, 10))}
         />
-      </Paper>
 
-      {/* Modal de filtrage */}
-      <Modal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}>
-        <Box sx={{ p: 4, bgcolor: 'white', borderRadius: 2, boxShadow: 24 }}>
-          <Typography variant="h6" gutterBottom>
-            Filtrer les données avant le rapport
-          </Typography>
-          <TextField
-            label="Région"
-            name="region"
-            fullWidth
-            margin="normal"
-            value={filterValues.region}
-            onChange={handleFilterChange}
-          />
-          <TextField
-            label="Direction Régionale"
-            name="directionRegionale"
-            fullWidth
-            margin="normal"
-            value={filterValues.directionRegionale}
-            onChange={handleFilterChange}
-          />
-          <TextField
-            label="Inspection Régionale"
-            name="inspectionRegionale"
-            fullWidth
-            margin="normal"
-            value={filterValues.inspectionRegionale}
-            onChange={handleFilterChange}
-          />
-          <TextField
-            label="Établissement"
-            name="etablissement"
-            fullWidth
-            margin="normal"
-            value={filterValues.etablissement}
-            onChange={handleFilterChange}
-          />
-          <Box mt={2} textAlign="right">
-            <Button variant="contained" color="primary" onClick={handleGenerateFilteredReport}>
-              Générer le Rapport
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+
+      </Paper>
+      
+
+      <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+  <Typography variant="h6">Liste des centres BEPC</Typography>
+  <TableContainer>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Nom du Centre</TableCell>
+          <TableCell>Région</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {centresBepc
+          .slice(centrePage * centreRowsPerPage, centrePage * centreRowsPerPage + centreRowsPerPage)
+
+          .map((centre) => (
+            <TableRow key={centre._id}>
+              <TableCell>{centre.nom}</TableCell>
+              <TableCell>{centre.region}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleEditCentre(centre)}
+                  sx={{ mr: 1 }}
+                >
+                  Modifier
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDeleteCentre(centre._id)}
+                >
+                  Supprimer
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+  <TablePagination
+  rowsPerPageOptions={[5, 10, 15]}
+  component="div"
+  count={centresBepc.length}
+  rowsPerPage={centreRowsPerPage}
+  page={centrePage}
+  onPageChange={(event, newPage) => setCentrePage(newPage)}
+  onRowsPerPageChange={(event) => setCentreRowsPerPage(parseInt(event.target.value, 10))}
+/>
+</Paper>
+
+
+    
+
+
+
+
+
+
+
+
+<Modal open={openAddModal} onClose={() => setOpenAddModal(false)}>
+  <Box sx={{ padding: 4, bgcolor: 'white', borderRadius: 2 }}>
+    <Typography variant="h5" gutterBottom>
+      Ajouter un Centre BEPC
+    </Typography>
+    <form onSubmit={handleAddCentre}>
+  <TextField
+    label="Nom du Centre"
+    name="nom"
+    value={newCentre.nom}
+    onChange={(e) => setNewCentre({ ...newCentre, nom: e.target.value })}
+    fullWidth
+    required
+  />
+  <TextField
+    select
+    label="Région"
+    name="region"
+    value={newCentre.region}
+    onChange={(e) => setNewCentre({ ...newCentre, region: e.target.value })}
+    fullWidth
+    required
+  >
+    {['Agadez', 'Dosso', 'Maradi', 'Diffa', 'Zinder', 'Niamey', 'Tillabery', 'Tahoua'].map((region) => (
+      <MenuItem key={region} value={region}>
+        {region}
+      </MenuItem>
+    ))}
+  </TextField>
+  <Button variant="contained" type="submit" sx={{ marginTop: 2 }}>
+    {isEditing ? 'Modifier' : 'Enregistrer'}
+  </Button>
+</form>
+
+  </Box>
+</Modal>
+
+
 
       {/* Snackbar */}
       <Snackbar

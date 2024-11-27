@@ -93,11 +93,11 @@ const RegisterPageCFEPD = () => {
             >
               S'inscrire
             </Button>
-            <Link to="/login-cfepd" style={{ textDecoration: 'none', color: '#FF8C00' }}>
+            {/* <Link to="/login-cfepd" style={{ textDecoration: 'none', color: '#FF8C00' }}>
               <Typography variant="body2" align="center">
                 Déjà inscrit ? Connectez-vous.
               </Typography>
-            </Link>
+            </Link> */}
           </Box>
         </Box>
       </Paper>

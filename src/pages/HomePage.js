@@ -1,1012 +1,4 @@
 
-// import React, { useState, useEffect, useContext } from 'react';
-// import { Link } from 'react-router-dom';
-// import SlidingPageDrawer from '../components/SlidingPageDrawer';
-// import { Box, Typography, Button, Collapse, Grid,Paper, Card, CardContent, IconButton, Divider, Container, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-// import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
-// //import logo from '../assets/images/armoiries-niger.png';  // Assurez-vous que le chemin est correct
-// import logo1 from '../assets/images/logo-ministere.png';  // Assurez-vous que le chemin est correct
-// //import PlanningMinistre from './ActivityMinistre';
-// import NewsPage from './NewsPage';
-// import axios from 'axios';
-// import { AuthContext } from '../context/AuthContext'; // Importez le contexte
-// import { useNavigate } from 'react-router-dom';
-// import AssignmentIcon from '@mui/icons-material/Assignment';
-// import FileCopyIcon from '@mui/icons-material/FileCopy';
-// import MessageMinistreModal from './MessageMinistreModal'; // Assure-toi que le chemin est correct
-// import ministerPhoto from '../assets/images/elisa-men.jpg';
-
-
-// const HomePage = () => {
-//   const { user } = useContext(AuthContext); // Récupérer l'utilisateur depuis le contexte
-//   const [openDrawer, setOpenDrawer] = useState(false);
-//   const [currentDrawerContent, setCurrentDrawerContent] = useState(null);
-//   const [sectionCards, setSectionCards] = useState([]);
-//   const [articles, setArticles] = useState([]); // État pour stocker les articles récupérés
-//   const [openConfigModal, setOpenConfigModal] = useState(false); // État pour le modal de configuration
-//   //const [pageTitle, setPageTitle] = useState('');
-//   const [drawerTitle, setDrawerTitle] = useState('');
-
-//   const apiBaseUrl = process.env.REACT_APP_API_URL;
-  
-//   const navigate = useNavigate();
-
-//   //const { setUser } = useContext(AuthContext);  // Assuming you manage user context
-  
-
-//   const [showObjectives, setShowObjectives] = useState(false);
-
-//   // Fonction pour basculer l'affichage des objectifs
-//   const toggleObjectives = () => {
-//     setShowObjectives(!showObjectives);
-//   };
-
-
-//   useEffect(() => {
-//     const fetchSectionCards = async () => {
-//       try {
-//         const response = await axios.get(`${apiBaseUrl}/api/section-cards`);
-//         setSectionCards(response.data);
-//       } catch (error) {
-//         console.error("Erreur lors de la récupération des données", error);
-//       }
-//     };
-
-//     fetchSectionCards();
-//   }, [apiBaseUrl]);
-
-//   useEffect(() => {
-//     // Ouvrir le modal si l'utilisateur est un établissement non configuré
-//     if (user && user.role === 'Etablissement' && !user.isConfigured) {
-//       setOpenConfigModal(true);
-//     }
-//   }, [user]);
-
- 
-
-//   useEffect(() => {
-//     const fetchSectionCards = async () => {
-//       try {
-//         const response = await axios.get(`${apiBaseUrl}/api/section-cards`);
-//         setSectionCards(response.data);
-//       } catch (error) {
-//         console.error("Erreur lors de la récupération des données", error);
-//       }
-//     };
-  
-//     fetchSectionCards();
-//   }, [apiBaseUrl]);
-  
-  
-  
-//   const handleOpenDrawer = async (content, sectionId) => {
-//     console.log("Opening drawer for:", content);
-//     setCurrentDrawerContent(content);
-//     setOpenDrawer(true);
-  
-//     // Trouver le titre de la page de la section actuelle
-//     const section = sectionCards.find((card) => card._id === sectionId);
-//     const pageTitle = section ? section.titlePage : '';
-  
-//     // Passer le titre de la page au Drawer
-//     setDrawerTitle(pageTitle);
-  
-//     // Si la section est 'news', récupérer les articles associés
-//     if (content === 'news' && sectionId) {
-//       try {
-//         const response = await axios.get(`${apiBaseUrl}/api/section-articles?section=${sectionId}`);
-//         setArticles(response.data); // Stocker les articles récupérés
-//       } catch (error) {
-//         console.error("Erreur lors de la récupération des articles", error);
-//       }
-//     }
-//   };
-  
-
-
-  
-//   const handleCloseDrawer = () => {
-//     setOpenDrawer(false);
-//   };
-
-//   const handleCloseConfigModal = () => {
-//     setOpenConfigModal(false);
-//   };
-
-
-// //==========Ajout
-//   const handleAccess = (action) => {
-//     if (user?.role !== 'Parent') {
-//       // Rediriger vers la page de connexion avec l'intention et le rôle de 'Parent'
-//       navigate('/login', { state: { intendedAction: action, role: 'Parent' } });
-//     } else {
-//       // Si le rôle est 'Parent', autoriser l'accès
-//       if (action === 'consult') {
-//         navigate('/bulletin-acces');
-//       } else if (action === 'download') {
-//         navigate('/download-bulletin');
-//       }
-//     }
-//   };
-  
-
- 
-
-//   return (
-//     <Box sx={{ padding: '20px 0', backgroundColor: '#B2DFDB' }}>
-     
-// <Box sx={{ textAlign: 'center', marginBottom: '40px', padding: '20px', backgroundColor: '#004d40', color: '#fff', borderRadius: '8px' }}>
-
-//     <Box
-//       sx={{
-//         backgroundColor: '#004d40',
-//         color: '#fff',
-//         marginTop:'20px',
-//         // padding: '40px',
-//         borderRadius: '10px',
-//         position: 'relative',
-//       }}
-//     >      
-// <img
-//   src={logo1}
-//   alt="Armoiries du Niger"
-//   style={{
-//     height: '250px',
-//     '@media (max-width:960px)': { // Taille pour md et sm
-//       height: '180px', // Taille réduite pour les écrans moyens et petits
-//     },
-//     '@media (max-width:600px)': { // Taille pour xs
-//       height: '100px', // Taille encore plus réduite pour les écrans très petits
-//     },
-//   }}
-// />
-// <Typography
-//   variant="h7"
-//   component="h1"
-//   sx={{
-//     marginTop: '20px',
-//     fontWeight: 'bold',
-//     fontSize: {
-//       xs: '1.5rem', // Taille réduite pour les petits écrans
-//       sm: '2rem',   // Taille un peu plus grande pour les écrans small
-//       md: '2.5rem', // Taille ajustée pour les écrans moyens
-//       lg: '2.7rem',   // Taille par défaut pour les grands écrans
-//     },
-//   }}
-// >
-// L'éducation universelle et participative pour un Niger inclusif
-// </Typography>
-
-
-
-
-
-
-
-// {/* Ajoute le bouton "Message du Ministre" ici */}
-// <MessageMinistreModal />
-
-
-// <Typography
-//   variant="h6"
-//   sx={{
-//     color: '#e0f7fa',
-//     marginBottom: '20px',
-//     fontSize: {
-//       xs: '0.8rem', // Taille réduite pour les petits écrans
-//       sm: '1rem',   // Taille pour les écrans small
-//       md: '1.2rem', // Taille pour les écrans moyens
-//       lg: '1.5rem', // Taille par défaut pour les grands écrans
-//     },
-//   }}
-// >
-//   Bienvenue sur la plateforme officielle du Ministère de l'Education Nationale, de l'Alphabétisation, de l'Enseignement Professionnel et de la Promotion des Langues Nationales.
-// </Typography>
-
-//       {/* Bouton pour afficher les objectifs dans le coin droit */}
-//       <Box sx={{ position: 'absolute', top: '20px', right: '20px' }}>
-//         <Button
-//           // variant="contained"
-//           // color="secondary"
-//           onClick={toggleObjectives}        
-//           variant="outlined" color="inherit" 
-//           sx={{ fontSize: '1.1rem', marginRight: '10px',
-
-//             transition: 'transform 0.3s ease-in-out',
-//             '&:hover': {
-//               backgroundColor: '#00acc1',
-//               transform: 'scale(1.1)',
-//             },
-//             display: { xs: 'none', md: 'block' }, // Masquer en petit écran (xs)
-
-
-
-
-//            }}
-//         >
-//           Objectifs du Portail
-//         </Button>
-//       </Box>
-
-//       {/* Collapse pour afficher le message juste en dessous du bouton */}
-//       <Collapse in={showObjectives} sx={{ position: 'absolute', top: '70px', right: '20px', transition: 'all 0.5s ease' }}>
-//         <Box
-//           sx={{
-//             marginTop:'10px',
-//             padding: '10px',
-//             backgroundColor: '#fff',
-//             borderRadius: '5px',
-//             color: '#000',
-//             width: '400px',
-//             boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
-//             animation: 'slide-down 0.5s ease',
-//           }}
-//         >
-//           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-//             Objectifs du Portail :
-//           </Typography>
-//           <Typography variant="body1" sx={{ marginTop: '10px' }}>
-//             Le portail vise à fournir une plateforme centralisée pour la gestion administrative, les inscriptions,
-//             et la communication entre les établissements scolaires, les enseignants, les parents et le Ministère de l'Education Nationale, de l'Alphabétisation, de l'Enseignement Professionnel et de la Promotion des Langues Nationales.
-//           </Typography>
-//         </Box>
-//       </Collapse>
-//     </Box>
-
-
-
-//   {/* <Button component={Link} to="/login" variant="outlined" color="inherit" sx={{ fontSize: '1.1rem', marginRight: '10px', marginBottom:'25px' }}>
-//     Se Connecter
-//   </Button>  */}
-
-//   <Button
-//   component={Link}
-//   to="/login"
-//   variant="outlined"
-//   color="inherit"
-//   sx={{
-//     fontSize: '1.1rem',
-//     marginRight: '10px',
-//     marginBottom: '25px',
-//     display: user ? 'none' : 'inline-block' // Si l'utilisateur est connecté, le bouton est masqué
-//   }}
-// >
-//   Se Connecter
-// </Button>
-
-
-
-// </Box>
-
-
-
-
-
-
-// <Box sx={{ padding: '40px', backgroundColor: '#B2DFDB' }}>
-    
-// <Grid container spacing={4}>
-// {/* Card 1: Inscription Examens */}
-// <Grid item xs={12} md={6}>
-//   <Card
-//     sx={{
-//       backgroundColor: '#004d40', // Vert foncé pour BEPC
-//       color: '#fff',
-//       padding: '20px',
-//       borderRadius: '12px',
-//       boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-//       textAlign: 'center',
-//       maxHeight: '300px',
-//       transition: 'transform 0.3s ease, background-color 0.3s ease',
-//       '&:hover': {
-//         transform: 'scale(1.05)',
-//         backgroundColor: '#00695c', // Plus clair au survol
-//       },
-//       '@media (max-width:450px)': {
-//         padding: '15px',
-//         maxHeight: '250px',
-//       },
-//       '@media (max-width:320px)': {
-//         padding: '10px',
-//         maxHeight: '200px',
-//       },
-//     }}
-//   >
-//     <CardContent>
-//       <AssignmentIcon
-//         sx={{
-//           fontSize: {
-//             xs: '40px', // Réduction de la taille de l'icône pour les petits écrans
-//             sm: '50px',
-//           },
-//           color: '#FFD700',
-//         }}
-//       /> {/* Icône dorée pour BEPC */}
-//       <Typography
-//         variant="h5"
-//         sx={{
-//           mt: 2,
-//           mb: 2,
-//           fontWeight: 'bold',
-//           fontSize: {
-//             xs: '1rem', // Taille pour les petits écrans
-//             sm: '1.2rem', // Taille par défaut pour les écrans moyens
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.9rem', // Plus petit pour les écrans ≤ 450px
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.8rem', // Encore plus petit pour les écrans ≤ 320px
-           
-//           },
-//         }}
-//       >
-//         Enregistrement aux Examens
-//       </Typography>
-//       <Typography
-//         variant="body1"
-//         sx={{
-//           color: '#e0f7fa',
-//           mb: 3,
-//           fontSize: {
-//             xs: '0.9rem', // Taille pour les petits écrans
-//             sm: '1rem',   // Taille par défaut
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.8rem',
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.7rem',
-//             display: 'none',
-//           },
-//         }}
-//       >
-//         Inscription et Participation aux Examens BEPC
-//       </Typography>
-//       <Button
-//         component={Link}
-//         to="/bepc-access"
-//         variant="contained"
-//         sx={{
-//           backgroundColor: '#FFD700', // Doré pour le bouton BEPC
-//           color: '#333',
-//           fontSize: {
-//             xs: '0.9rem', // Taille pour les petits écrans
-//             sm: '1.1rem', // Taille par défaut pour les écrans moyens
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.8rem', // Plus petit pour les écrans ≤ 450px
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.7rem', // Encore plus petit pour les écrans ≤ 320px
-//           },
-//           '&:hover': { backgroundColor: '#ffc107' }, // Doré plus vif au survol
-//         }}
-//       >
-//         Inscription BEPC
-//       </Button>
-//     </CardContent>
-//   </Card>
-// </Grid>
-
-
-
-// <Grid item xs={12} md={6}>
-//   <Card
-//     sx={{
-//       backgroundColor: '#1A535C', // Bleu vert pour CFEPD
-//       color: '#fff',
-//       padding: '20px',
-//       borderRadius: '12px',
-//       boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-//       textAlign: 'center',
-//       maxHeight: '300px',
-//       transition: 'transform 0.3s ease, background-color 0.3s ease',
-//       '&:hover': {
-//         transform: 'scale(1.05)',
-//         backgroundColor: '#2A7E84', // Plus clair au survol
-//       },
-//       '@media (max-width:450px)': {
-//         padding: '15px', // Réduction des marges
-//         maxHeight: '250px',
-//       },
-//       '@media (max-width:320px)': {
-//         padding: '10px', // Moins d'espace pour les très petits écrans
-//         maxHeight: '200px',
-//       },
-//     }}
-//   >
-//     <CardContent>
-//       <FileCopyIcon
-//         sx={{
-//           fontSize: {
-//             xs: '40px', // Réduction de l'icône pour les petits écrans
-//             sm: '50px', // Taille par défaut pour les écrans moyens et plus
-//           },
-//           color: '#FF8C00',
-//         }}
-//       />
-//       <Typography
-//         variant="h5"
-//         sx={{
-//           mt: 2,
-//           mb: 2,
-//           fontWeight: 'bold',
-//           fontSize: {
-//             xs: '1rem', // Taille pour les petits écrans
-//             sm: '1.2rem', // Taille par défaut pour les écrans moyens
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.9rem', // Plus petit pour les écrans <= 450px
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.8rem', // Encore plus petit pour les écrans <= 320px
-//           },
-//         }}
-//       >
-//         Enregistrement aux Examens
-//       </Typography>
-//       <Typography
-//         variant="body1"
-//         sx={{
-//           color: '#fff8e1',
-//           mb: 3,
-//           fontSize: {
-//             xs: '0.9rem', // Taille pour les petits écrans
-//             sm: '1rem', // Taille par défaut pour les écrans moyens
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.8rem', // Plus petit pour 450px
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.7rem', // Encore plus petit pour 320px
-//             display: 'none',
-//           },
-//         }}
-//       >
-//         Inscription et Participation aux Examens CFEPD
-//       </Typography>
-//       <Button
-//         component={Link}
-//         to="/cfepd-access"
-//         variant="contained"
-//         sx={{
-//           backgroundColor: '#FF8C00', // Orange pour le bouton CFEPD
-//           color: '#fff',
-//           fontSize: {
-//             xs: '0.9rem', // Taille pour les petits écrans
-//             sm: '1.1rem', // Taille par défaut pour les écrans moyens
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.8rem', // Plus petit pour les écrans <= 450px
-//           },
-//           '@media (max-width:320px)': {
-//             fontSize: '0.7rem', // Encore plus petit pour les écrans <= 320px
-//           },
-//           '&:hover': { backgroundColor: '#ff751a' }, // Orange plus vif au survol
-//         }}
-//       >
-//         Inscription CFEPD
-//       </Button>
-//     </CardContent>
-//   </Card>
-// </Grid>
-
-
-
-
-
-//   {/* Card 2: Accès au Bulletin Numérique */}
-//   <Grid container spacing={4}>
-//   {/* Carte Accès au Bulletin Numérique */}
-//   <Grid item xs={12} md={6}>
-//   <Card
-//     sx={{
-//       backgroundColor: '#2c3e50', // Bleu nuit pour le fond
-//       color: '#fff',
-//       padding: '20px',
-//       mt: 5,
-//       ml: 5,
-//       borderRadius: '12px',
-//       boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-//       textAlign: 'center',
-//       maxHeight: '300px',
-//       transition: 'transform 0.3s ease, background-color 0.3s ease',
-//       '&:hover': {
-//         transform: 'scale(1.05)',
-//         backgroundColor: '#34495e', // Plus clair au survol
-//       },
-//       '@media (max-width:450px)': {
-//         padding: '15px', // Réduction de l'espace
-//         maxHeight: '250px',
-//       },
-//       '@media (max-width:150px)': {
-//         padding: '10px', // Encore moins d'espace pour les écrans ultra-petits
-//         maxHeight: '200px',
-//       },
-//     }}
-//   >
-//     <CardContent>
-//       <FileCopyIcon sx={{ fontSize: 50, color: '#FF8C00' }} /> {/* Icône orange */}
-//       <Typography
-//         variant="h5"
-//         sx={{
-//           mt: 2,
-//           mb: 2,
-//           fontWeight: 'bold',
-//           fontSize: {
-//             xs: '1rem', // Réduction pour les petits écrans
-//             sm: '1.2rem',
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.9rem', // Plus petit pour 450px
-//           },
-//           '@media (max-width:150px)': {
-//             fontSize: '0.7rem', // Encore plus petit pour 150px
-//           },
-//         }}
-//       >
-//         Accès au Bulletin Numérique
-//       </Typography>
-//       <Typography
-//         variant="body1"
-//         sx={{
-//           color: '#e0f7fa',
-//           mb: 3,
-//           fontSize: {
-//             xs: '0.8rem', // Par défaut pour les petits écrans
-//             sm: '1rem', // Taille moyenne pour les écrans small
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.7rem', // Plus petit pour 450px
-//           },
-//           '@media (max-width:350px)': {            
-//             display: 'none',
-//           },
-//         }}
-//       >
-//         Consultez les bulletins de vos enfants.
-//       </Typography>
-//       <Button
-//         variant="contained"
-//         sx={{
-//           backgroundColor: '#FF8C00', // Orange pour le bouton
-//           color: '#fff',
-//           fontSize: {
-//             xs: '0.9rem', // Taille pour les petits écrans
-//             sm: '1.1rem', // Taille moyenne pour les écrans small
-//           },
-//           '@media (max-width:450px)': {
-//             fontSize: '0.8rem', // Plus petit pour 450px
-//           },
-//           '@media (max-width:150px)': {
-//             fontSize: '0.6rem', // Encore plus petit pour 150px
-//           },
-//           '&:hover': { backgroundColor: '#e67e22' }, // Orange vif au survol
-//           mr: 2,
-//         }}
-//         onClick={() => handleAccess('consult')}
-//       >
-//         Consulter Bulletin
-//       </Button>
-//     </CardContent>
-//   </Card>
-// </Grid>
-
-
-
-//   {/* Carte avec la photo du Ministre */}
-//   <Grid
-//   item
-//   xs={12}
-//   md={6}
-//   sx={{
-//     display: {
-//       xs: 'none', // Masquer par défaut pour les petits écrans
-//       md: 'block', // Visible pour les écrans moyens et au-dessus
-//     },
-//     '@media (max-width:450px)': {
-//       display: 'none', // Spécifiquement masqué pour les écrans <= 450px
-//     },
-//   }}
-// >
-//   <Card
-//     sx={{
-//       backgroundColor: '#fff', // Fond clair et agréable pour la carte
-//       color: '#333',
-//       mt: 5,
-//       ml: 2,
-//       padding: '20px',
-//       borderRadius: '12px',
-//       boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-//       display: 'flex', // Disposition en ligne
-//       alignItems: 'center',
-//       transition: 'transform 0.3s ease',
-//       maxHeight: '300px',
-//       '&:hover': {
-//         transform: 'scale(1.05)',
-//         backgroundColor: '#f9f9f9', // Fond légèrement plus clair au survol
-//       },
-//     }}
-//   >
-//     <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-//       <img
-//         src={ministerPhoto} // Utilisation de l'import de l'image
-//         alt="Portrait du Ministre"
-//         style={{
-//           width: '32%',
-//           height: 'auto',
-//           borderRadius: '8px',
-//         }}
-//       />
-//       <Box sx={{ textAlign: 'left' }}>
-//         <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#2e7d32' }}>
-//           Mme Elisabeth Sherif
-//         </Typography>
-//         <Typography variant="body2" sx={{ color: '#555', fontWeight: 'medium', mt: 1 }}>
-//           MEN/A/EP/PLN
-//         </Typography>
-//         <Typography
-//           variant="body2"
-//           sx={{ color: '#FF8C00', mt: 1, fontSize: '1.1rem', textAlign: 'left', fontWeight: 'bold' }}
-//         >
-//           Un engagement fort pour une éducation inclusive et participative.
-//         </Typography>
-//       </Box>
-//     </CardContent>
-//   </Card>
-// </Grid>
-
-
-
-
-// </Grid>
-
-
-// </Grid>
-//     </Box>
-
-// <Dialog 
-//   open={openConfigModal} 
-//   onClose={handleCloseConfigModal}
-//   PaperProps={{
-//     sx: { 
-//       padding: '20px', 
-//       borderRadius: '16px', 
-//       backgroundColor: '#2C3E50', 
-//       boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.3)',
-//       color: '#fff'
-//     }
-//   }}
-// >
-//   <DialogTitle sx={{ textAlign: 'center', backgroundColor: '#1ABC9C', color: '#fff', borderRadius: '12px 12px 0 0', padding: '15px' }}>
-//     Configuration Requise
-//   </DialogTitle>
-  
-//   <DialogContent sx={{ padding: '30px', textAlign: 'center' }}>
-//     <Typography variant="h6" sx={{ marginBottom: 3, fontWeight: 'bold', color: '#ECF0F1' }}>
-//       Votre établissement n'est pas encore configuré.
-//     </Typography>
-//     <Typography variant="body1" sx={{ color: '#BDC3C7' }}>
-//       Cliquez sur le bouton ci-dessous pour commencer la configuration.
-//     </Typography>
-//   </DialogContent>
-  
-//   <DialogActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
-//     <Button 
-//       component={Link} 
-//       to="/etablissement/configuration" 
-//       variant="contained" 
-//       sx={{ 
-//         backgroundColor: '#1ABC9C', 
-//         color: '#fff', 
-//         padding: '10px 20px', 
-//         fontSize: '1.1rem',
-//         borderRadius: '8px',
-//         '&:hover': { backgroundColor: '#16A085' }
-//       }}
-//     >
-//       Commencer la Configuration
-//     </Button>
-//   </DialogActions>
-// </Dialog>
-
-
-//       {/* Section d'informations clés */}
-//       <Container maxWidth="lg">
-//          {/* Ajout du titre centré */}
-
-
-
-
-
-
-// {/* Section d'informations clés */}
-
-
-// <Box
-//   sx={{
-//     textAlign: 'center',
-//     mb: 6,
-//     display: {
-//       xs: 'none', // Masqué pour les écrans extra petits
-//       sm: 'none', // Masqué pour les écrans petits
-//     },
-//     '@media (min-width:300px)': {
-//       display: 'block', // Visible à partir de 650px
-//     },
-//   }}
-// >
-//   <Typography
-//     variant="h4"
-//     component="h2"
-//     sx={{ fontWeight: 'bold', color: '#004d40', marginBottom: '40px' , marginTop:'50px'}}
-//   >
-//     Actualités et Annonces Importantes
-//   </Typography>
-
-//   <Grid container spacing={4} sx={{ marginBottom: '40px' }}>
-//     {sectionCards.map((card) => (
-//       <Grid item xs={12} md={4} key={card._id}>
-//         <Paper
-//           sx={{
-//             minHeight: '300px',
-//             display: 'flex',
-//             flexDirection: 'column',
-//             justifyContent: 'center',
-//             alignItems: 'center',
-//             backgroundColor: '#fff',
-//             boxShadow: 4,
-//             borderRadius: '16px',
-//             textAlign: 'center',
-//             padding: '20px',
-//             transition: 'transform 0.4s ease',
-//             '&:hover': {
-//               transform: 'scale(1.05)',
-//             },
-//           }}
-//         >
-//           <Typography
-//             variant="h5"
-//             sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '20px' }}
-//           >
-//             {card.titleCard}
-//           </Typography>
-//           <Typography
-//             variant="body1"
-//             sx={{ fontSize: '1.1rem', marginBottom: '20px', color: '#333' }}
-//           >
-//             {card.bodyCard}
-//           </Typography>
-//           <Button
-//             onClick={() => handleOpenDrawer('news', card._id)}
-//             variant="outlined"
-//             sx={{
-//               borderColor: '#FF8C00',
-//               color: '#FF8C00',
-//               '&:hover': { backgroundColor: '#FF8C00', color: '#fff' },
-//             }}
-//           >
-//             {card.btnCard}
-//           </Button>
-//         </Paper>
-//       </Grid>
-//     ))}
-//   </Grid>
-// </Box>
-
-
-
-
-       
-
-
-// <SlidingPageDrawer open={openDrawer} onClose={handleCloseDrawer} title={drawerTitle}>
-//   {currentDrawerContent === 'news' && <NewsPage articles={articles} onClose={handleCloseDrawer} />}
-// </SlidingPageDrawer>
-
-
-
-
-        
-
-// <Box sx={{ marginTop: '40px', textAlign: 'center', padding: '20px', backgroundColor: '#004d40', color: '#fff', borderRadius: '8px' }}>
-//   <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: 'bold' }}>
-//     Ressources Scolaires et Outils
-//   </Typography>
-//   <Typography variant="body1" sx={{ color: '#e0f7fa', marginBottom: '20px' }}>
-//     Accédez à une sélection d'outils et de ressources pour améliorer vos performances académiques et la gestion des établissements.
-//   </Typography>
-
-//   <Grid container spacing={4}>
-  
-//   <Grid item xs={12} md={4}>
-//   <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
-//     <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
-//       Ressources Pédagogiques
-//     </Typography>
-//     <Typography variant="body1" sx={{ color: '#004d40' }}>
-//       Explorez des vidéos, des guides PDF et des fiches pour chaque matière et niveau scolaire.
-//     </Typography>
-//     <Button 
-//       component={Link} 
-//       to="/login"
-//       variant="contained" 
-//       sx={{ backgroundColor: '#FF8C00', marginTop: '10px' }} 
-//     >
-//       Accéder
-//     </Button>
-//   </Paper>
-// </Grid>
-
-
-
-   
-//     <Grid item xs={12} md={4}>
-//       <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
-//         <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
-//           Outils pour Enseignants
-//         </Typography>
-//         <Typography variant="body1" sx={{ color: '#004d40' }}>
-//           Utilisez des outils modernes pour gérer les classes, planifier les cours et suivre la progression des élèves.
-//         </Typography>
-//         <Button 
-//           variant="contained" 
-//           sx={{ backgroundColor: '#FF8C00', marginTop: '10px' }} 
-//           onClick={() => alert('Cette fonctionnalité est en cours de développement')}
-//         >
-//           Accéder
-//         </Button>
-//       </Paper>
-//     </Grid>
-
-//     <Grid item xs={12} md={4}>
-//       <Paper sx={{ padding: '20px', backgroundColor: '#ffffff', boxShadow: 3, borderRadius: '8px' }}>
-//         <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF8C00', marginBottom: '10px' }}>
-//           Outils pour Parents
-//         </Typography>
-//         <Typography variant="body1" sx={{ color: '#004d40' }}>
-//           Suivez les progrès de vos enfants, consultez leurs bulletins et communiquez avec les enseignants.
-//         </Typography>
-//         <Button 
-//           variant="contained" 
-//           sx={{ backgroundColor: '#FF8C00', marginTop: '10px' }} 
-//           onClick={() => alert('Cette fonctionnalité est en cours de développement')}
-//         >
-//           Accéder
-//         </Button>
-//       </Paper>
-//     </Grid>
-//   </Grid>
-// </Box>
-
-
-
-//         {/* Section réseaux sociaux */}
-// <Divider sx={{ marginY: 8, borderColor: '#e0e0e0' }} />
-// <Box
-//   sx={{
-//     backgroundColor: '#f5f5f5',
-//     borderRadius: '16px',
-//     padding: '40px 20px',
-//     textAlign: 'center',
-//     boxShadow: 4,
-//     marginTop: '-100px',
-//     transition: 'all 0.3s ease',
-//     '&:hover': {
-//       transform: 'scale(1.02)',
-//     },
-//   }}
-// >
-//   <Typography
-//     variant="h4"
-//     sx={{
-//       marginBottom: '20px',
-//       fontWeight: 'bold',
-//       color: '#004d40',
-//       letterSpacing: '2px',
-//     }}
-//   >
-//     Rejoignez notre communauté
-//   </Typography>
-//   <Typography
-//     variant="body1"
-//     sx={{ marginBottom: '30px', color: '#757575', fontSize: '1.2rem', marginTop:'-15px' }}
-//   >
-//     Suivez-nous sur les réseaux sociaux pour rester informé de nos dernières actualités et événements.
-//   </Typography>
-//   <Box
-//     sx={{
-//       display: 'flex',
-//       justifyContent: 'center',
-//       gap: '30px',
-//       flexWrap: 'wrap',
-//     }}
-//   >
-//     <IconButton
-//       href="#"
-//       sx={{
-//         backgroundColor: '#3b5998',
-//         color: '#fff',
-//         '&:hover': { backgroundColor: '#2d4373' },
-//         fontSize: '2rem',
-//         width: '60px',
-//         height: '60px',
-//         boxShadow: 3,
-//         borderRadius: '50%',
-//         transition: 'transform 0.3s ease',
-//         transform: 'scale(1.1)',
-     
-//       }}
-//     >
-//       <Facebook />
-//     </IconButton>
-//     <IconButton
-//       href="#"
-//       sx={{
-//         backgroundColor: '#00acee',
-//         color: '#fff',
-//         '&:hover': { backgroundColor: '#007ab9' },
-//         fontSize: '2rem',
-//         width: '60px',
-//         height: '60px',
-//         boxShadow: 3,
-//         borderRadius: '50%',
-//         transition: 'transform 0.3s ease',
-//         transform: 'scale(1.1)',
-        
-//       }}
-//     >
-//       <Twitter />
-//     </IconButton>
-//     <IconButton
-//       href="#"
-//       sx={{
-//         backgroundColor: '#e4405f',
-//         color: '#fff',
-//         '&:hover': { backgroundColor: '#c32f40' },
-//         fontSize: '2rem',
-//         width: '60px',
-//         height: '60px',
-//         boxShadow: 3,
-//         borderRadius: '50%',
-//         transition: 'transform 0.3s ease',
-//         transform: 'scale(1.1)',
-     
-//       }}
-//     >
-//       <Instagram />
-//     </IconButton>
-//     <IconButton
-//       href="#"
-//       sx={{
-//         backgroundColor: '#0077b5',
-//         color: '#fff',
-//         '&:hover': { backgroundColor: '#005582' },
-//         fontSize: '2rem',
-//         width: '60px',
-//         height: '60px',
-//         boxShadow: 3,
-//         borderRadius: '50%',
-//         transition: 'transform 0.3s ease',
-//         transform: 'scale(1.1)',
-//       }}
-//     >
-//       <LinkedIn />
-//     </IconButton>
-//   </Box>
-// </Box>
-
-//       </Container>
-//     </Box>
-//   );
-// };
-
-// export default HomePage;
-
-
-
-
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import SlidingPageDrawer from '../components/SlidingPageDrawer';
@@ -1162,7 +154,302 @@ const HomePage = () => {
      <Box sx={{ textAlign: 'center', marginBottom: '40px', padding: '0px', margin: '0px', borderRadius: '8px', width: '100%', marginTop: '-20px'}}>
   
   
+     <Box
+      sx={{
+        width: '100%',
+        backgroundColor: '#ffffff', // Fond blanc
+      
+       
+        borderRadius: '12px', // Coins arrondis
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }, // Organisation colonne pour petits écrans, ligne pour grands écrans
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        
+        gap: 3,
+      }}
+    >
+  {/* Section du logo au centre */}
+  <Box
+    sx={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center', // Centrer horizontalement
+      textAlign: 'center', // Centrer le texte
+      padding: '50px',
+    }}
+  >
+    <img
+      src={logo1} // Remplacez par l'URL ou le chemin de votre logo
+      alt="Logo du Ministère"
+      style={{
+        height: '250px', // Taille du logo
+        marginBottom: '20px',
+      }}
+    />
+    <Typography
+      variant="h4"
+      sx={{
+        fontWeight: 'bold',
+        fontSize: { xs: '2.5rem', sm: '2.5rem' }, // Taille responsive
+        color: '#004d40',
+        marginBottom: '10px',
+      }}
+    >
+      Bienvenue sur notre plateforme
+    </Typography>
+    <Typography
+      variant="subtitle1"
+      sx={{
+        fontSize: { xs: '1rem', sm: '1.2rem' },
+        color: '#555555',
+      }}
+    >
+      Une solution innovante pour une éducation moderne et inclusive.
+    </Typography>
+  </Box>
+
+  {/* Image à côté */}
+  <Box
+  sx={{
+    position: 'relative',
+    maxWidth: '500px', // Taille maximale de l'image
+    width: { xs: '90%', md: '80%', sm: '100%' },
+    marginRight:{ xs: '0px', md: '50px', sm: '40px' }, // Espacement  
+    marginTop: { xs: '10px',  md: '80px', sm: '20px' },
+    borderRadius: '12px', // Coins arrondis pour un effet moderne
+    overflow: 'hidden', // Empêche tout débordement
+   marginBottom: '50px',
+    transform: 'scale(1)', // Transformation initiale
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Effet fluide au survol
+    '&:hover': {
+      transform: 'scale(1.05)', // Zoom léger au survol
+      boxShadow: '0px 12px 30px rgba(0, 0, 0, 0.3)', // Ombre plus prononcée au survol
+    },
+  }}
+>
+  <img
+    src={educations1} // Remplacez par l'URL ou le chemin de votre image
+    alt="Illustration éducative"
+    style={{
+      width: { xs: '60%', sm: '100%' },
+      height: 'auto', // Ajustement automatique de la hauteur
+      borderRadius: '12px', // Coins arrondis
+    }}
+  />
+
+  {/* Badge sans texte */}
+  <Box
+    sx={{
+      position: 'absolute',
+      top: 10, // Positionné à 10px du haut
+      left: 10, // Positionné à 10px de la gauche
+      width: '80px', // Taille du badge
+      height: '80px',
+      backgroundColor: '#00ACC1', // Couleur du badge
+      borderRadius: '50%', // Forme circulaire
+      display: 'flex',
+      alignItems: 'center',
+    
+      justifyContent: 'center',
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)', // Ombre flottante
+    }}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="white"
+      viewBox="0 0 24 24"
+      width="60px"
+      height="60px"
+    >
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5l-5-5 1.41-1.41L11 13.17l7.59-7.59L20 7l-9 9.5z" />
+    </svg>
+  </Box>
+</Box>
+
+
+
+    </Box>
+
+
+    <Box
+  sx={{
+    width: '100%', // Prend toute la largeur disponible
+    backgroundColor: '#f3f4f6', // Fond doux et élégant
+    borderRadius: '16px', // Coins arrondis pour un effet moderne
+    paddingTop: { xs: '20px', sm: '40px' }, // Espacement interne ajusté
+    paddingBottom: { xs: '2px', sm: '40px' }, // Espacement interne ajusté
+    display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
+    alignItems: 'center',
+    gap: 5,
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.15)', // Ombre subtile pour relief
+    overflow: 'hidden', // Empêche les débordements
+  }}
+>
+  {/* Animation Lottie */}
+  <Box
+    sx={{
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <Player
+      autoplay
+      loop
+      src={LottieLego} // Chemin de votre animation Lottie
+      style={{
+        height: '250px', // Taille ajustée pour un meilleur équilibre
+        maxWidth: '100%',
+      }}
+    />
+  </Box>
+
+  {/* Section Texte */}
+  <Box
+    sx={{
+      flex: 2,
+      padding: '40px',
+      backgroundColor: '#ffffff', // Fond blanc pour contraster avec le reste
+      marginRight: { xs: '20px', sm: '60px' }, // Espacement interne ajusté
+      borderRadius: '12px',     
+      textAlign: { xs: 'center', md: 'left' }, // Centré sur mobile, aligné à gauche sur desktop
+      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // Ombre subtile
+    }}
+  >
+    <Typography
+      variant="h3"
+      sx={{
+        fontWeight: 'bold',
+        fontSize: { xs: '1.8rem', sm: '2.4rem' },
+        color: '#004d40', // Couleur verte professionnelle
+        marginBottom: '20px',
+        textAlign: { xs: 'center', md: 'center' },
+      }}
+    >
+      🚨 Pré-inscriptions ouvertes pour le BEPC et le CFEPD !
+    </Typography>
+    <Typography
+      sx={{
+        fontSize: { xs: '1rem', sm: '1.2rem' },
+        lineHeight: '1.8',
+        fontWeight: '500',
+        padding: '20px',
+        color: '#333', // Texte sombre pour lisibilité
+        marginBottom: '10px',
+      }}
+    >
+      Les préinscriptions pour les examens du BEPC et le CFEPD commencent le <strong>1er décembre 2024</strong> et se clôturent le <strong>31 mars 2025</strong>.
+    </Typography>
+    {/* <Typography
+      sx={{
+        fontSize: { xs: '0.9rem', sm: '1rem' },
+        color: '#666', // Couleur de texte secondaire
+      }}
+    >
+      Contactez-nous pour toute assistance : <strong>+227 96 98 61 74</strong>.
+    </Typography> */}
+  </Box>
+</Box>
+
+
+<Box
+  sx={{
+    width: '100%', // Largeur totale
+    backgroundColor: '#004d40', // Fond doux
+    borderRadius: '16px', // Coins arrondis
+    paddingBottom: { xs: '20px', sm: '50px' },
+    paddingTop: { xs: '20px', sm: '50px' },
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+    display: 'flex',
+    flexDirection: 'column', // Organisation en colonne
+    alignItems: 'center',
+    gap: 3, // Espacement entre les éléments
+    textAlign: 'center',
+    marginTop: { xs: '20px', sm: '40px' },
+    marginBottom: { xs: '20px', sm: '40px' },
+  }}
+>
+  {/* Titre */}
+  <Typography
+    variant="h4"
+    sx={{
+      fontWeight: 'bold',
+      fontSize: { xs: '1.5rem', sm: '2rem' }, // Taille responsive
+      color: '#fff', // Vert professionnel
+    
+      padding: '20px',
+    }}
+  >
+    Espace réservé aux administrateurs BEPC et CFEPD
+  </Typography>
+
+  {/* Informations de contact */}
+  <Typography
+    sx={{
+      fontSize: { xs: '0.5rem', sm: '1rem' },
+      color: '#fff', // Texte sombre pour lisibilité
+      marginBottom: '10px',
+      lineHeight: '1.2',
+    }}
+  >
+    En cas de problème, veuillez appeler :
+    <br />
+    <strong>+227 96 98 61 74/+227 80 64 83 83</strong>
+    
+  </Typography>
+
+  {/* Boutons */}
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' }, // Colonne sur mobile, ligne sur desktop
+      gap: 2, // Espacement entre les boutons
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: '#FF8C00',
+        color: '#fff',
+        fontSize: { xs: '0.9rem', sm: '1rem' },
+        padding: '10px 20px',
+        borderRadius: '8px', // Coins arrondis
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Ombre légère
+        '&:hover': { backgroundColor: '#e67e22' }, // Couleur au survol
+      }}
+      href="/bepc-access"
+    >
+      Administrateur BEPC
+    </Button>
+
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: '#00ACC1',
+        color: '#fff',
+        fontSize: { xs: '0.9rem', sm: '1rem' },
+        padding: '10px 20px',
+        borderRadius: '8px', // Coins arrondis
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)', // Ombre légère
+        '&:hover': { backgroundColor: '#00838F' }, // Couleur au survol
+      }}
+      href="/cfepd-access"
+    >
+      Administrateur CFEPD
+    </Button>
+  </Box>
+</Box>
+
+
+
   
+
   
   
   {/* Partie avec le logo sur fond blanc */}
@@ -1173,7 +460,7 @@ const HomePage = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     color: '#004d40',
     padding: '20px',
     borderRadius: '12px',
@@ -1183,276 +470,196 @@ const HomePage = () => {
     flexWrap: 'wrap', // Permet l'adaptation pour les petits écrans
   }}
 >
-  {/* Animation Lottie */}
-  <Box
-    sx={{
-      flex: '1 1 150px', // Taille adaptative
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <Player
-      autoplay
-      loop
-      src={LottieLego} // Remplace par l'animation de ton choix
-      style={{
-        height: '250px', // Taille de l'animation
-        width: '250px',
-      }}
-    />
-  </Box>
 
-  {/* Texte de l'annonce */}
-  <Box
-    sx={{
-      flex: '2 1 300px', // Taille adaptative
-      textAlign: 'left',
-    }}
-  >
-    <Typography
-  variant="h5"
-  sx={{
-    fontWeight: 'bold',
-    fontSize: {
-      xs: '1.2rem',
-      sm: '1.5rem',
-      md: '1.8rem',
-    },
-    marginBottom: '10px',
-  }}
->
-  Pré-inscriptions ouvertes pour le BEPC et le CFEPD !
-</Typography>
-<Typography
-  variant="body1"
-  sx={{
-    fontSize: '1.2rem',
-    marginBottom: '10px',
-  }}
->
-  Les inscriptions commencent le <strong>1er décembre 2024</strong> et se clôturent le <strong>31 mars 2025</strong>.
-</Typography>
-
-  </Box>
 
   {/* Onglets avec contenu dynamique */}
 
-
-
-<Box>
-  {/* Tabs pour les grands écrans */}
   <Box
+  sx={{
+    width: '100%', // Prend toute la largeur
+    backgroundColor: '#f3f4f6', // Fond doux
+    padding: '20px',
+    borderRadius: '16px', // Coins arrondis
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+    overflow: 'hidden', // Empêche les débordements
+  }}
+>
+  <Tabs
+    value={tabIndex}
+    onChange={handleTabChange}
+    variant="fullWidth" // Les onglets prennent toute la largeur
     sx={{
-      display: { xs: 'none', sm: 'block' }, // Masqué pour les petits écrans
+      '& .MuiTabs-indicator': {
+        height: '4px',
+        backgroundColor: '#ff8c00', // Indicateur coloré
+        borderRadius: '4px',
+      },
+      '& .MuiTab-root': {
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        fontSize: { xs: '1rem', sm: '1.2rem' },
+        color: '#333',
+        padding: '12px 16px',
+       
+        transition: 'all 0.3s ease',
+        borderRadius: '8px', // Coins arrondis des onglets
+        '&:hover': {
+          backgroundColor: '#ffefd5', // Fond clair au survol
+          color: '#ff8c00', // Texte vibrant au survol
+          transform: 'scale(1.05)', // Zoom léger au survol
+        },
+        '&.Mui-selected': {
+          color: '#ffffff',
+          backgroundColor: '#ff8c00', // Couleur vive pour l'onglet sélectionné
+          boxShadow: '0px 4px 12px rgba(255, 140, 0, 0.5)', // Ombre autour de l'onglet actif
+        },
+      },
     }}
   >
-    <Tabs
-      value={tabIndex}
-      onChange={handleTabChange}
-      centered
-      sx={{
-        backgroundColor: '#ffffff',
-        borderRadius: '12px',
-        padding: '10px',
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-        '& .MuiTabs-indicator': {
-          height: '4px',
-          backgroundColor: '#00acc1',
-          borderRadius: '4px',
-        },
-        '& .MuiTab-root': {
-          fontWeight: 'bold',
-          textTransform: 'none',
-          fontSize: '1.2rem',
-          color: '#004d40',
-          padding: '10px 20px',
-          margin: '0 10px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          transition: 'all 0.3s ease',
-          '&:hover': {
-            backgroundColor: '#e0f7fa',
-            color: '#00695c',
-            transform: 'scale(1.05)',
-          },
-          '&.Mui-selected': {
-            color: '#00acc1',
-            backgroundColor: '#e0f7fa',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.3)',
-          },
-        },
-      }}
-    >
-      <Tab icon={<SchoolIcon />} label="Accueil" />
-      <Tab icon={<InfoIcon />} label="Avis aux candidats" />
-      <Tab icon={<CampaignIcon />} label="Accès Administrateur" />
-    </Tabs>
-  </Box>
-
-  {/* Un seul Tab pour les petits écrans */}
-  <Box
-    sx={{
-      display: { xs: 'block', sm: 'none' }, // Visible uniquement pour les petits écrans
-      padding: '20px',
-      backgroundColor: '#ffffff !important',
-      borderRadius: '12px',
-      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-    }}
-  >
-    {/* Contenu de l'onglet actif */}
-    {tabIndex === 0 && (
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px', color: '#004d40' }}>
-          Accueil
-        </Typography>
-        <Typography>
-          Bienvenue sur la plateforme officielle du Ministère de l'Éducation Nationale.
-        </Typography>
-      </Box>
-    )}
-    {tabIndex === 1 && (
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px', color: '#004d40' }}>
-          Avis aux candidats
-        </Typography>
-        <Typography>
-          Préparez vos dossiers conformément aux instructions données par les établissements ou les directions régionales.
-        </Typography>
-      </Box>
-    )}
-    {tabIndex === 2 && (
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px', color: '#004d40' }}>
-          Accès Administrateur
-        </Typography>
-        <Typography>
-          Accédez à l’espace administrateur pour gérer les inscriptions.
-        </Typography>
-      </Box>
-    )}
-
-    {/* Boutons pour changer d'onglet */}
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '20px',
-      }}
-    >
-      <Button
-        variant="outlined"
-        disabled={tabIndex === 0}
-        onClick={() => setTabIndex((prevIndex) => prevIndex - 1)}
-        sx={{
-          flex: 1,
-          marginRight: '10px',
-          backgroundColor: '#00acc1',
-          color: '#fff',
-          '&:hover': { backgroundColor: '#00838f' },
-        }}
-      >
-        Précédent
-      </Button>
-      <Button
-        variant="outlined"
-        disabled={tabIndex === 2}
-        onClick={() => setTabIndex((prevIndex) => prevIndex + 1)}
-        sx={{
-          flex: 1,
-          backgroundColor: '#00acc1',
-          color: '#fff',
-          '&:hover': { backgroundColor: '#00838f' },
-        }}
-      >
-        Suivant
-      </Button>
-    </Box>
-  </Box>
+    <Tab icon={<SchoolIcon />} label="Cartes & Bulletins Scolaire" />
+    <Tab icon={<InfoIcon />} label="Diplôme - Ecoles Professionnelles" />
+    <Tab icon={<CampaignIcon />} label="Informations Clés" />
+    {/* <Tab icon={<EventIcon />} label="Événements" />
+    <Tab icon={<ContactMailIcon />} label="Contact" />
+    <Tab icon={<HelpOutlineIcon />} label="FAQ" /> */}
+  </Tabs>
 </Box>
 
 
 
-<Box
-  sx={{
-    padding: '20px',
-    borderRadius: '12px',
-    backgroundColor: '#fff',
-  }}
->
+
+  <Box
+    sx={{
+      padding: '20px',
+      borderRadius: '12px',
+      backgroundColor: '#fff',
+    }}
+  >
 
 {tabIndex === 0 && (
   <Box
     sx={{
       display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
-      alignItems: 'center',
-      justifyContent: 'space-between', // Laisser un espace vide à gauche
-      gap: 3,
+      flexDirection: 'column',
+      gap: 4,
       padding: '20px',
-      backgroundColor: '#fff',
+      backgroundColor: '#f3f4f6', // Fond principal doux
       borderRadius: '16px',
     }}
   >
-    {/* Place vide à gauche */}
-    <Box
+    {/* Titre principal */}
+    <Typography
+      variant="h4"
       sx={{
-        flex: 1, // Prend de l'espace mais reste vide
-        display: { xs: 'none', md: 'block' }, // N'apparaît que sur les grands écrans
-      }}
-    ></Box>
-
-    {/* Logo et texte centrés */}
-    <Box
-      sx={{
-        flex: 2, // Augmenter la largeur pour compenser
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center', // Centrer horizontalement
-        textAlign: 'center', // Centrer le texte
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#004d40',
+        marginBottom: '20px',
       }}
     >
-      <img
-        src={logo1}
-        alt="Armoiries du Niger"
-        style={{
-          height: '220px',
-          marginBottom: '20px',
-        }}
-      />
-      <Typography
-        variant="h6"
+      Projet de Bulletin Numérique : Informations Clés
+    </Typography>
+
+    {/* Cadres avec fonds différents */}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }, // Colonne pour petits écrans, ligne pour grands écrans
+        gap: 3,
+      }}
+    >
+      {/* Cadre 1 */}
+      <Box
         sx={{
-          fontWeight: 'bold',
-          marginBottom: '20px',
-          fontSize: { xs: '1.5rem', md: '1.5rem' }, // Taille responsive
-          color: '#004d40',
+          flex: 1,
+          padding: '20px',
+          backgroundColor: '#FFEBEE', // Fond rouge clair
+          borderRadius: '12px',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
         }}
       >
-        Une plateforme innovante pour une éducation connectée et participative
-      </Typography>
-    </Box>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 'bold',
+            color: '#D32F2F', // Texte rouge foncé
+            marginBottom: '10px',
+          }}
+        >
+          Intégration obligatoire pour tous les établissements
+        </Typography>
+        <Typography
+          sx={{
+            color: '#555', // Texte gris
+          }}
+        >
+          Le projet de bulletin numérique est à terme. Tous les établissements
+          publics et privés doivent prendre les dispositions nécessaires pour
+          s'inscrire dans cette nouvelle logique administrative.
+        </Typography>
+      </Box>
 
-    {/* Animation Lottie ou image responsive */}
-    <Box
-      sx={{
-        flex: 3, // Taille de la boîte à droite
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center', // Centrer horizontalement et verticalement
-      }}
-    >
-      <img
-        alt="Education"
-        src={educations1} // Animation locale
-        style={{
-          height: 'auto', // Ajuste automatiquement la hauteur
-          maxWidth: '100%', // Limite la largeur maximale
-          maxHeight: { xs: '200px', sm: '300px', md: '400px' }, // Ajustement dynamique selon l'écran
+      {/* Cadre 2 */}
+      <Box
+        sx={{
+          flex: 1,
+          padding: '20px',
+          backgroundColor: '#E3F2FD', // Fond bleu clair
+          borderRadius: '12px',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
         }}
-      />
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 'bold',
+            color: '#1976D2', // Texte bleu foncé
+            marginBottom: '10px',
+          }}
+        >
+          Sensibilisation et formations prévues
+        </Typography>
+        <Typography
+          sx={{
+            color: '#555',
+          }}
+        >
+          Des sessions de sensibilisation et de formation seront organisées
+          pour accompagner les établissements dans cette transition
+          numérique. Un calendrier sera communiqué.
+        </Typography>
+      </Box>
+
+      {/* Cadre 3 */}
+      <Box
+        sx={{
+          flex: 1,
+          padding: '20px',
+          backgroundColor: '#E8F5E9', // Fond vert clair
+          borderRadius: '12px',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 'bold',
+            color: '#388E3C', // Texte vert foncé
+            marginBottom: '10px',
+          }}
+        >
+          Prochain communiqué officiel
+        </Typography>
+        <Typography
+          sx={{
+            color: '#555',
+          }}
+        >
+          Un communiqué officiel sera diffusé prochainement pour préciser les
+          démarches administratives et logistiques à suivre pour une intégration
+          réussie du projet dans tous les établissements.
+        </Typography>
+      </Box>
     </Box>
   </Box>
 )}
@@ -1469,32 +676,40 @@ const HomePage = () => {
       justifyContent: 'space-between',
     }}
   >
-    {/* Place vide à gauche */}
-    <Box
-      sx={{
-        flex: 0.5, // Occupe un espace réduit à gauche
-        display: { xs: 'none', md: 'block' }, // Visible uniquement sur les grands écrans
-      }}
-    ></Box>
-
     {/* Texte au centre */}
     <Box
       sx={{
         flex: 1,
-        textAlign: { xs: 'center', md: 'left' },
+        textAlign: { xs: 'center', md: 'justify' }, // Texte justifié sur desktop
       }}
     >
-      <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px', fontSize:'1.5rem' }}>
-        Espace réservé aux candidats officiels et libres
+      <Typography
+        sx={{
+          marginBottom: '10px',
+          fontSize: '1.1rem',
+          lineHeight: '1.8',
+          marginLeft: '50px',
+          color: '#333',
+        }}
+      >
+        Désormais, les diplômes délivrés par les écoles professionnelles du Niger
+        respecteront des normes nationales et internationales reconnues. 
+        Cette réforme vise à renforcer la valeur des qualifications 
+        obtenues et à garantir leur reconnaissance sur le marché du travail, 
+        aussi bien au niveau national qu'international.
       </Typography>
-      <Typography sx={{ marginBottom: '10px', fontSize:'1.1rem' }}>
-        Les <strong>candidats officiels</strong> doivent préparer leurs dossiers conformément aux instructions fournies par les établissements où ils sont inscrits et suivre leurs recommandations.
-      </Typography>
-      <Typography sx={{ marginBottom: '10px' }}>
-        Les <strong>candidats libres</strong> sont invités à effectuer leurs inscriptions auprès des <strong>directions régionales</strong> ou des <strong>inspections régionales</strong>.
-      </Typography>
-      <Typography sx={{ marginBottom: '10px',  fontSize:'1.2rem' }}>
-        Pour toute information complémentaire, veuillez appeler les numéros suivants : <strong>+227 96 98 61 74</strong> ou <strong>+227 80 64 83 83</strong>.
+      <Typography
+        sx={{
+          marginBottom: '10px',
+          fontSize: '1.1rem',
+          lineHeight: '1.8',
+          marginLeft: '50px',
+          color: '#333',
+        }}
+      >
+        Les établissements sont invités à prendre les mesures nécessaires pour
+        s’adapter à cette nouvelle réglementation. Des détails supplémentaires
+        seront communiqués ultérieurement via des canaux officiels.
       </Typography>
     </Box>
 
@@ -1520,6 +735,7 @@ const HomePage = () => {
 
 
 
+
 {tabIndex === 2 && (
   <Box
     sx={{
@@ -1529,17 +745,21 @@ const HomePage = () => {
       justifyContent: 'space-between',
       gap: 4,
       padding: '20px',
-      backgroundColor: '#fff',
+      backgroundColor: '#f9f9f9', // Fond doux pour toute la section
       borderRadius: '16px',
     }}
   >
-    {/* Animation Lottie à gauche */}
+    {/* Animation Lottie avec cadre */}
     <Box
       sx={{
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '20px',
+        backgroundColor: '#ffffff', // Fond blanc pour l'image
+        borderRadius: '12px',
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
       }}
     >
       <Player
@@ -1547,120 +767,47 @@ const HomePage = () => {
         loop
         src={administrateurbepc} // Animation locale
         style={{
-          height: '350px', // Taille de l'animation
-          maxWidth: '100%', // Limite la largeur maximale
+          height: '300px', // Taille ajustée pour mieux cadrer
+          maxWidth: '100%',
         }}
       />
     </Box>
 
-    {/* Boutons et message à droite */}
+    {/* Texte informatif avec cadre */}
     <Box
       sx={{
         flex: 1,
-        textAlign: 'center',
+        padding: '20px',
+        backgroundColor: '#ffffff', // Fond blanc pour le texte
+        borderRadius: '12px',
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', // Ombre subtile
+        textAlign: 'justify', // Texte justifié
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          fontWeight: 'bold',
-          marginBottom: '20px',
-          color: '#004d40',
-          fontSize: { xs: '1.2rem', md: '1.5rem' }, // Taille responsive
-        }}
-      >
-        Espace réservé aux administrateurs BEPC et CFEPD
-      </Typography>
-
-      <Typography
-        sx={{
-          marginBottom: '10px',
-          fontSize: { xs: '1rem', md: '1.2rem' },
-          color: '#004d40',
-          fontWeight: 'bold',
-        }}
-      >
-        En cas de problème, veuillez appeler :
-      </Typography>
-
-      {/* Numéros de téléphone en ligne */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 2,
-          marginBottom: '20px',
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: { xs: '1.2rem', md: '1.5rem' },
-            color: '#FF8C00',
-            fontWeight: 'bold',
-            textAlign: 'center',
+ <Typography
+      sx={{
+        fontSize: { xs: '1rem', md: '1.2rem' },
+        color: '#333', // Texte sombre pour une meilleure lisibilité
+        lineHeight: '1.8',
+      }}
+    >
+      Chers <strong>enseignants</strong>, <strong> administrateurs</strong>, et 
+      <strong> personnels éducatifs</strong>, pour toute information ou pour consulter
+      les derniers communiqués importants, veuillez vous référer à la rubrique 
+      <strong>
+        <a
+          href="#actualites-annonces" // Lien vers l'ID de la section cible
+          style={{
+            color: '#00ACC1', // Couleur pour le lien
+            textDecoration: 'none',
           }}
         >
-          +227 96 98 61 74
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: { xs: '1.2rem', md: '1.5rem' },
-            color: '#00ACC1',
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}
-        >
-          +227 80 64 83 83
-        </Typography>
-      </Box>
+          Actualités et Annonces Importantes
+        </a>
+      </strong> disponible sur la plateforme. Cela vous permettra de rester informés
+      des nouveautés et des mises à jour concernant le système éducatif.
+    </Typography>
 
-      {/* Boutons d'accès */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          justifyContent: 'center',
-          gap: 2,
-        }}
-      >
-        <Button
-          component={Link}
-          to="/bepc-access"
-          variant="contained"
-          sx={{
-            backgroundColor: '#FF8C00',
-            color: '#fff',
-            fontSize: { xs: '0.9rem', md: '1rem' },
-            padding: '10px 20px',
-            borderRadius: '8px',
-            boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-            width: { xs: '100%', sm: 'auto' },
-            '&:hover': { backgroundColor: '#e67e22' },
-          }}
-        >
-          Administrateur BEPC
-        </Button>
-
-        <Button
-          component={Link}
-          to="/cfepd-access"
-          variant="contained"
-          sx={{
-            backgroundColor: '#00ACC1',
-            color: '#fff',
-            fontSize: { xs: '0.9rem', md: '1rem' },
-            padding: '10px 20px',
-            borderRadius: '8px',
-            boxShadow: '0px 4px 12px rgba(0,0,0,0.2)',
-            width: { xs: '100%', sm: 'auto' },
-            '&:hover': { backgroundColor: '#00838F' },
-          }}
-        >
-          Administrateur CFEPD
-        </Button>
-      </Box>
     </Box>
   </Box>
 )}
@@ -1668,7 +815,10 @@ const HomePage = () => {
 
 
 
-</Box>
+
+  </Box>
+
+
 </Box>
 
 
@@ -1784,7 +934,7 @@ const HomePage = () => {
       Se Connecter
     </Button>
   </Box>
-</Box>
+  </Box>
 
 </Box>
 
@@ -2208,13 +1358,19 @@ const HomePage = () => {
     },
   }}
 >
-  <Typography
-    variant="h4"
-    component="h2"
-    sx={{ fontWeight: 'bold', color: '#004d40', marginBottom: '40px' , marginTop:'50px'}}
-  >
-    Actualités et Annonces Importantes
-  </Typography>
+<Typography
+  id="actualites-annonces" // ID ajouté pour l'ancrage
+  variant="h4"
+  component="h2"
+  sx={{
+    fontWeight: 'bold',
+    color: '#004d40',
+    marginBottom: '40px',
+    marginTop: '50px',
+  }}
+>
+  Actualités et Annonces Importantes
+</Typography>
 
   <Grid container spacing={4} sx={{ marginBottom: '40px' }}>
     {sectionCards.map((card) => (
@@ -2465,8 +1621,26 @@ const HomePage = () => {
     >
       <LinkedIn />
     </IconButton>
+
+    <Box
+  sx={{
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    zIndex: 1000, // Assurez-vous qu'il reste au-dessus des autres éléments
+  }}
+>
+
+
+</Box>
+
+
+
+
   </Box>
 </Box>
+
+
 
       </Container>
     </Box>
